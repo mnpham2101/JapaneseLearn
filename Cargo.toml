@@ -13,3 +13,10 @@ slint = { version = "1.16.1", features = ["compat-1-0"] }
 
 [build-dependencies]
 slint-build = "1.16.1"
+
+[lib]
+path = "src/main.rs"
+crate-type = ["cdylib"]
+
+[target.'cfg(target_family = "wasm")'.dependencies]
+wasm-bindgen = { version = "0.2" }

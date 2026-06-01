@@ -16,12 +16,7 @@ agent: speckit.tasks
 ## Phase 1: Foundation
 - [x] 1.1 Setup Slint and Rust framework. Initialize Rust project structure with Cargo.
 - [x] 1.1.1 Fix warning in build after task 1.1 implementation.
-- [ ] 1.2 Configure build targets for Windows and WebAssembly. Configure Cargo.toml to provide alias for both targets so that the build commands can be easily executed from the terminal. The alias should be named `build-windows` for Windows and `build-web` for WebAssembly, and should execute the appropriate build command for each target. Update Readme.md to include instructions on how to use these aliases for building the application on both platforms.
-```toml
-[alias]
-build-windows = "build --target x86_64-pc-windows-msvc"
-build-web = "build --target wasm32-unknown-unknown"
-```
+- [x] 1.2 Configure build targets for Windows and WebAssembly. Ensure `wasm-pack` and `wasm-opt` are integrated for WebAssembly builds.
 - [ ] 1.3 Create base UI layout (main window, navigation).
 - [ ] 1.4 Implement sample data models with hardcoded flashcards.
 - [ ] 1.5 Verify compilation and run on Windows and WebAssembly.
