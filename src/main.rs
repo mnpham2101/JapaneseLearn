@@ -1,5 +1,6 @@
 slint::include_modules!();
 
 fn main() {
-    MainWindow::new().run();
+    let window = MainWindow::new().expect("Failed to create MainWindow");
+    window.run().expect("Failed to run MainWindow");
 }
