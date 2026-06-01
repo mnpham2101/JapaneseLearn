@@ -14,7 +14,7 @@ agent: speckit.tasks
 # Task Breakdown for JapaneseLearn Application
 
 ## Phase 1: Foundation
-- [ ] 1.1 Setup Slint and Rust framework. Initialize Rust project structure with Cargo.
+- [x] 1.1 Setup Slint and Rust framework. Initialize Rust project structure with Cargo.
 - [ ] 1.2 Configure build targets for Windows and WebAssembly.
 - [ ] 1.3 Create base UI layout (main window, navigation).
 - [ ] 1.4 Implement sample data models with hardcoded flashcards.
