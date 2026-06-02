@@ -1,14 +1,15 @@
 import { CommonButton } from "common_button.slint";
 
-export struct FlashcardData {
+export struct FlashcardModel {
     jap-obj: string,
     explanation: string,
+    known: bool,
 }
 
 export component Flashcard {
-    in property<FlashcardData> data: { jap-obj: "", explanation: "" };
+    in property<FlashcardModel> data: { jap-obj: "", explanation: "", known: true };
     in-out property<bool> show-back: false;
-    in-out property<bool> known: false;
+    in-out property<bool> known: data.known;
 
     callback flipped;
 
