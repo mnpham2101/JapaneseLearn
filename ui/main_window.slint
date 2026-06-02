@@ -1,19 +1,81 @@
+import { NavButton } from "components/nav_button.slint";
+import { StudyPage } from "pages/study_page.slint";
+import { ReviewPage } from "pages/review_page.slint";
+
+// Page enum to track current page
+enum PageType {
+    StudyMode,
+    ReviewMode,
+}
+
 export component MainWindow inherits Window {
     width: 800px;
     height: 600px;
     title: "Japanese Learn";
 
-    Rectangle {
-        width: parent.width;
-        height: parent.height;
-        background: #ffffff;
+    property<PageType> current-page: PageType.StudyMode;
 
-        Text {
-            text: "Japanese Learn — Flashcards";
-            horizontal-alignment: center;
-            vertical-alignment: center;
-            font-size: 24px;
-            color: #333333;
+    VerticalLayout {
+        spacing: 0;
+
+        Rectangle {
+            background: #2c3e50;
+            height: 60px;
+            padding: 15px;
+
+            HorizontalLayout {
+                alignment: start;
+                spacing: 20px;
+
+                Text {
+                    text: "Japanese Learn";
+                    font-size: 24px;
+                    color: #ffffff;
+                    vertical-alignment: center;
+                }
+            }
+        }
+
+        Rectangle {
+            background: #ffffff;
+            height: 480px;
+
+            if current-page == PageType.StudyMode: StudyPage {
+            }
+
+            if current-page == PageType.ReviewMode: ReviewPage {
+            }
+        }
+
+        Rectangle {
+            background: #ecf0f1;
+            height: 60px;
+            padding: 10px;
+
+            HorizontalLayout {
+                spacing: 10px;
+                alignment: center;
+
+                NavButton {
+                    width: 150px;
+                    height: 40px;
+                    button-text: "Study Mode";
+                    active: current-page == PageType.StudyMode;
+                    clicked => {
+                        current-page = PageType.StudyMode;
+                    }
+                }
+
+                NavButton {
+                    width: 150px;
+                    height: 40px;
+                    button-text: "Review Mode";
+                    active: current-page == PageType.ReviewMode;
+                    clicked => {
+                        current-page = PageType.ReviewMode;
+                    }
+                }
+            }
         }
     }
 }
