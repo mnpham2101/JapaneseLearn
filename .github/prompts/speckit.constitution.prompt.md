@@ -35,4 +35,5 @@ agent: speckit.constitution
 - Automated tests **must** be implemented for core logic and UI interactions.
 - Cross‑platform compatibility **must** be ensured; OS‑specific assumptions **must not** be made.
 - Dependencies **must** be kept minimal to reduce binary size and deployment complexity.
+- Prefer reuse functions, common components; do not add unnecessary functions or properties when an existing component API can be reused.
 - Version control (e.g., Git) **must** be used with meaningful commit messages.
