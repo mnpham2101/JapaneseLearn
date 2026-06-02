@@ -6,6 +6,7 @@ paths:
 
 # General rules:
 - read @ .github/prompts/speckit.tasks.prompt.md for the task execution rules and the task breakdown for the Japanese Learn application.
+- follow code style and Slint declarative rules defined in @ .claude/rules/code-style.md when writing or reviewing Slint and Rust code.
 - after the task is implemented, successfully built, and tested, suggest a commit message following the format: `type: description [Task X.Y]` where X = phase, Y = task number. The commit message should be descriptive of the changes made in the task implementation.
 - after suggesting the commit message, prompt for review of the commit codes and approval.
 - if there are suggestions for code improvement during the review, or follow up work such as fixing warnings, suggest the necessary changes and implement them before moving on to the next task. Prompt me for follow up tasks.
