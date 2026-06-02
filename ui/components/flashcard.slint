@@ -11,77 +11,73 @@ export component Flashcard {
     in-out property<bool> known: false;
 
     callback flipped;
-    callback known-toggled(bool);
 
     min-width: 200px;
 
-    VerticalLayout {
-        spacing: 12px;
+    Rectangle {
+        width: 100%;
+        height: 180px;
+        background: known ? #eafaf1 : #f7f9fb;
+        border-radius: 16px;
+        border-width: 2px;
+        border-color: known ? #27ae60 : #d0d8e6;
 
-        // Card body — tap to flip between front and back
-        Rectangle {
-            height: 180px;
-            background: known ? #eafaf1 : #f7f9fb;
-            border-radius: 16px;
-            border-width: 2px;
-            border-color: known ? #27ae60 : #d0d8e6;
-
-            TouchArea {
-                clicked => {
-                    show-back = !show-back;
-                    flipped();
-                }
-            }
-
-            VerticalLayout {
-                alignment: center;
-                padding: 20px;
-                spacing: 6px;
-
-                // Front: Japanese object large
-                if !show-back: Text {
-                    text: data.jap-obj;
-                    font-size: 36px;
-                    color: #2c3e50;
-                    horizontal-alignment: center;
-                    vertical-alignment: center;
-                }
-
-                // Back: Japanese object small (reminder)
-                if show-back: Text {
-                    text: data.jap-obj;
-                    font-size: 18px;
-                    color: #7f8c8d;
-                    horizontal-alignment: center;
-                }
-
-                // Back: Explanation large
-                if show-back: Text {
-                    text: data.explanation;
-                    font-size: 26px;
-                    color: #2c3e50;
-                    horizontal-alignment: center;
-                    vertical-alignment: center;
-                    wrap: word-wrap;
-                }
-
-                Text {
-                    text: show-back ? "Tap to hide" : "Tap to reveal";
-                    font-size: 12px;
-                    color: #95a5a6;
-                    horizontal-alignment: center;
-                }
+        // Full-card touch for flip — lower z-order than known button
+        TouchArea {
+            clicked => {
+                show-back = !show-back;
+                flipped();
             }
         }
 
-        // Known/Unknown toggle — checked styling reflects known state
-        CommonButton {
-            text: known ? "Known" : "Unknown";
-            checked: known;
-            clicked => {
-                known = !known;
-                known-toggled(known);
+        VerticalLayout {
+            alignment: center;
+            padding: 20px;
+            spacing: 6px;
+
+            if !show-back: Text {
+                text: data.jap-obj;
+                font-size: 36px;
+                color: #2c3e50;
+                horizontal-alignment: center;
+                vertical-alignment: center;
             }
+
+            if show-back: Text {
+                text: data.jap-obj;
+                font-size: 18px;
+                color: #7f8c8d;
+                horizontal-alignment: center;
+            }
+
+            if show-back: Text {
+                text: data.explanation;
+                font-size: 26px;
+                color: #2c3e50;
+                horizontal-alignment: center;
+                vertical-alignment: center;
+                wrap: word-wrap;
+            }
+
+            Text {
+                text: show-back ? "Tap to hide" : "Tap to reveal";
+                font-size: 12px;
+                color: #95a5a6;
+                horizontal-alignment: center;
+            }
+        }
+
+        // Known toggle — top-right corner, higher z-order captures its own clicks.
+        // checkable + two-way binding replaces the clicked callback entirely.
+        CommonButton {
+            checkable: true;
+            checked <=> known;
+            x: parent.width - self.width - 8px;
+            y: 8px;
+            width: 32px;
+            height: 32px;
+            text: known ? "✓" : "✗";
+            accessibilityLabel: known ? "Mark as unknown" : "Mark as known";
         }
     }
 }
