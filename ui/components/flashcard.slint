@@ -1,0 +1,87 @@
+import { CommonButton } from "common_button.slint";
+
+export struct FlashcardData {
+    jap-obj: string,
+    explanation: string,
+}
+
+export component Flashcard {
+    in property<FlashcardData> data: { jap-obj: "", explanation: "" };
+    in-out property<bool> show-back: false;
+    in-out property<bool> known: false;
+
+    callback flipped;
+    callback known-toggled(bool);
+
+    min-width: 200px;
+
+    VerticalLayout {
+        spacing: 12px;
+
+        // Card body — tap to flip between front and back
+        Rectangle {
+            height: 180px;
+            background: known ? #eafaf1 : #f7f9fb;
+            border-radius: 16px;
+            border-width: 2px;
+            border-color: known ? #27ae60 : #d0d8e6;
+
+            TouchArea {
+                clicked => {
+                    show-back = !show-back;
+                    flipped();
+                }
+            }
+
+            VerticalLayout {
+                alignment: center;
+                padding: 20px;
+                spacing: 6px;
+
+                // Front: Japanese object large
+                if !show-back: Text {
+                    text: data.jap-obj;
+                    font-size: 36px;
+                    color: #2c3e50;
+                    horizontal-alignment: center;
+                    vertical-alignment: center;
+                }
+
+                // Back: Japanese object small (reminder)
+                if show-back: Text {
+                    text: data.jap-obj;
+                    font-size: 18px;
+                    color: #7f8c8d;
+                    horizontal-alignment: center;
+                }
+
+                // Back: Explanation large
+                if show-back: Text {
+                    text: data.explanation;
+                    font-size: 26px;
+                    color: #2c3e50;
+                    horizontal-alignment: center;
+                    vertical-alignment: center;
+                    wrap: word-wrap;
+                }
+
+                Text {
+                    text: show-back ? "Tap to hide" : "Tap to reveal";
+                    font-size: 12px;
+                    color: #95a5a6;
+                    horizontal-alignment: center;
+                }
+            }
+        }
+
+        // Known/Unknown toggle — checked styling reflects known state
+        CommonButton {
+            text: known ? "Known" : "Unknown";
+            checked: known;
+            clicked => {
+                known = !known;
+                known-toggled(known);
+            }
+        }
+    }
+}
