@@ -17,8 +17,13 @@ agent: speckit.tasks
 - [x] 1.1 Setup Slint and Rust framework. Initialize Rust project structure with Cargo.
 - [x] 1.1.1 Fix warning in build after task 1.1 implementation.
 - [x] 1.2 Configure build targets for Windows and WebAssembly. Ensure `wasm-pack` and `wasm-opt` are integrated for WebAssembly builds.
-- [ ] 1.3 Create base UI layout (main window, navigation).
-- [ ] 1.4 Implement sample data models with hardcoded flashcards.
+- [ ] 1.3.1 Create base UI layout (main window, page, navigation between pages). The pages are intended for study mode and review mode. Navigation between the pages is supported by a button.
+- [ ] 1.3.2 Implement Common UI components (buttons, lists) in Slint. The list provides placeholders for flashcard stacks and flashcards, but does not yet implement dynamic data binding or interactivity. The list provides buttons to add new flashcards and stacks, but the functionality is not yet implemented.
+- [ ] 1.3.3 Implement flashcard in Slint. The flashcard components should accept data models for the Japanese word and Vietnamese meaning. It must have front and back properties, and a mechanism to toggle between them. The flash card must have properties for user to mark the card as known or unknown. The flashcard should be designed to be reusable across different parts of the application (e.g., stack view, study mode).
+- [ ] 1.4.1 Implement sample data models with hardcoded flashcards.
+- [ ] 1.4.2 Implement sample data models with hardcoded flashcard stacks.
+- [ ] 1.4.3 Implement flashcard stack in Slint that inherits from the common list component created in 1.3.2. The flashcard stack component should accept a collection of flashcard data models and display them in a list or grid format. It should support basic interactions such as selecting a flashcard to view details, and provide a mechanism to add new flashcards to the stack. The stack component should be designed to be reusable across different parts of the application (e.g., main page, study mode).
+- [ ] 1.4.4 Bind sample data models to the UI components (flashcards and stacks) to display the hardcoded data in the application.
 - [ ] 1.5 Verify compilation and run on Windows and WebAssembly.
 
 ## Phase 2: Flashcard Management
