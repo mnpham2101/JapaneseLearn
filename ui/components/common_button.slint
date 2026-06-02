@@ -1,0 +1,31 @@
+export component CommonButton {
+    in property<string> text: "";
+    in property<bool> primary: false;
+    callback clicked;
+
+    Rectangle {
+        width: 100%;
+        height: 40px;
+        border-radius: 8px;
+        background: primary ? #3498db : #95a5a6;
+
+        HorizontalLayout {
+            padding: 10px;
+            alignment: center;
+
+            Text {
+                text: text;
+                color: #ffffff;
+                horizontal-alignment: center;
+                vertical-alignment: center;
+                font-size: 14px;
+            }
+        }
+
+        TouchArea {
+            clicked => {
+                clicked();
+            }
+        }
+    }
+}
