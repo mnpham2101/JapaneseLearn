@@ -60,7 +60,7 @@ export component MainWindow inherits Window {
                     width: 150px;
                     height: 40px;
                     button-text: "Study Mode";
-                    active: current-page == PageType.StudyMode;
+                    primary: current-page == PageType.StudyMode;
                     clicked => {
                         current-page = PageType.StudyMode;
                     }
@@ -70,7 +70,7 @@ export component MainWindow inherits Window {
                     width: 150px;
                     height: 40px;
                     button-text: "Review Mode";
-                    active: current-page == PageType.ReviewMode;
+                    primary: current-page == PageType.ReviewMode;
                     clicked => {
                         current-page = PageType.ReviewMode;
                     }
