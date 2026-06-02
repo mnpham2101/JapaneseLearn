@@ -6,6 +6,7 @@ agent: speckit.constitution
 
 # Slint Best Practices
 - UI definitions **must** be separated into `.slint` files; Rust logic **must not** be mixed with UI markup.
+- Each UI component **must** be defined in its own `.slint` file and imported where needed to promote reusability and maintainability.
 - Property bindings **must** be used instead of imperative updates wherever possible.
 - The `changed` keyword **must** be used to react to property changes.
 - Component hierarchies **should** remain shallow; reusable custom components **must** be preferred over duplication.
