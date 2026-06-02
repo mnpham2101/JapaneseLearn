@@ -1,31 +1,63 @@
-export component CommonButton {
+export component CommonButton inherits Rectangle {
     in property<string> text: "";
     in property<bool> primary: false;
+
+    // button could be disable. Callback can only be invoked when enabled is true.
+    in-out property<bool> enabled: true;
+    // if the button is clicked, button state changes. Useful for toggle button, in flashcard
+    in-out property<bool> checked: false;
+    // if the button is checkable, it can be checked or unchecked when clicked. Otherwise, it behaves like a normal button without checked state. Useful for mutual exclusive button group, in flashcard stack list.
+    in property<bool> checkable: false;
+    // if the button is pressed, it is being clicked. Useful for visual feedback when user clicks and holds the button.
+    out property<bool> pressed <=> ta.pressed;
+
+    in property<string> accessibilityLabel: "";
+    in property<string> accessibilityDescription: "";
+    in property<string> accessibilityId: "";
+
     callback clicked;
 
-    Rectangle {
-        width: 100%;
-        height: 40px;
-        border-radius: 8px;
-        background: primary ? #3498db : #95a5a6;
+    width: 100%;
+    height: 40px;
+    border-radius: 8px;
+    accessible-role: button;
+    accessible-label: accessibilityLabel != "" ? accessibilityLabel : text;
+    accessible-description: accessibilityDescription;
+    accessible-id: accessibilityId;
+    accessible-enabled: enabled;
+    accessible-checkable: checkable;
+    accessible-checked: checked;
+    background: !enabled ? #bdc3c7 : (checked ? #2c3e50 : (primary ? #3498db : #95a5a6));
+    opacity: pressed ? 0.9 : (enabled ? 1.0 : 0.85);
 
-        HorizontalLayout {
-            padding: 10px;
-            alignment: center;
+    HorizontalLayout {
+        padding: 10px;
+        alignment: center;
 
-            Text {
-                text: text;
-                color: #ffffff;
-                horizontal-alignment: center;
-                vertical-alignment: center;
-                font-size: 14px;
-            }
+        Text {
+            text: text;
+            color: #ffffff;
+            horizontal-alignment: center;
+            vertical-alignment: center;
+            font-size: 14px;
         }
+    }
 
-        TouchArea {
-            clicked => {
+    ta:=TouchArea {
+        enabled: enabled;
+        clicked => {
+            if (checkable) {
+                checked = !checked;
+            }
+            if (enabled) {
                 clicked();
             }
+        }
+    }
+
+    accessible-action-default => {
+        if (enabled) {
+            clicked();
         }
     }
 }
