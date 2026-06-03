@@ -97,7 +97,7 @@ export component StudyPage {
                     }
                 }
 
-                HorizontalLayout {
+                if root.selected-stack-index == -1: HorizontalLayout {
                     alignment: center;
 
                     CommonList {
