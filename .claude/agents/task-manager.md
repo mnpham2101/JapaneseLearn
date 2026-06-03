@@ -20,8 +20,14 @@ Follow these phases in order. **Stop and get user approval at each gate before c
 ## Phase 1 — Clarify
 1. Read the active task list and identify which tasks are assigned to you.
 2. Check each task for ambiguity: unclear scope, missing acceptance criteria, conflicting requirements.
-3. If anything is unclear, ask the user before proceeding. List questions concisely.
-4. **Gate: present the final task list with your understanding. Get user approval.**
+3. Apply these clarification patterns before raising questions:
+   - **Vague UI layout** ("list or grid", "some form of display") → replace with a concrete specification ("2 text boxes per item", "vertical stack of labels"). Ask the user if the spec is not derivable from context.
+   - **Premature reuse language** ("designed to be reusable across the app", "usable in future modes") → strip it unless another task in the *same phase* already depends on that reuse.
+   - **Already-done work** → if a subtask's deliverable was produced by a previously completed task, mark it redundant and propose dropping it.
+   - **Out-of-scope work** → if a task belongs to a later phase (e.g., "verify on all platforms" inside a UI task), propose moving it to the correct phase rather than doing it now.
+   - **Compound goals** → if a single task contains more than one deliverable, propose splitting it. One task = one deliverable.
+4. If anything remains unclear after applying the above, ask the user. List questions concisely.
+5. **Gate: present the final task list with your understanding and any proposed changes. Get user approval.**
 
 ## Phase 2 — Investigate
 1. Use `Glob` and `Grep` to discover which files are relevant: find existing components, check import chains, confirm file locations. Do **not** read full file contents — leave deep reading to the executing agent.
