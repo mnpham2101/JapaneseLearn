@@ -1,0 +1,35 @@
+import { CommonList } from "common_list.slint";
+import { FlashcardLabel } from "flashcard_label.slint";
+import { FlashcardStackModel } from "flashcard.slint";
+
+// List of flashcard stacks shown as selectable labels.
+export component FlashcardList {
+    in property<[FlashcardStackModel]> stacks: [];
+    HorizontalLayout {
+        alignment: LayoutAlignment.center;
+        VerticalLayout {
+            spacing: 10px;
+            alignment: LayoutAlignment.center;
+            for stack[i] in stacks: Rectangle {
+                width: 200px;
+                height: 50px;
+                border-radius: 10px;
+                background: #f7f9fb;
+                border-width: 1px;
+                border-color: #d0d8e6;
+
+                HorizontalLayout {
+                    padding-left: 12px;
+                    padding-right: 12px;
+                    alignment: center;
+
+                    Text {
+                        text: stack.stackname;
+                        font-size: 14px;
+                        color: #34495e;
+                    }
+                }
+            }
+        }
+    }
+}

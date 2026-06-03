@@ -1,10 +1,36 @@
 import { CommonList } from "../components/common_list.slint";
 import { CommonButton } from "../components/common_button.slint";
+import { FlashcardStackModel } from "../components/flashcard.slint";
+import { FlashcardList } from "../components/flashcard_list.slint";
 
 export component StudyPage {
     width: 100%;
     height: 100%;
-    property<[string]> items: ["Hiragana Basics", "N5 Vocabulary", "Travel Phrases"];
+    property<[FlashcardStackModel]> flashcardList: [
+        {
+            stackname: "Hiragana Basics",
+            flashcards: [
+                { jap-obj: "あ", explanation: "a", known: false },
+                { jap-obj: "い", explanation: "i", known: false },
+                { jap-obj: "う", explanation: "u", known: false },
+            ],
+        },
+        {
+            stackname: "N5 Vocabulary",
+            flashcards: [
+                { jap-obj: "水", explanation: "water (mizu)", known: false },
+                { jap-obj: "火", explanation: "fire (hi)",   known: false },
+            ],
+        },
+        {
+            stackname: "Travel Phrases",
+            flashcards: [
+                { jap-obj: "ありがとう", explanation: "Thank you",   known: false },
+                { jap-obj: "すみません", explanation: "Excuse me",   known: false },
+            ],
+        },
+    ];
+
     Rectangle {
         width: 100%;
         height: 100%;
@@ -34,31 +60,19 @@ export component StudyPage {
                 }
             }
 
-            CommonList {
-                title: "Flashcard Stacks";
-                for item in items: Rectangle {
-                    width: 100%;
-                    height: 50px;
-                    border-radius: 10px;
-                    background: #f7f9fb;
-                    border-width: 1px;
-                    border-color: #d0d8e6;
+            HorizontalLayout {
+                alignment: center;
 
-                    HorizontalLayout {
-                        padding-left: 12px;
-                        padding-right: 12px;
-                        alignment: center;
-
-                        Text {
-                            text: item;
-                            font-size: 14px;
-                            color: #34495e;
-                        }
+                CommonList {
+                    width: 400px;
+                    title: "Flashcard Stacks";
+                    FlashcardList{
+                        stacks: root.flashcardList;
                     }
-                }
-                addButtonText: "Add Stack";
-                addClicked => {
-                    // Placeholder action for add stack
+                    addButtonText: "Add Stack";
+                    addClicked => {
+                        // Placeholder action for add stack
+                    }
                 }
             }
         }
