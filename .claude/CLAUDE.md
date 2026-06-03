@@ -17,52 +17,66 @@ python3 -m http.server  # serves at http://localhost:8000
 
 Prerequisites: Rust 1.96+, `cargo install wasm-opt` for web builds.
 
+### Build troubleshooting
+
+If `cargo build` fails with `LNK1201` (PDB locked by a running process):
+```powershell
+taskkill /F /IM japanese_learn.exe 2>$null
+Remove-Item "target\debug\deps\japanese_learn.pdb" -ErrorAction SilentlyContinue
+Remove-Item "target\debug\japanese_learn.pdb" -ErrorAction SilentlyContinue
+cargo build
+```
+
 ## Project Structure
 
 ```
 src/
-  main.rs              # entry point only — no business logic here
+  main.rs                       # entry point only — no business logic here
 ui/
-  main_window.slint    # root window, page routing
-  components/          # reusable widgets (common_button, nav_button, common_list)
-  pages/               # page-level components (study_page, review_page)
+  main_window.slint             # root window, page routing
+  components/                   # reusable widgets — one component per file
+  pages/                        # page-level components (study_page, review_page)
+.claude/
+  agents/slint-developer.md     # Slint developer agent (use for all .slint work)
+  rules/slint-code-style.md     # Slint coding rules and declarative patterns
+  rules/rust-code-style.md      # Rust coding rules
+  skill/implement-tasks/SKILL.md  # task execution guidelines
+.github/prompts/
+  speckit.tasks.prompt.md       # active task list
+  speckit.constitution.prompt.md  # general programming practices + workflow
+  speckit.clarify.prompt.md     # Slint UI design patterns reference
 ```
 
-## Slint Rules (MUST follow)
+## Coding Standards
 
-- UI definitions **must** live in `.slint` files — never mix Rust logic into markup.
-- Each component **must** be in its own `.slint` file; import where needed.
-- Use **property bindings** instead of imperative updates; react to changes with the `changed` keyword.
-- Keep component hierarchies **shallow**; prefer reusable components over duplication.
-- Common components (buttons, lists) **must** define base properties/behaviors and be extended for specific cases.
-- Build with **hardcoded default models first**; only integrate dynamic data after a successful build.
-- No unnecessary animations or large assets — optimize for lightweight rendering.
+Full rules live in the dedicated files — do not duplicate here:
+- **Slint/UI**: `.claude/rules/slint-code-style.md`
+- **Rust**: `.claude/rules/rust-code-style.md`
 
-## Rust Rules (MUST follow)
-
-- Favor `let` over `let mut`; mutate only when essential.
-- Error handling via `Result`/`Option` — no panics in normal control flow.
-- Separate concerns into distinct modules:
-  - **UI logic** — Slint event handling and property updates
-  - **Business logic** — core flashcard/study functionality
-  - **Data access** — JSON/file persistence
-- Document public APIs with `///` doc comments and examples.
-- Use only well-maintained crates; keep dependencies minimal.
+Key invariants (always apply):
+- One `.slint` component per file; reusable widgets in `ui/components/`, pages in `ui/pages/`.
+- Property bindings over imperative callbacks; `<=>` for two-way state sync.
+- Hardcoded models first; integrate dynamic data only after a successful build.
+- No Rust logic inside `.slint` files.
 
 ## Git & Commit Discipline
 
-- Commits **must** be atomic (one objective per commit) and pass `cargo build` + `cargo test`.
-- Commit message format: `type: description [Task X.Y]` where X = phase, Y = task number.
-- Run `cargo fmt` and `cargo clippy` before every commit.
+- Commits **must** be atomic — one objective per commit.
+- Run `cargo fmt`, `cargo clippy`, and `cargo build` before every commit.
+- Commit message format:
+  ```
+  type: description
+  TaskId: Task X.Y
+  ```
 - Never include unrelated changes in the same commit.
 
 ## Implementation Workflow
 
-1. Select a task from the current `specs/.../tasks.md`.
-2. Implement in Rust + Slint following all constitution rules.
-3. Validate: build for Windows **and** WebAssembly, run tests, manually test UI.
-4. Commit with descriptive message referencing the task ID.
-5. Review before proceeding to the next task.
+1. Pick the next open task from `.github/prompts/speckit.tasks.prompt.md`.
+2. Use the **slint-developer** agent (`.claude/agents/slint-developer.md`) for all `.slint` work.
+3. Follow task execution rules in `.claude/skill/implement-tasks/SKILL.md`.
+4. Validate: `cargo build` passes, UI tested manually.
+5. Suggest a commit message referencing the task ID; await review before the next task.
 
 ## Reuse & Simplicity
 
@@ -72,6 +86,4 @@ ui/
 
 ## Constitution Reference
 
-Full project constitution: [`.specify/memory/constitution.md`](.specify/memory/constitution.md) (v1.0.0, ratified 2026-06-01).
-Speckit workflow prompts: [`.github/prompts/`](.github/prompts/).
-
+Full project constitution: `.specify/memory/constitution.md` (v1.0.0, ratified 2026-06-01).
