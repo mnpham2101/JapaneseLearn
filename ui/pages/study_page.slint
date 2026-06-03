@@ -6,7 +6,7 @@ import { FlashcardList } from "../components/flashcard_list.slint";
 export component StudyPage {
     width: 100%;
     height: 100%;
-    property<[FlashcardStackModel]> flashcardList: [
+    property <[FlashcardStackModel]> flashcardList: [
         {
             stackname: "Hiragana Basics",
             flashcards: [
@@ -19,22 +19,35 @@ export component StudyPage {
             stackname: "N5 Vocabulary",
             flashcards: [
                 { jap-obj: "水", explanation: "water (mizu)", known: false },
-                { jap-obj: "火", explanation: "fire (hi)",   known: false },
+                { jap-obj: "火", explanation: "fire (hi)", known: false },
             ],
         },
         {
             stackname: "Travel Phrases",
             flashcards: [
-                { jap-obj: "ありがとう", explanation: "Thank you",   known: false },
-                { jap-obj: "すみません", explanation: "Excuse me",   known: false },
+                { jap-obj: "ありがとう", explanation: "Thank you", known: false },
+                { jap-obj: "すみません", explanation: "Excuse me", known: false },
             ],
         },
     ];
+
+    // Tracks which stack label is selected; -1 means none.
+    property <int> selected-stack-index: -1;
+    property <bool> show-stack: selected-stack-index >= 0;
 
     Rectangle {
         width: 100%;
         height: 100%;
         background: #ffffff;
+
+        // Background dismiss — lower z-order than all content.
+        // Captures clicks on empty areas outside the detail pane and list,
+        // closing the stack detail by clicking outside stack detail, in TouchArea
+        TouchArea {
+            clicked => {
+                root.selected-stack-index = -1;
+            }
+        }
 
         VerticalLayout {
             padding: 20px;
@@ -55,23 +68,49 @@ export component StudyPage {
                     text: "Create Stack";
                     primary: true;
                     clicked => {
-                        // Placeholder action for create stack
                     }
                 }
             }
 
-            HorizontalLayout {
-                alignment: center;
+            // Vertically stacked pattern: detail pane slides in above the list.
+            // alignment: end keeps the list anchored at the bottom.
+            VerticalLayout {
+                alignment: LayoutAlignment.end;
+                vertical-stretch: 1;
 
-                CommonList {
-                    width: 400px;
-                    title: "Flashcard Stacks";
-                    FlashcardList{
-                        stacks: root.flashcardList;
+                if root.show-stack: Rectangle {
+                    background: #f0f4f8;
+                    border-radius: 12px;
+                    border-width: 1px;
+                    border-color: #c8d6e5;
+                    height: 80px;
+
+                    // Absorbs clicks so they do not reach the background TouchArea.
+                    TouchArea { }
+
+                    Text {
+                        text: "Flashcard stack details — " + root.flashcardList[root.selected-stack-index].stackname;
+                        font-size: 16px;
+                        color: #2c3e50;
+                        horizontal-alignment: center;
+                        vertical-alignment: center;
                     }
-                    addButtonText: "Add Stack";
-                    addClicked => {
-                        // Placeholder action for add stack
+                }
+
+                HorizontalLayout {
+                    alignment: center;
+
+                    CommonList {
+                        width: 400px;
+                        title: "Flashcard Stacks";
+                        flashcard-list := FlashcardList {
+                            stacks: root.flashcardList;
+                            selected-index <=> root.selected-stack-index;
+                        }
+
+                        addButtonText: "Add Stack";
+                        addClicked => {
+                        }
                     }
                 }
             }
