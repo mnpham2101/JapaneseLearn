@@ -4,7 +4,7 @@ import { CommonButton } from "../components/common_button.slint";
 export component StudyPage {
     width: 100%;
     height: 100%;
-
+    property<[string]> items: ["Hiragana Basics", "N5 Vocabulary", "Travel Phrases"];
     Rectangle {
         width: 100%;
         height: 100%;
@@ -36,7 +36,26 @@ export component StudyPage {
 
             CommonList {
                 title: "Flashcard Stacks";
-                items: ["Hiragana Basics", "N5 Vocabulary", "Travel Phrases"];
+                for item in items: Rectangle {
+                    width: 100%;
+                    height: 50px;
+                    border-radius: 10px;
+                    background: #f7f9fb;
+                    border-width: 1px;
+                    border-color: #d0d8e6;
+
+                    HorizontalLayout {
+                        padding-left: 12px;
+                        padding-right: 12px;
+                        alignment: center;
+
+                        Text {
+                            text: item;
+                            font-size: 14px;
+                            color: #34495e;
+                        }
+                    }
+                }
                 addButtonText: "Add Stack";
                 addClicked => {
                     // Placeholder action for add stack

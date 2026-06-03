@@ -26,26 +26,7 @@ export component CommonList {
 
             VerticalLayout {
                 spacing: 10px;
-                for item in items: Rectangle {
-                    width: 100%;
-                    height: 50px;
-                    border-radius: 10px;
-                    background: #f7f9fb;
-                    border-width: 1px;
-                    border-color: #d0d8e6;
-
-                    HorizontalLayout {
-                        padding-left: 12px;
-                        padding-right: 12px;
-                        alignment: center;
-
-                        Text {
-                            text: item;
-                            font-size: 14px;
-                            color: #34495e;
-                        }
-                    }
-                }
+                @children
             }
 
             CommonButton {
