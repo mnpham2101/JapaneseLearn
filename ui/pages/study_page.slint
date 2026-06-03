@@ -2,6 +2,7 @@ import { CommonList } from "../components/common_list.slint";
 import { CommonButton } from "../components/common_button.slint";
 import { FlashcardStackModel } from "../components/flashcard.slint";
 import { FlashcardList } from "../components/flashcard_list.slint";
+import { FlashcardStack } from "../components/flashcard_stack.slint";
 
 export component StudyPage {
     width: 100%;
@@ -78,23 +79,9 @@ export component StudyPage {
                 alignment: LayoutAlignment.end;
                 vertical-stretch: 1;
 
-                if root.show-stack: Rectangle {
-                    background: #f0f4f8;
-                    border-radius: 12px;
-                    border-width: 1px;
-                    border-color: #c8d6e5;
-                    height: 80px;
-
-                    // Absorbs clicks so they do not reach the background TouchArea.
-                    TouchArea { }
-
-                    Text {
-                        text: "Flashcard stack details — " + root.flashcardList[root.selected-stack-index].stackname;
-                        font-size: 16px;
-                        color: #2c3e50;
-                        horizontal-alignment: center;
-                        vertical-alignment: center;
-                    }
+                if root.show-stack: FlashcardStack {
+                    stack: root.flashcardList[root.selected-stack-index];
+                    close-clicked => { root.selected-stack-index = -1; }
                 }
 
                 if root.selected-stack-index == -1: HorizontalLayout {

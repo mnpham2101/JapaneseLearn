@@ -1,0 +1,102 @@
+import { FlashcardStackModel } from "flashcard.slint";
+import { CommonButton } from "common_button.slint";
+
+// Displays all flashcards in a single stack.
+// close-clicked lets the parent (StudyPage) collapse this view back to the list.
+// addFlashcard is a placeholder for future card-creation flow.
+export component FlashcardStack {
+    in property<FlashcardStackModel> stack: { stackname: "", flashcards: [] };
+    callback addFlashcard;
+    callback close-clicked;
+
+    Rectangle {
+        width: 100%;
+        background: #f0f4f8;
+        border-radius: 12px;
+        border-width: 1px;
+        border-color: #c8d6e5;
+        clip: true;
+
+        // Absorbs all pointer events so they never reach the background
+        // TouchArea in StudyPage, which would dismiss this component.
+        TouchArea {}
+
+        VerticalLayout {
+            padding: 16px;
+            spacing: 12px;
+
+            HorizontalLayout {
+                spacing: 10px;
+
+                Text {
+                    text: stack.stackname;
+                    font-size: 20px;
+                    font-weight: 700;
+                    color: #2c3e50;
+                    vertical-alignment: center;
+                    horizontal-stretch: 1;
+                }
+
+                CommonButton {
+                    width: 32px;
+                    height: 32px;
+                    text: "✕";
+                    accessibilityLabel: "Close stack";
+                    clicked => root.close-clicked();
+                }
+            }
+
+            VerticalLayout {
+                spacing: 8px;
+                for card in stack.flashcards: HorizontalLayout {
+                    spacing: 16px;
+                    padding: 8px;
+                    height: 44px;
+
+                    // Japanese word field
+                    Rectangle {
+                        horizontal-stretch: 1;
+                        border-width: 1px;
+                        border-color: #b0c4de;
+                        border-radius: 6px;
+                        background: #ffffff;
+
+                        TextInput {
+                            text: card.jap-obj;
+                            font-size: 18px;
+                            color: #2c3e50;
+                            vertical-alignment: center;
+                            width: parent.width - 12px;
+                            x: 6px;
+                        }
+                    }
+
+                    // Vietnamese meaning field
+                    Rectangle {
+                        horizontal-stretch: 1;
+                        border-width: 1px;
+                        border-color: #b0c4de;
+                        border-radius: 6px;
+                        background: #ffffff;
+
+                        TextInput {
+                            text: card.explanation;
+                            font-size: 16px;
+                            color: #7f8c8d;
+                            vertical-alignment: center;
+                            width: parent.width - 12px;
+                            x: 6px;
+                        }
+                    }
+                }
+            }
+
+            CommonButton {
+                width: 160px;
+                text: "Add Flashcard";
+                primary: true;
+                clicked => root.addFlashcard();
+            }
+        }
+    }
+}
