@@ -6,6 +6,11 @@ export struct FlashcardModel {
     known: bool,
 }
 
+export struct FlashcardStackModel {
+    stackname: string,
+    flashcards: [FlashcardModel],
+}
+
 export component Flashcard {
     in property<FlashcardModel> data: { jap-obj: "", explanation: "", known: true };
     in-out property<bool> show-back: false;
