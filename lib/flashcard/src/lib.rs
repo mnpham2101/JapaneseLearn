@@ -1,9 +1,13 @@
-slint::include_modules!();
+pub mod flashcard {
+    slint::include_modules!();
+}
+
+use flashcard::FlashcardAppLogic;
 
 pub fn init<T>(ui: &T)
 where
     T: slint::ComponentHandle + 'static,
+    for<'a> FlashcardAppLogic<'a>: slint::Global<'a, T>,
 {
-    // Phase 2 callback registrations will be added here incrementally.
-    let _ = ui; // suppress unused warning until Phase 2 wires callbacks
+    let _ = ui.global::<FlashcardAppLogic>(); // Global bound verified; Phase 2 adds handlers here
 }

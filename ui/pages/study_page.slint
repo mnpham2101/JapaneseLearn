@@ -1,4 +1,11 @@
-import { CommonList, CommonBtn, FlashcardStackModel, FlashcardList, FlashcardStack, FlashcardAppLogic } from "@flashcard/ui/main_lib.slint";
+import {
+    CommonList,
+    CommonBtn,
+    FlashcardStackModel,
+    FlashcardList,
+    FlashcardStack,
+    FlashcardAppLogic,
+} from "@flashcard";
 
 export component StudyPage {
     width: 100%;
@@ -50,7 +57,9 @@ export component StudyPage {
 
                 if root.show-stack: FlashcardStack {
                     stack: FlashcardAppLogic.flashcard-list[FlashcardAppLogic.selected-stack-index];
-                    close-clicked => { FlashcardAppLogic.selected-stack-index = -1; }
+                    close-clicked => {
+                        FlashcardAppLogic.selected-stack-index = -1;
+                    }
                 }
 
                 if FlashcardAppLogic.selected-stack-index == -1: HorizontalLayout {

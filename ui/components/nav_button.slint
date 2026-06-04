@@ -1,7 +1,7 @@
-import { CommonBtn } from "@flashcard/ui/main_lib.slint";
+import { CommonBtn } from "@flashcard";
 
 export component NavBtn inherits CommonBtn {
-    in property<string> button-text: "";
+    in property <string> button-text: "";
 
     // Use common button behavior while exposing nav-specific properties.
     text: button-text;

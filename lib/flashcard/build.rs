@@ -1,3 +1,6 @@
 fn main() {
-    slint_build::compile("ui/main_lib.slint").unwrap();
+    let config = slint_build::CompilerConfiguration::new()
+        .as_library("flashcard")
+        .rust_module("flashcard");
+    slint_build::compile_with_config("ui/flashcard_lib.slint", config).unwrap();
 }

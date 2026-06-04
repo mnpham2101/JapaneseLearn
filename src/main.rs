@@ -6,6 +6,6 @@ slint::include_modules!();
 #[cfg_attr(target_family = "wasm", wasm_bindgen(start))]
 fn main() {
     let window = MainWindow::new().expect("Failed to create MainWindow");
-    flashcard::init(&window);
+    ::flashcard::init(&window);
     window.run().expect("Failed to run MainWindow");
 }
