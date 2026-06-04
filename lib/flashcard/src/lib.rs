@@ -6,12 +6,92 @@ pub mod flashcard {
 
 use flashcard::FlashcardAppLogic;
 
+// ── Persistence ──────────────────────────────────────────────────────────────
+
+const STACKS_FILE: &str = "stacks.json";
+
+#[derive(serde::Serialize, serde::Deserialize)]
+struct CardData {
+    jap_obj: String,
+    explanation: String,
+    known: bool,
+}
+
+#[derive(serde::Serialize, serde::Deserialize)]
+struct StackData {
+    stackname: String,
+    flashcards: Vec<CardData>,
+}
+
+fn to_stack_data(stacks: &[flashcard::FlashcardStackModel]) -> Vec<StackData> {
+    stacks
+        .iter()
+        .map(|s| StackData {
+            stackname: s.stackname.to_string(),
+            flashcards: s
+                .flashcards
+                .iter()
+                .map(|c| CardData {
+                    jap_obj: c.jap_obj.to_string(),
+                    explanation: c.explanation.to_string(),
+                    known: c.known,
+                })
+                .collect(),
+        })
+        .collect()
+}
+
+fn from_stack_data(data: Vec<StackData>) -> Vec<flashcard::FlashcardStackModel> {
+    data.into_iter()
+        .map(|s| flashcard::FlashcardStackModel {
+            stackname: s.stackname.into(),
+            flashcards: slint::ModelRc::new(slint::VecModel::from(
+                s.flashcards
+                    .into_iter()
+                    .map(|c| flashcard::FlashcardModel {
+                        jap_obj: c.jap_obj.into(),
+                        explanation: c.explanation.into(),
+                        known: c.known,
+                    })
+                    .collect::<Vec<_>>(),
+            )),
+        })
+        .collect()
+}
+
+#[cfg(not(target_arch = "wasm32"))]
+fn save_stacks(stacks: &[flashcard::FlashcardStackModel]) {
+    if let Ok(json) = serde_json::to_string_pretty(&to_stack_data(stacks)) {
+        let _ = std::fs::write(STACKS_FILE, json);
+    }
+}
+
+#[cfg(target_arch = "wasm32")]
+fn save_stacks(_stacks: &[flashcard::FlashcardStackModel]) {}
+
+#[cfg(not(target_arch = "wasm32"))]
+fn load_stacks() -> Option<Vec<flashcard::FlashcardStackModel>> {
+    let json = std::fs::read_to_string(STACKS_FILE).ok()?;
+    let data: Vec<StackData> = serde_json::from_str(&json).ok()?;
+    Some(from_stack_data(data))
+}
+
+#[cfg(target_arch = "wasm32")]
+fn load_stacks() -> Option<Vec<flashcard::FlashcardStackModel>> {
+    None
+}
+
 pub fn init<T>(ui: &T)
 where
     T: slint::ComponentHandle + 'static,
     for<'a> FlashcardAppLogic<'a>: slint::Global<'a, T>,
 {
     let logic = ui.global::<FlashcardAppLogic>();
+
+    // Restore persisted stacks on startup (no-op on WASM).
+    if let Some(stacks) = load_stacks() {
+        logic.set_flashcard_list(slint::ModelRc::new(slint::VecModel::from(stacks)));
+    }
 
     {
         let ui_weak = ui.as_weak();
@@ -24,7 +104,8 @@ where
                 stackname: name,
                 flashcards: slint::ModelRc::new(slint::VecModel::from(vec![])),
             });
-            logic.set_flashcard_list(slint::ModelRc::new(slint::VecModel::from(stacks)));
+            logic.set_flashcard_list(slint::ModelRc::new(slint::VecModel::from(stacks.clone())));
+            save_stacks(&stacks);
         });
     }
 
@@ -49,7 +130,8 @@ where
                 });
                 stack.flashcards = slint::ModelRc::new(slint::VecModel::from(cards));
             }
-            logic.set_flashcard_list(slint::ModelRc::new(slint::VecModel::from(stacks)));
+            logic.set_flashcard_list(slint::ModelRc::new(slint::VecModel::from(stacks.clone())));
+            save_stacks(&stacks);
         });
     }
 
@@ -74,7 +156,8 @@ where
                 }
                 stack.flashcards = slint::ModelRc::new(slint::VecModel::from(cards));
             }
-            logic.set_flashcard_list(slint::ModelRc::new(slint::VecModel::from(stacks)));
+            logic.set_flashcard_list(slint::ModelRc::new(slint::VecModel::from(stacks.clone())));
+            save_stacks(&stacks);
         });
     }
 
@@ -98,7 +181,8 @@ where
                 }
                 stack.flashcards = slint::ModelRc::new(slint::VecModel::from(cards));
             }
-            logic.set_flashcard_list(slint::ModelRc::new(slint::VecModel::from(stacks)));
+            logic.set_flashcard_list(slint::ModelRc::new(slint::VecModel::from(stacks.clone())));
+            save_stacks(&stacks);
         });
     }
 
@@ -118,7 +202,8 @@ where
                 stacks.remove(idx);
             }
             logic.set_selected_stack_index(-1);
-            logic.set_flashcard_list(slint::ModelRc::new(slint::VecModel::from(stacks)));
+            logic.set_flashcard_list(slint::ModelRc::new(slint::VecModel::from(stacks.clone())));
+            save_stacks(&stacks);
         });
     }
 
@@ -144,7 +229,8 @@ where
                 }
                 stack.flashcards = slint::ModelRc::new(slint::VecModel::from(cards));
             }
-            logic.set_flashcard_list(slint::ModelRc::new(slint::VecModel::from(stacks)));
+            logic.set_flashcard_list(slint::ModelRc::new(slint::VecModel::from(stacks.clone())));
+            save_stacks(&stacks);
         });
     }
 }
