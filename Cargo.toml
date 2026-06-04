@@ -1,3 +1,11 @@
+[workspace]
+members = [".", "lib/flashcard"]
+resolver = "2"
+
+[workspace.dependencies]
+slint = { version = "1.16.1", features = ["compat-1-0"] }
+slint-build = "1.16.1"
+
 [package]
 name = "japanese_learn"
 version = "0.1.0"
@@ -9,10 +17,11 @@ readme = "README.md"
 build = "build.rs"
 
 [dependencies]
-slint = { version = "1.16.1", features = ["compat-1-0"] }
+slint = { workspace = true }
+flashcard = { path = "lib/flashcard" }
 
 [build-dependencies]
-slint-build = "1.16.1"
+slint-build = { workspace = true }
 
 [lib]
 path = "src/main.rs"
