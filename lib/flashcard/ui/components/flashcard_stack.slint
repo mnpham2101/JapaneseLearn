@@ -6,11 +6,13 @@ import { Tokens } from "../styles/tokens.slint";
 // close-clicked lets the parent (StudyPage) collapse this view back to the list.
 // flashcard-add-confirmed is fired when the user submits the add-flashcard form.
 // flashcard-field-changed is fired when a card's text field is edited.
+// flashcard-delete-confirmed is fired when the delete button on a card is clicked.
 export component FlashcardStack {
     in property<FlashcardStackModel> stack: { stackname: "", flashcards: [] };
     in-out property <bool> show-add-form: false;
     callback flashcard-add-confirmed(jap: string, meaning: string);
     callback flashcard-field-changed(card-index: int, jap: string, meaning: string);
+    callback flashcard-delete-confirmed(card-index: int);
     callback close-clicked;
 
     stack-container := Rectangle {
@@ -97,6 +99,16 @@ export component FlashcardStack {
                             edited => {
                                 root.flashcard-field-changed(i, jap-txt.text, self.text);
                             }
+                        }
+                    }
+
+                    CommonBtn {
+                        width: 32px;
+                        height: 32px;
+                        text: "✕";
+                        accessibilityLabel: "Delete card";
+                        clicked => {
+                            root.flashcard-delete-confirmed(i);
                         }
                     }
                 }
