@@ -1,5 +1,6 @@
 import { FlashcardStackModel } from "flashcard.slint";
 import { CommonButton } from "common_button.slint";
+import { Tokens } from "../styles/tokens.slint";
 
 // Displays all flashcards in a single stack.
 // close-clicked lets the parent (StudyPage) collapse this view back to the list.
@@ -9,12 +10,12 @@ export component FlashcardStack {
     callback addFlashcard;
     callback close-clicked;
 
-    Rectangle {
+    stack-container := Rectangle {
         width: 100%;
-        background: #f0f4f8;
-        border-radius: 12px;
-        border-width: 1px;
-        border-color: #c8d6e5;
+        background: Tokens.card-container-background;
+        border-radius: Tokens.card-container-border-radius;
+        border-width: Tokens.border-width;
+        border-color: Tokens.card-container-border-color;
         clip: true;
 
         // Absorbs all pointer events so they never reach the background
@@ -22,17 +23,17 @@ export component FlashcardStack {
         TouchArea {}
 
         VerticalLayout {
-            padding: 16px;
-            spacing: 12px;
+            padding: Tokens.padding-lg;
+            spacing: Tokens.spacing-md;
 
             HorizontalLayout {
                 spacing: 10px;
 
                 Text {
                     text: stack.stackname;
-                    font-size: 20px;
+                    font-size: Tokens.font-size-title;
                     font-weight: 700;
-                    color: #2c3e50;
+                    color: Tokens.text-primary;
                     vertical-alignment: center;
                     horizontal-stretch: 1;
                 }
@@ -47,45 +48,45 @@ export component FlashcardStack {
             }
 
             VerticalLayout {
-                spacing: 8px;
+                spacing: Tokens.spacing-sm;
                 for card in stack.flashcards: HorizontalLayout {
                     spacing: 16px;
-                    padding: 8px;
+                    padding: Tokens.padding-sm;
                     height: 44px;
 
                     // Japanese word field
-                    Rectangle {
+                    jap-field-container := Rectangle {
                         horizontal-stretch: 1;
-                        border-width: 1px;
-                        border-color: #b0c4de;
-                        border-radius: 6px;
-                        background: #ffffff;
+                        border-width: Tokens.border-width;
+                        border-color: Tokens.border-color;
+                        border-radius: Tokens.border-radius;
+                        background: Tokens.card-field-background;
 
                         TextInput {
                             text: card.jap-obj;
-                            font-size: 18px;
-                            color: #2c3e50;
+                            font-size: Tokens.font-size-body;
+                            color: Tokens.text-primary;
                             vertical-alignment: center;
                             width: parent.width - 12px;
-                            x: 6px;
+                            x: Tokens.spacing-xs;
                         }
                     }
 
                     // Vietnamese meaning field
-                    Rectangle {
+                    meaning-field-container := Rectangle {
                         horizontal-stretch: 1;
-                        border-width: 1px;
-                        border-color: #b0c4de;
-                        border-radius: 6px;
-                        background: #ffffff;
+                        border-width: Tokens.border-width;
+                        border-color: Tokens.border-color;
+                        border-radius: Tokens.border-radius;
+                        background: Tokens.card-field-background;
 
                         TextInput {
                             text: card.explanation;
-                            font-size: 16px;
-                            color: #7f8c8d;
+                            font-size: Tokens.font-size-caption;
+                            color: Tokens.text-secondary;
                             vertical-alignment: center;
                             width: parent.width - 12px;
-                            x: 6px;
+                            x: Tokens.spacing-xs;
                         }
                     }
                 }

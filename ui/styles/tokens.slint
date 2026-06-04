@@ -1,0 +1,32 @@
+// Style tokens — single source of truth for all shared visual constants.
+// Import this file wherever hardcoded colors, sizes, or radii would otherwise appear.
+export global Tokens {
+    // Border
+    out property <color> border-color: #b0c4de;
+    out property <length> border-width: 1px;
+    out property <length> border-radius: 6px;
+
+    // Card field background
+    out property <color> card-field-background: #ffffff;
+
+    // Card container
+    out property <color> card-container-background: #f0f4f8;
+    out property <length> card-container-border-radius: 12px;
+    out property <color> card-container-border-color: #c8d6e5;
+
+    // Text colors
+    out property <color> text-primary: #2c3e50;
+    out property <color> text-secondary: #7f8c8d;
+
+    // Spacing
+    out property <length> padding-lg: 16px;
+    out property <length> padding-sm: 8px;
+    out property <length> spacing-md: 12px;
+    out property <length> spacing-sm: 8px;
+    out property <length> spacing-xs: 6px;
+
+    // Font sizes
+    out property <length> font-size-title: 20px;
+    out property <length> font-size-body: 18px;
+    out property <length> font-size-caption: 16px;
+}
