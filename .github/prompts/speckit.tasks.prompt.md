@@ -48,14 +48,18 @@ agent: speckit.tasks
 - [x] 2.3.2 **[rust-developer]** Wire `on_flashcard_field_changed`: replace the `FlashcardModel` at `card-index` in the selected stack with updated field values, then push the refreshed `flashcardList` back. **Depends on 2.3.1.**
 - [x] 2.4.1 **[slint-developer]** In `lib/flashcard/ui/components/flashcard_stack.slint`, add a delete `CommonBtn` ("✕") per card row inside the `for card[i]` loop. Add `callback flashcard-delete-confirmed(card-index: int)` to `FlashcardStack`. Wire through `study_page.slint` to `FlashcardAppLogic`. **Depends on 2.3.1.**
 - [x] 2.4.2 **[rust-developer]** Wire `on_flashcard_delete_confirmed`: remove the `FlashcardModel` at `card-index` from the selected stack and push the updated `flashcardList` back. **Depends on 2.4.1.**
-- [ ] 2.5 Verify the complete CRUD workflow on a running build: create a stack, add cards, edit fields, delete cards. Confirm `FlashcardStack` reflects all changes live without re-selection. No new code unless a data-binding bug is found. **Depends on 2.1.2, 2.2.2, 2.3.2, 2.4.2.**
+- [x] 2.5 Verify the complete CRUD workflow on a running build: create a stack, add cards, edit fields, delete cards. Confirm `FlashcardStack` reflects all changes live without re-selection. No new code unless a data-binding bug is found. **Depends on 2.1.2, 2.2.2, 2.3.2, 2.4.2.**
 
-  > Tasks 2.6.1 and 2.6.2 are sequential (Rust wiring requires Slint callback to exist first).
+  > Tasks 2.6.1/2.6.2 (drag-to-reorder) and 2.6.3/2.6.4 (delete stack) all touch the same files
+  > (`flashcard_stack.slint` and `lib.rs`), so the full chain is strictly sequential:
+  > 2.6.1 → 2.6.2 → 2.6.3 → 2.6.4.
 
-- [ ] 2.6.1 **[slint-developer]** In `ui/components/flashcard_stack.slint`, implement drag-to-reorder for card rows using Slint pointer/touch events. Add `callback flashcard-reordered(from-index: int, to-index: int)` to `FlashcardStack`. **Depends on 2.5.**
-- [ ] 2.6.2 **[rust-developer]** Wire `on_flashcard_reordered`: swap the `FlashcardModel` entries at `from-index` and `to-index` in the selected stack, then push the updated `flashcardList` back to `StudyPage`. **Depends on 2.6.1.**
-- [ ] 2.7 **[rust-developer]** Implement session persistence: on every `flashcardList` change serialize it to a local `stacks.json` file using `serde` + `serde_json`; load and restore it at application startup. Add `serde` and `serde_json` to `Cargo.toml`. Gate all `std::fs` calls with `#[cfg(not(target_arch = "wasm32"))]`. **Depends on 2.4.2.**
-- [ ] 2.8 Test flashcard CRUD operations and persistence manually on Windows: verify data survives application restart. **Depends on 2.7.**
+- [x] 2.6.1 **[slint-developer]** In `lib/flashcard/ui/components/flashcard_stack.slint`, implement drag-to-reorder for card rows using Slint pointer/touch events. Add `callback flashcard-reordered(from-index: int, to-index: int)` to `FlashcardStack`. **Depends on 2.5.**
+- [x] 2.6.2 **[rust-developer]** Wire `on_flashcard_reordered`: swap the `FlashcardModel` entries at `from-index` and `to-index` in the selected stack, then push the updated `flashcardList` back. **Depends on 2.6.1.**
+- [x] 2.6.3 **[slint-developer]** In `lib/flashcard/ui/components/flashcard_stack.slint`, add a "Delete Stack" `CommonBtn` to the stack header row (beside the existing close "✕" button). Add `callback stack-delete-confirmed` to `FlashcardStack`. In `ui/pages/study_page.slint`, wire `stack-delete-confirmed` → `FlashcardAppLogic.stack-delete-confirmed()`. `FlashcardAppLogic` already declares `callback stack-delete-confirmed()` — no change needed there. **Depends on 2.6.2.**
+- [x] 2.6.4 **[rust-developer]** Wire `on_stack_delete_confirmed` in `lib/flashcard/src/lib.rs`: remove the `FlashcardStackModel` at `selected-stack-index` from `flashcard-list`, reset `selected-stack-index = -1`, and push the updated list back. **Depends on 2.6.3.**
+- [x] 2.7 **[rust-developer]** Implement session persistence: on every `flashcardList` change serialize it to a local `stacks.json` file using `serde` + `serde_json`; load and restore it at application startup. Add `serde` and `serde_json` to `lib/flashcard/Cargo.toml`. Define shadow Rust structs `StackData`/`CardData` with `#[derive(Serialize, Deserialize)]`; convert to/from Slint types inside `lib.rs`. Gate all `std::fs` calls with `#[cfg(not(target_arch = "wasm32"))]`. Call `save_stacks()` after every `set_flashcard_list` in each CRUD handler; call `load_stacks()` at the start of `init()`. **Depends on 2.4.2.**
+- [x] 2.8 Test flashcard CRUD operations and persistence manually on Windows: verify data survives application restart. **Depends on 2.7.**
 
 ## Phase 3: Study Mode
 
