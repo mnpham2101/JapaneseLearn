@@ -118,6 +118,9 @@ export component StudyPage {
                     flashcard-reordered(from-index, to-index) => {
                         FlashcardAppLogic.flashcard-reordered(from-index, to-index);
                     }
+                    stack-delete-confirmed => {
+                        FlashcardAppLogic.stack-delete-confirmed();
+                    }
                 }
 
                 if FlashcardAppLogic.selected-stack-index == -1: HorizontalLayout {

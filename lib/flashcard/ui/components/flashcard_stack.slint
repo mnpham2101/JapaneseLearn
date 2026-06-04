@@ -8,6 +8,7 @@ import { Tokens } from "../styles/tokens.slint";
 // flashcard-field-changed is fired when a card's text field is edited.
 // flashcard-delete-confirmed is fired when the delete button on a card is clicked.
 // flashcard-reordered is fired when a drag-to-reorder gesture completes.
+// stack-delete-confirmed is fired when the "Delete Stack" button is clicked.
 export component FlashcardStack {
     in property<FlashcardStackModel> stack: { stackname: "", flashcards: [] };
     in-out property <bool> show-add-form: false;
@@ -15,6 +16,7 @@ export component FlashcardStack {
     callback flashcard-field-changed(card-index: int, jap: string, meaning: string);
     callback flashcard-delete-confirmed(card-index: int);
     callback flashcard-reordered(from-index: int, to-index: int);
+    callback stack-delete-confirmed;
     callback close-clicked;
 
     // Drag-to-reorder state.
@@ -55,6 +57,14 @@ export component FlashcardStack {
                     color: Tokens.text-primary;
                     vertical-alignment: center;
                     horizontal-stretch: 1;
+                }
+
+                CommonBtn {
+                    width: 110px;
+                    height: 32px;
+                    text: "Delete Stack";
+                    accessibilityLabel: "Delete this stack";
+                    clicked => root.stack-delete-confirmed();
                 }
 
                 CommonBtn {
