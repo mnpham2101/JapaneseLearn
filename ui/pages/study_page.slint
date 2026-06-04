@@ -103,6 +103,9 @@ export component StudyPage {
                     flashcard-add-confirmed(jap, meaning) => {
                         FlashcardAppLogic.flashcard-add-confirmed(jap, meaning);
                     }
+                    flashcard-field-changed(card-index, jap, meaning) => {
+                        FlashcardAppLogic.flashcard-field-changed(card-index, jap, meaning);
+                    }
                 }
 
                 if FlashcardAppLogic.selected-stack-index == -1: HorizontalLayout {

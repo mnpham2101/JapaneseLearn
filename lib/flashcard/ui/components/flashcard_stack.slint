@@ -5,10 +5,12 @@ import { Tokens } from "../styles/tokens.slint";
 // Displays all flashcards in a single stack.
 // close-clicked lets the parent (StudyPage) collapse this view back to the list.
 // flashcard-add-confirmed is fired when the user submits the add-flashcard form.
+// flashcard-field-changed is fired when a card's text field is edited.
 export component FlashcardStack {
     in property<FlashcardStackModel> stack: { stackname: "", flashcards: [] };
     in-out property <bool> show-add-form: false;
     callback flashcard-add-confirmed(jap: string, meaning: string);
+    callback flashcard-field-changed(card-index: int, jap: string, meaning: string);
     callback close-clicked;
 
     stack-container := Rectangle {
@@ -51,7 +53,7 @@ export component FlashcardStack {
 
             VerticalLayout {
                 spacing: Tokens.spacing-sm;
-                for card in stack.flashcards: HorizontalLayout {
+                for card[i] in stack.flashcards: HorizontalLayout {
                     spacing: 16px;
                     padding: Tokens.padding-sm;
                     height: 44px;
@@ -64,13 +66,16 @@ export component FlashcardStack {
                         border-radius: Tokens.border-radius;
                         background: Tokens.card-field-background;
 
-                        TextInput {
+                        jap-txt := TextInput {
                             text: card.jap-obj;
                             font-size: Tokens.font-size-body;
                             color: Tokens.text-primary;
                             vertical-alignment: center;
                             width: parent.width - 12px;
                             x: Tokens.spacing-xs;
+                            edited => {
+                                root.flashcard-field-changed(i, self.text, meaning-txt.text);
+                            }
                         }
                     }
 
@@ -82,13 +87,16 @@ export component FlashcardStack {
                         border-radius: Tokens.border-radius;
                         background: Tokens.card-field-background;
 
-                        TextInput {
+                        meaning-txt := TextInput {
                             text: card.explanation;
                             font-size: Tokens.font-size-caption;
                             color: Tokens.text-secondary;
                             vertical-alignment: center;
                             width: parent.width - 12px;
                             x: Tokens.spacing-xs;
+                            edited => {
+                                root.flashcard-field-changed(i, jap-txt.text, self.text);
+                            }
                         }
                     }
                 }
