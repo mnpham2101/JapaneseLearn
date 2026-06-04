@@ -4,10 +4,11 @@ import { Tokens } from "../styles/tokens.slint";
 
 // Displays all flashcards in a single stack.
 // close-clicked lets the parent (StudyPage) collapse this view back to the list.
-// addFlashcard is a placeholder for future card-creation flow.
+// flashcard-add-confirmed is fired when the user submits the add-flashcard form.
 export component FlashcardStack {
     in property<FlashcardStackModel> stack: { stackname: "", flashcards: [] };
-    callback addFlashcard;
+    in-out property <bool> show-add-form: false;
+    callback flashcard-add-confirmed(jap: string, meaning: string);
     callback close-clicked;
 
     stack-container := Rectangle {
@@ -25,6 +26,7 @@ export component FlashcardStack {
         VerticalLayout {
             padding: Tokens.padding-lg;
             spacing: Tokens.spacing-md;
+            alignment: LayoutAlignment.end;
 
             HorizontalLayout {
                 spacing: 10px;
@@ -92,11 +94,105 @@ export component FlashcardStack {
                 }
             }
 
-            CommonBtn {
+            // Add-flashcard form — slides in when show-add-form is true.
+            // Uses the Vertically stacked up components pattern.
+            if root.show-add-form: Rectangle {
+                background: #f5f5f5;
+                border-radius: Tokens.border-radius;
+                height: self.visible ? 80px : 0px;
+
+                HorizontalLayout {
+                    padding: Tokens.padding-sm;
+                    spacing: Tokens.spacing-sm;
+                    alignment: center;
+
+                    // Japanese word input with overlay label as placeholder
+                    jap-field := Rectangle {
+                        width: 200px;
+                        height: 36px;
+                        border-width: Tokens.border-width;
+                        border-color: Tokens.border-color;
+                        border-radius: Tokens.border-radius;
+                        background: Tokens.card-field-background;
+
+                        jap-input := TextInput {
+                            font-size: Tokens.font-size-body;
+                            color: Tokens.text-primary;
+                            vertical-alignment: center;
+                            width: parent.width - 12px;
+                            x: Tokens.spacing-xs;
+                        }
+
+                        Text {
+                            visible: jap-input.text == "";
+                            text: "Japanese word...";
+                            font-size: Tokens.font-size-body;
+                            color: #aaaaaa;
+                            vertical-alignment: center;
+                            x: Tokens.spacing-xs;
+                        }
+                    }
+
+                    // Vietnamese meaning input with overlay label as placeholder
+                    meaning-field := Rectangle {
+                        width: 200px;
+                        height: 36px;
+                        border-width: Tokens.border-width;
+                        border-color: Tokens.border-color;
+                        border-radius: Tokens.border-radius;
+                        background: Tokens.card-field-background;
+
+                        meaning-input := TextInput {
+                            font-size: Tokens.font-size-body;
+                            color: Tokens.text-primary;
+                            vertical-alignment: center;
+                            width: parent.width - 12px;
+                            x: Tokens.spacing-xs;
+                        }
+
+                        Text {
+                            visible: meaning-input.text == "";
+                            text: "Vietnamese meaning...";
+                            font-size: Tokens.font-size-body;
+                            color: #aaaaaa;
+                            vertical-alignment: center;
+                            x: Tokens.spacing-xs;
+                        }
+                    }
+
+                    CommonBtn {
+                        width: 90px;
+                        text: "Confirm";
+                        primary: true;
+                        clicked => {
+                            root.flashcard-add-confirmed(jap-input.text, meaning-input.text);
+                            jap-input.text = "";
+                            meaning-input.text = "";
+                            root.show-add-form = false;
+                        }
+                    }
+
+                    CommonBtn {
+                        width: 80px;
+                        text: "Cancel";
+                        clicked => {
+                            jap-input.text = "";
+                            meaning-input.text = "";
+                            root.show-add-form = false;
+                        }
+                    }
+                }
+            }
+
+            // "Add Flashcard" button — hidden while the form is open.
+            if !root.show-add-form: CommonBtn {
                 width: 160px;
                 text: "Add Flashcard";
                 primary: true;
-                clicked => root.addFlashcard();
+                height: self.visible ? 36px : 0px;
+                clicked => {
+                    root.show-add-form = true;
+                }
             }
         }
     }
