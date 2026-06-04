@@ -151,78 +151,34 @@ export component Demo {
 ```
 
 ## Build slint components as reusable library:
-* related components serving a common purpose (e.g., flashcard UI components) **must** be organized into a shared directory (e.g., `ui/components/`) and imported into pages or other components as needed. Use relative paths for imports to maintain clarity and avoid issues with module resolution. Each component file should export a single component that can be easily imported and used in other parts of the application.
-* the components should also be built as a Rust module, following the code example: 
+
+Related components serving a common purpose **must** be packaged as a Cargo workspace member (the **libA** pattern). This section covers the complete setup — library side, client side, and common pitfalls.
+
+### Slint entry file (library)
+
+Create one entry `.slint` file that re-exports everything the client needs:
 
 ```slint
-// each slint component is defined in ui/*.slint file
-// import other components by relative paths
-// file my_component.slint
-export global MyLibraryDataModel {};
-export component MyComponent { callback my-callback; }
-
-// an entry file should be re-export all components.
-// file my_library.slint
-export { My Component, MyLibraryDataModel } from "my_component.slint"
+// file lib/my_library/ui/my_library.slint
+export { MyComponent }    from "components/my_component.slint";
+export { MyGlobalLogic }  from "my_global_logic.slint";  // global singleton
 ```
 
-```rust
-// rust build.rs files should be placed at library's root, on the same directory with library Cargo.toml
-// file build.rs
-use std::path::PathBuf;
+Internal components import each other by **relative paths** (`import { Foo } from "foo.slint"`). Only the entry file is visible to the client.
 
-fn main() {
-    // Add the controls library as a library path so we can import slint files with "@controls/foo.slint"
-    let manifest_dir = PathBuf::from(std::env::var("CARGO_MANIFEST_DIR").unwrap());
-
-    // do not add itself to its own library path
-    // let library_paths = std::collections::HashMap::from([(
-    //     "my_library".to_string(),
-    //     manifest_dir.join("../my_library"),
-    // )]);
-
-    let config = slint_build::CompilerConfiguration::new()
-        .with_library_paths(library_paths)
-        .with_style("cupertino".into());
-    // compile the entry file
-    slint_build::compile_with_config("ui/my_component.slint", config).expect("Slint build failed");
-}
-
-// file src/main.rs:
-// define the library as a rust module
-pub mod my_library {           
-    slint::include_modules!();
-    use slint::{ComponentHandle, Model};
-    // include init function to init necessary logic, 
-    // including defining callback that are declared in slint
-    pub fn init<T>(ui: &T)
-    // This init function will accept a reference to any component type T,
-    // but only under one condition:
-    // the component T has knowledge of the global singleton MyLibraryDataModel.
-    where
-        T: ComponentHandle + 'static,
-        for<'a> <'a>: slint::Global<'a, T>,
-    {
-        // get the instance of the global MyLibraryDataModel to run the callback on_update_my_callback
-        let logic = ui.global::<MyLibraryDataModel>();
-        // the pointer ui is gone after init returns (heap is MainWindow is still remained)
-        // must keep the weak ptr to access MainWindow which is the root component, and move to callback's scope
-        let ui_weak = ui.as_weak();
-
-        logic.on_update_my_callback( {
-            println!("[INFO] on_update_my_callback.");
-        });
-    }
-}
+Client-side Slint imports use the library name prefixed with `@`:
+```slint
+import { MyComponent, MyGlobalLogic } from "@my_library";
 ```
 
-* Cargo.toml of the library must correctly define the that slint and rust code are built as a package:
-```
+### Library `Cargo.toml`
+
+```toml
 [package]
 name = "my_library"
 version = "0.1.0"
-edition = "2024"
-links = "my_library"
+edition = "2021"
+links = "my_library"          # required — enables DEP_MY_LIBRARY_* env vars for the client
 
 [dependencies]
 slint = { workspace = true }
@@ -231,22 +187,114 @@ slint = { workspace = true }
 slint-build = { workspace = true }
 ```
 
-* The client application must be configured to use the library correctly. Starting with its root Cargo.toml:
-```
-[dependencies]
-my_library = { // path to where the libary is  }
-```
-* main function of main.rs should call init function defined in the library to register any callback
+The `links` key tells Cargo to expose `DEP_MY_LIBRARY_SLINT_*` metadata to any crate that depends on this library. **It must match the crate name (lowercase, hyphens replaced by underscores).**
+
+### Library `build.rs`
+
 ```rust
-use my_library::my_libary;
-fn main(){
-   let ui = MainWindow::new().unwrap();
-   // call init function defined in my_library/src/lib.rs
-   init(&ui);    
+fn main() {
+    // as_library + rust_module require the "experimental-module-builds" feature in slint-build.
+    // They emit DEP_MY_LIBRARY_SLINT_LIBRARY_* metadata so the client resolves @my_library imports
+    // without needing with_library_paths, and ensures the client reuses the library's Rust types
+    // (enabling the Global<MainWindow> trait bound in init<T>).
+    let config = slint_build::CompilerConfiguration::new()
+        .as_library("my_library")
+        .rust_module("my_library");
+    slint_build::compile_with_config("ui/my_library.slint", config).unwrap();
 }
 ```
-* the global data model in the library should be made available to the global context to be used by client app
-```slint
-import { MyLibraryModel } from @my_library
+
+### Library `src/lib.rs`
+
+```rust
+// IMPORTANT: wrap include_modules!() in pub mod <name> so the client can resolve
+// `my_library::my_library::*` — the path that the client's generated code emits.
+pub mod my_library {
+    slint::include_modules!();
+}
+
+use my_library::MyGlobalLogic;
+
+pub fn init<T>(ui: &T)
+where
+    T: slint::ComponentHandle + 'static,
+    // This bound is satisfiable when T = MainWindow because the client's slint::include_modules!()
+    // generates impl Global<MainWindow> for my_library::my_library::MyGlobalLogic.
+    for<'a> MyGlobalLogic<'a>: slint::Global<'a, T>,
+{
+    let logic = ui.global::<MyGlobalLogic>();
+    let ui_weak = ui.as_weak();
+
+    logic.on_some_callback(move || {
+        let ui = ui_weak.unwrap();
+        let logic = ui.global::<MyGlobalLogic>();
+        // implement callback logic here — ALL Rust logic lives in lib.rs, never in client main.rs
+        logic.set_some_property(new_value);
+    });
+}
 ```
-* note that `my_library` is the name of the Slint library, defined by its Cargo.toml file, and should be used in the import section now. 
+
+### Client `Cargo.toml` (workspace root)
+
+```toml
+[workspace]
+members = [".", "lib/my_library"]
+resolver = "2"
+
+[workspace.dependencies]
+slint = { version = "1.x", features = ["compat-1-0"] }
+# experimental-module-builds is required for as_library / rust_module in build.rs
+slint-build = { version = "1.x", features = ["experimental-module-builds"] }
+my_library = { path = "lib/my_library" }
+
+[package]
+name = "my_app"
+# ...
+
+[dependencies]
+slint = { workspace = true }
+my_library = { path = "lib/my_library" }
+
+[build-dependencies]
+slint-build = { workspace = true }
+```
+
+### Client `build.rs`
+
+```rust
+fn main() {
+    // No with_library_paths needed — the library emits DEP_MY_LIBRARY_SLINT_* metadata
+    // via as_library in its own build.rs, and slint_build picks them up automatically.
+    slint_build::compile("ui/main_window.slint").expect("Slint build failed");
+}
+```
+
+### Client `src/main.rs`
+
+```rust
+slint::include_modules!(); // generates: use my_library::my_library; (shadows crate name!)
+
+fn main() {
+    let window = MainWindow::new().unwrap();
+    // Use :: prefix to unambiguously reference the crate, not the generated module alias.
+    ::my_library::init(&window);
+    window.run().unwrap();
+}
+```
+
+### Verification
+
+After a successful build, confirm `init` is called by adding a `println!` to `init()` and running the app. You should see the output before the window appears. Remove the println before committing.
+
+---
+
+### Troubleshooting
+
+| Error | Cause | Fix |
+|---|---|---|
+| `no method named as_library` / `no method named rust_module` | Feature flag missing | Add `features = ["experimental-module-builds"]` to `slint-build` in workspace deps |
+| `error: Error reading ... lib/my_library: Access is denied (os error 5)` | `with_library_paths` points to a **directory** | Remove `with_library_paths` from client build.rs; use `as_library` in library build.rs instead |
+| `unresolved import my_library::my_library` | `pub mod my_library` wrapper missing from library `src/lib.rs` | Wrap `slint::include_modules!()` in `pub mod my_library { ... }` |
+| `cannot find function init in module my_library` | Generated `use my_library::my_library` shadows the crate name | Call `::my_library::init(&window)` (leading `::` = explicit crate reference) |
+| `expected &LibraryComponent, found &MainWindow` (E0308) | `as_library` + `rust_module` not used — client regenerates types inline so `Global<MainWindow>` impl is missing | Add `as_library("my_library").rust_module("my_library")` to library build.rs, add the feature flag, add `pub mod` wrapper |
+| Build succeeds but `init` not called | `::my_library::init(&window)` missing from client `main()` | Add the call before `window.run()` |
