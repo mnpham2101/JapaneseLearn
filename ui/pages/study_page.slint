@@ -62,9 +62,21 @@ export component StudyPage {
                         spacing: 10px;
                         alignment: center;
 
-                        stack-name-input := TextInput {
+                        Rectangle {
                             width: 260px;
-                            font-size: 14px;
+                            height: 36px;
+                            border-width: 1px;
+                            border-color: #b0c4de;
+                            border-radius: 6px;
+                            background: #ffffff;
+
+                            stack-name-input := TextInput {
+                                font-size: 14px;
+                                color: #2c3e50;
+                                vertical-alignment: center;
+                                width: parent.width - 12px;
+                                x: 6px;
+                            }
                         }
 
                         CommonBtn {
