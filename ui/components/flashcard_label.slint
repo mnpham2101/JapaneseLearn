@@ -1,11 +1,11 @@
-import { CommonButton } from "common_button.slint";
+import { CommonBtn } from "common_button.slint";
 import { FlashcardStackModel } from "flashcard.slint";
 
 // A clickable label representing one flashcard stack.
-// Inherits CommonButton so it shares all visual states (checked, primary, enabled).
+// Inherits CommonBtn so it shares all visual states (checked, primary, enabled).
 // The `checked` property is set externally by the parent (one-way binding) to reflect
 // whether this stack is currently selected — no checkable toggle needed here.
-export component FlashcardLabel inherits CommonButton {
+export component FlashcardLabel inherits CommonBtn {
     in property<FlashcardStackModel> stack: { stackname: "", flashcards: [] };
     text: stack.stackname;
 }

@@ -1,4 +1,4 @@
-import { CommonButton } from "common_button.slint";
+import { CommonBtn } from "common_button.slint";
 
 export struct FlashcardModel {
     jap-obj: string,
@@ -75,7 +75,7 @@ export component Flashcard {
 
         // Known toggle — top-right corner, higher z-order captures its own clicks.
         // checkable + two-way binding replaces the clicked callback entirely.
-        CommonButton {
+        CommonBtn {
             checkable: true;
             checked <=> known;
             x: parent.width - self.width - 8px;

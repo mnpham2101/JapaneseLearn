@@ -1,5 +1,5 @@
 import { FlashcardStackModel } from "flashcard.slint";
-import { CommonButton } from "common_button.slint";
+import { CommonBtn } from "common_button.slint";
 import { Tokens } from "../styles/tokens.slint";
 
 // Displays all flashcards in a single stack.
@@ -38,7 +38,7 @@ export component FlashcardStack {
                     horizontal-stretch: 1;
                 }
 
-                CommonButton {
+                CommonBtn {
                     width: 32px;
                     height: 32px;
                     text: "✕";
@@ -92,7 +92,7 @@ export component FlashcardStack {
                 }
             }
 
-            CommonButton {
+            CommonBtn {
                 width: 160px;
                 text: "Add Flashcard";
                 primary: true;
