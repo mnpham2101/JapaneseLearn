@@ -13,6 +13,14 @@ export component StudyPage {
     property <bool> show-stack: FlashcardAppLogic.selected-stack-index >= 0;
     property <bool> show-create-form: false;
 
+    // Reset the create form whenever the stack detail opens so that the
+    // "Add Stack" toggle button returns to its unchecked state.
+    changed show-stack => {
+        if (show-stack) {
+            show-create-form = false;
+        }
+    }
+
     Rectangle {
         width: 100%;
         height: 100%;
@@ -31,25 +39,11 @@ export component StudyPage {
             padding: 20px;
             spacing: 20px;
 
-            HorizontalLayout {
-                spacing: 10px;
-                alignment: center;
-
-                Text {
-                    text: "Study Mode";
-                    font-size: 28px;
-                    color: #333333;
-                }
-
-                CommonBtn {
-                    width: 140px;
-                    text: "Create Stack";
-                    primary: true;
-                    visible: !root.show-create-form;
-                    clicked => {
-                        root.show-create-form = true;
-                    }
-                }
+            Text {
+                text: "Study Mode";
+                font-size: 28px;
+                color: #333333;
+                horizontal-alignment: center;
             }
 
             // Vertically stacked pattern: form slides in above the list.
@@ -117,14 +111,14 @@ export component StudyPage {
                     CommonList {
                         width: 400px;
                         title: "Flashcard Stacks";
+                        // Two-way bind: clicking "Add Stack" opens/closes the create form.
+                        // Confirm/Cancel set show-create-form = false, which unchecks the button.
+                        add-stack <=> root.show-create-form;
                         flashcard-list := FlashcardList {
                             stacks: FlashcardAppLogic.flashcard-list;
                             selected-index <=> FlashcardAppLogic.selected-stack-index;
                         }
-
                         addButtonText: "Add Stack";
-                        addClicked => {
-                        }
                     }
                 }
             }

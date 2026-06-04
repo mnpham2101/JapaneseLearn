@@ -4,7 +4,9 @@ export component CommonList {
     in property<string> title: "";
     in property<[string]> items: ["Item 1", "Item 2"];
     in property<string> addButtonText: "Add";
-    callback addClicked;
+    // Toggled by the add button; bind <=> to the parent's form-visible property
+    // so clicking the button opens/closes the create form declaratively.
+    in-out property <bool> add-stack: false;
 
     Rectangle {
         width: 100%;
@@ -16,7 +18,7 @@ export component CommonList {
         VerticalLayout {
             padding: 16px;
             spacing: 12px;
-            alignment: LayoutAlignment.stretch; 
+            alignment: LayoutAlignment.stretch;
             Text {
                 text: title;
                 font-size: 18px;
@@ -24,15 +26,14 @@ export component CommonList {
                 font-weight: 700;
             }
 
-
-                @children
-            
+            @children
 
             CommonBtn {
                 width: 140px;
                 text: addButtonText;
-                primary: false;
-                clicked => addClicked();
+                primary: true;
+                checkable: true;
+                checked <=> add-stack;
             }
         }
     }
