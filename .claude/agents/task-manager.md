@@ -39,7 +39,8 @@ Follow these phases in order. **Stop and get user approval at each gate before c
 ## Phase 3 — Plan
 1. Write an ordered, step-by-step execution plan. Each step maps to a concrete file change or command.
 2. Assign each step to an agent type and structure parallel groups:
-   - `.slint` UI work → `slint-developer`; Rust / multi-file work → `general-purpose`.
+   - `.slint` UI work → `slint-developer`; Rust business logic, service modules, callback implementations → `rust-developer`.
+   - Mixed-agent tasks are already split per the **Mixed-agent work** clarification pattern in Phase 1.
    - Label every task with `**[slint-developer]**` or `**[rust-developer]**` at the start of its description. Tasks with no code deliverable (e.g., spec documents) need no label.
    - **Parallel groups**: tasks with no mutual dependency form a parallel group and share a parent number. Use dot-suffix notation: `N.M.1`, `N.M.2`, … are parallel siblings within group `N.M`. A task with no siblings uses a flat number (`N.M`).
    - **Parallelism notes**: separate each parallel group from the next with a blockquote stating which tasks are parallel and what gate they unlock:
