@@ -1,0 +1,13 @@
+// Data model structs for flashcard domain.
+// Import this file wherever FlashcardModel or FlashcardStackModel is needed.
+
+export struct FlashcardModel {
+    jap-obj: string,
+    explanation: string,
+    known: bool,
+}
+
+export struct FlashcardStackModel {
+    stackname: string,
+    flashcards: [FlashcardModel],
+}

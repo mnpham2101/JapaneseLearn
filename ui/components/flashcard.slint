@@ -1,15 +1,7 @@
 import { CommonBtn } from "common_button.slint";
+import { FlashcardModel, FlashcardStackModel } from "../model/flashcard_model.slint";
 
-export struct FlashcardModel {
-    jap-obj: string,
-    explanation: string,
-    known: bool,
-}
-
-export struct FlashcardStackModel {
-    stackname: string,
-    flashcards: [FlashcardModel],
-}
+export { FlashcardModel, FlashcardStackModel }
 
 export component Flashcard {
     in property<FlashcardModel> data: { jap-obj: "", explanation: "", known: true };
