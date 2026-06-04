@@ -41,6 +41,7 @@ Follow these phases in order. **Stop and get user approval at each gate before c
    - `.slint` UI work → `slint-developer`
    - General Rust / multi-file work → `general-purpose`
    - Prefer fewer agents; one agent handles sequential steps in the same domain.
+   - Parallel tasks implementation could be done only if the tasks have no dependencies from one another.
 3. **Gate: present the plan and agent assignments. Get user approval before invoking any agent.**
 
 ## Phase 4 — Execute

@@ -34,17 +34,24 @@ src/
   main.rs                       # entry point only — no business logic here
 ui/
   main_window.slint             # root window, page routing
-  components/                   # reusable widgets — one component per file
+  components/                   # application UI components — one component per file
+  model/                        # Slint data model structs (FlashcardModel, etc.)
   pages/                        # page-level components (study_page, review_page)
+lib/                            # optional: Slint+Rust components built as libraries
+  <libname>/
+    src/lib.rs                  # init function, Rust backend logic
+    ui/                         # library's own Slint components and models
+    build.rs
+    Cargo.toml
 .claude/
   agents/slint-developer.md     # Slint developer agent (use for all .slint work)
-  rules/slint-code-style.md     # Slint coding rules and declarative patterns
+  agents/task-manager.md        # task-manager agent (use for multi-task planning)
+  rules/slint-code-style.md     # Slint coding rules, naming conventions, patterns
   rules/rust-code-style.md      # Rust coding rules
-  skill/implement-tasks/SKILL.md  # task execution guidelines
+  skill/implement-tasks/SKILL.md  # task follow-up and commit workflow
 .github/prompts/
   speckit.tasks.prompt.md       # active task list
-  speckit.constitution.prompt.md  # general programming practices + workflow
-  speckit.clarify.prompt.md     # Slint UI design patterns reference
+  speckit.constitution.prompt.md  # general programming practices + architecture
 ```
 
 ## Coding Standards
@@ -54,7 +61,8 @@ Full rules live in the dedicated files — do not duplicate here:
 - **Rust**: `.claude/rules/rust-code-style.md`
 
 Key invariants (always apply):
-- One `.slint` component per file; reusable widgets in `ui/components/`, pages in `ui/pages/`.
+- One `.slint` component per file; components in `ui/components/`, data models in `ui/model/`, pages in `ui/pages/`.
+- Slint component naming — PascalCase with functional suffix: `*Btn`, `*TxtBox`, `*Container`, `*Page`.
 - Property bindings over imperative callbacks; `<=>` for two-way state sync.
 - Hardcoded models first; integrate dynamic data only after a successful build.
 - No Rust logic inside `.slint` files.

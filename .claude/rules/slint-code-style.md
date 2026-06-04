@@ -2,7 +2,12 @@
 paths: 
   - ui/**/*.slint
 ---
-
+# Slint naming convention
+- Component names **must** use PascalCase with a functional suffix:
+    - `*Btn` for button (e.g., `CommonBtn`, `NavBtn`).
+    - `*TxtBox` for text input/text box (e.g., `JapaneseTxtBox`).
+    - `*Container` for general layout containers and Rectangles (e.g., `FlashcardContainer`).
+    - `*Page` for main view pages (e.g., `StudyPage`, `ReviewPage`).
 # Slint Best Practices
 - UI definitions **must** be separated into `.slint` files; Rust logic **must not** be mixed with UI markup.
 - Each UI component **must** be defined in its own `.slint` file and imported where needed to promote reusability and maintainability.
@@ -14,6 +19,8 @@ paths:
 - Components requiring data models (e.g., list views, `HorizontalView`) **must** have default hardcoded models first; the program **must** build successfully before integrating dynamic data sources. Code **must** be committed after each successful UI component implementation.
 - Rendering **must** be optimized for lightweight performance; unnecessary animations or large assets **must not** be used.
 - UI responsiveness **must** be tested across desktop, mobile, and WebAssembly targets.
+- Avoid hardcode sizes. Let the UI responses to different screensizes. 
+- UI styling must be universal accross all components. Define common size, colors in a separate slint file.
 ## Slint declarative rules:
 - Prefer two-way property binding (`<=>`) over `clicked` callbacks for state synchronization. When a child component's property directly mirrors parent state (e.g., button `checked` ↔ `known`), bind with `<=>` and set `checkable: true` to let Slint handle the toggle — no callback needed.
 - Reserve callbacks for event notifications (things that "happened", like `flipped`) rather than state synchronization (value changes already captured by a property).
