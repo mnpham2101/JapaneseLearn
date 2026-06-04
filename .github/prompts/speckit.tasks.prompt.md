@@ -43,30 +43,39 @@ agent: speckit.tasks
 ## Phase 3: Study Mode
 - [ ] 3.1 Implement study mode view with single‑card presentation.
 - [ ] 3.2 Implement reveal mechanism (Japanese word first, Vietnamese meaning hidden).
-- [ ] 3.3 Implement marking of flashcards as “known” or “unknown.”
-- [ ] 3.4 Implement ability to toggle flashcard status between “known” and “unknown.”
+- [ ] 3.3 Implement marking of flashcards as "known" or "unknown."
+- [ ] 3.4 Implement ability to toggle flashcard status between "known" and "unknown."
 - [ ] 3.5 Track user progress within each stack (known vs unknown counts).
 - [ ] 3.6 Test study mode interactions manually on Windows and WebAssembly.
 
-## Phase 4: Optimization & Testing
-- [ ] 4.1 Optimize rendering performance for Windows and WebAssembly targets.
-- [ ] 4.2 Test UI responsiveness across both targets.
-- [ ] 4.3 Add Rust unit tests for core logic (flashcard CRUD, study mode state).
-- [ ] 4.4 Add Rust integration tests for data persistence.
-- [ ] 4.5 Ensure compliance with constitution best practices (UI separation, modularity).
-- [ ] 4.6 Document testing results and performance benchmarks.
+## Phase 4: Persistent Data Management
+- [ ] 4.1 Define the markdown file format specification for flashcard stacks. The format uses `## Stack Name` headings to delimit stacks and a GFM pipe table (`| Japanese | Meaning |`) under each heading for cards. Document the format with a worked example in `docs/markdown-format.md`. This document is the reference for all subsequent import/export tasks in this phase.
+- [ ] 4.2 Add `pulldown-cmark` (version `0.12`) to `Cargo.toml` under `[dependencies]` with `default-features = false, features = ["getopts"]` disabled — use only the default feature set needed for CommonMark + table parsing (`ENABLE_TABLES` option flag). Verify `cargo build` passes with the new dependency on both the default (Windows) target. No functional code change — dependency addition only.
+- [ ] 4.3 Add `rfd` (version `0.15`) to `Cargo.toml` under `[dependencies]` with `features = []` (sync API only, no async). Gate the dependency with `#[cfg(not(target_arch = "wasm32"))]` at the usage sites so the WASM build is unaffected. Verify `cargo build` passes. No functional code change — dependency addition only.
+- [ ] 4.4 Implement a Rust module `src/markdown_io.rs` with two public functions: `parse_stacks(source: &str) -> Vec<StackData>` and `serialize_stacks(stacks: &[StackData]) -> String`. Define `StackData { name: String, cards: Vec<CardData> }` and `CardData { japanese: String, meaning: String }` as plain data structs in the same file. Use `pulldown-cmark` with `Options::ENABLE_TABLES` to parse the markdown format defined in task 4.1. The serializer must produce output that round-trips through the parser. All I/O is pure string transformation — no file access in this module. Add unit tests covering: a single stack with two cards, two stacks, an empty file, and a stack with no cards.
+- [ ] 4.5 Expose import and export callbacks in `ui/pages/study_page.slint`. Add two `callback` declarations to `StudyPage`: `import-stack-clicked` and `export-stack-clicked`. Wire an "Import" `CommonButton` and an "Export" `CommonButton` into the existing header `HorizontalLayout` in `study_page.slint` alongside the "Create Stack" button. The buttons invoke their respective callbacks; no Rust logic yet. Verify the UI builds and the two buttons are visible.
+- [ ] 4.6 Implement the import flow in `src/main.rs`. In the `on_import_stack_clicked` handler: open a native file-open dialog using `rfd::FileDialog` (sync API, filter `*.md`), read the selected file with `std::fs::read_to_string`, call `markdown_io::parse_stacks`, convert the result to `Vec<FlashcardStackModel>`, and push it to the UI via the existing `flashcardList` property on `StudyPage`. Gate the entire handler body with `#[cfg(not(target_arch = "wasm32"))]` so the WASM build compiles without `rfd` or `std::fs`. Verify on Windows: selecting a valid markdown file populates the stack list; cancelling the dialog is a no-op.
+- [ ] 4.7 Implement the export flow in `src/main.rs`. In the `on_export_stack_clicked` handler: read the current `flashcardList` from `StudyPage`, convert each `FlashcardStackModel` to `StackData`, call `markdown_io::serialize_stacks`, open a native file-save dialog using `rfd::FileDialog` (sync API, default filename `stacks.md`, filter `*.md`), and write the result with `std::fs::write`. Gate the entire handler body with `#[cfg(not(target_arch = "wasm32"))]`. Verify on Windows: clicking Export opens a save dialog; saving produces a `.md` file that can be re-imported via task 4.6 without data loss.
 
-## Phase 5: Future Backlog (Extensible)
-- [ ] 5.1 Add audio playback (Japanese text‑to‑speech integration).
-- [ ] 5.2 Implement spaced repetition algorithms for study scheduling.
-- [ ] 5.3 Add synchronization across devices (future cloud sync).
-- [ ] 5.4 Implement export/import of stacks via markdown files.
-- [ ] 5.5 Add analytics and reporting features (progress charts, study statistics).
+## Phase 5: Optimization & Testing
+- [ ] 5.1 Optimize rendering performance for Windows and WebAssembly targets.
+- [ ] 5.2 Test UI responsiveness across both targets.
+- [ ] 5.3 Add Rust unit tests for core logic (flashcard CRUD, study mode state).
+- [ ] 5.4 Add Rust integration tests for data persistence.
+- [ ] 5.5 Ensure compliance with constitution best practices (UI separation, modularity).
+- [ ] 5.6 Document testing results and performance benchmarks.
+
+## Phase 6: Future Backlog (Extensible)
+- [ ] 6.1 Add audio playback (Japanese text‑to‑speech integration).
+- [ ] 6.2 Implement spaced repetition algorithms for study scheduling.
+- [ ] 6.3 Add synchronization across devices (future cloud sync).
+- [ ] 6.4 Add WASM-compatible import/export: replace `rfd` + `std::fs` with a browser file-input element via `web-sys` and JavaScript interop. Gate with `#[cfg(target_arch = "wasm32")]`.
+- [ ] 6.5 Add analytics and reporting features (progress charts, study statistics).
 
 # Deliverables
 - Each task produces incremental functionality aligned with the plan.
 - Completion of all tasks results in:
-  - A working Windows + WebAssembly application with flashcard management and study mode.
+  - A working Windows + WebAssembly application with flashcard management, study mode, and markdown-based import/export.
   - Documentation of architecture, modules, and usage.
   - Rust test suite covering core features.
   - Backlog items prepared for future iterations.

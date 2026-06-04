@@ -52,17 +52,20 @@ The plan is based on the requirements defined in `speckit.specify`, the constitu
 - Implement ability to toggle status between “known” and “unknown.”
 - Track user progress within each stack.
 
-## Phase 4: Optimization & Testing
+## Phase 4: Persistent data management
+- Add export/import of stacks via markdown files. User should be able to provide markdown file with structured format; the application can read the file and generate the Flashcards.
+
+## Phase 5: Optimization & Testing
 - Optimize rendering performance across Windows and WebAssembly.
 - Test UI responsiveness across both targets.
 - Add automated tests for Rust core logic.
 - Ensure compliance with constitution best practices.
 
-## Phase 5: Future Backlog (Extensible)
+## Phase 6: Future Backlog (Extensible)
 - Add audio playback (Japanese text‑to‑speech).
 - Add spaced repetition algorithms.
 - Add synchronization across devices.
-- Add export/import of stacks via markdown files.
+
 - Add analytics and reporting features.
 
 # Deliverables

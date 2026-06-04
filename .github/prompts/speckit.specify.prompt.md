@@ -29,6 +29,9 @@ The goal is to make learning efficient, engaging, and trackable across desktop a
 - Users **must** be able to mark flashcards as "known" or "unknown."
 - Users **must** be able to change a flashcard’s status between "known" and "unknown."
 
+## Persistent data management
+- Add export/import of stacks via markdown files. User should be able to provide markdown file with structured format; the application can read the file and generate the Flashcards.
+
 # Requirements (Later / Future Backlog)
 ## Data Management
 - The application **may** support export/import of flashcard stacks via text or markdown files.
