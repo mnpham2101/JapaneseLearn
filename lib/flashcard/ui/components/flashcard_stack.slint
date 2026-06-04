@@ -7,13 +7,26 @@ import { Tokens } from "../styles/tokens.slint";
 // flashcard-add-confirmed is fired when the user submits the add-flashcard form.
 // flashcard-field-changed is fired when a card's text field is edited.
 // flashcard-delete-confirmed is fired when the delete button on a card is clicked.
+// flashcard-reordered is fired when a drag-to-reorder gesture completes.
 export component FlashcardStack {
     in property<FlashcardStackModel> stack: { stackname: "", flashcards: [] };
     in-out property <bool> show-add-form: false;
     callback flashcard-add-confirmed(jap: string, meaning: string);
     callback flashcard-field-changed(card-index: int, jap: string, meaning: string);
     callback flashcard-delete-confirmed(card-index: int);
+    callback flashcard-reordered(from-index: int, to-index: int);
     callback close-clicked;
+
+    // Drag-to-reorder state.
+    // drag-source: index of the row being dragged (-1 = no drag active).
+    // drag-current-y: accumulated Y offset since drag started.
+    // drag-target: computed destination row, clamped to valid range.
+    // Row slot height = card height (44px) + VerticalLayout spacing (8px) = 52px.
+    in-out property <int> drag-source: -1;
+    in-out property <length> drag-current-y: 0px;
+    property <int> drag-target: drag-source < 0 ? -1
+        : max(0, min(stack.flashcards.length - 1,
+              drag-source + round(drag-current-y / 1px / 52)));
 
     stack-container := Rectangle {
         width: 100%;
@@ -55,10 +68,48 @@ export component FlashcardStack {
 
             VerticalLayout {
                 spacing: Tokens.spacing-sm;
-                for card[i] in stack.flashcards: HorizontalLayout {
+                for card[i] in stack.flashcards: Rectangle {
+                    height: 44px;
+                    border-radius: Tokens.border-radius;
+                    // Highlight row that is the current drop target.
+                    background: root.drag-target == i && root.drag-source != i
+                        ? #dce8f5 : transparent;
+
+                    HorizontalLayout {
                     spacing: 16px;
                     padding: Tokens.padding-sm;
-                    height: 44px;
+
+                    // Drag handle — press + drag to reorder this row.
+                    Rectangle {
+                        width: 20px;
+                        Text {
+                            text: "≡";
+                            color: root.drag-source == i ? Tokens.text-primary : #cccccc;
+                            font-size: 16px;
+                            horizontal-alignment: center;
+                            vertical-alignment: center;
+                        }
+                        TouchArea {
+                            mouse-cursor: root.drag-source == i ? MouseCursor.grabbing : MouseCursor.grab;
+                            pointer-event(e) => {
+                                if (e.kind == PointerEventKind.down) {
+                                    root.drag-source = i;
+                                    root.drag-current-y = 0px;
+                                } else if (e.kind == PointerEventKind.up) {
+                                    if (root.drag-source >= 0 && root.drag-source != root.drag-target) {
+                                        root.flashcard-reordered(root.drag-source, root.drag-target);
+                                    }
+                                    root.drag-source = -1;
+                                    root.drag-current-y = 0px;
+                                }
+                            }
+                            moved => {
+                                if (root.drag-source == i) {
+                                    root.drag-current-y = self.mouse-y - self.pressed-y;
+                                }
+                            }
+                        }
+                    }
 
                     // Japanese word field
                     jap-field-container := Rectangle {
@@ -111,8 +162,9 @@ export component FlashcardStack {
                             root.flashcard-delete-confirmed(i);
                         }
                     }
-                }
-            }
+                    }  // HorizontalLayout
+                }  // Rectangle (row)
+            }  // VerticalLayout (card list)
 
             // Add-flashcard form — slides in when show-add-form is true.
             // Uses the Vertically stacked up components pattern.
