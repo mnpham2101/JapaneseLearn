@@ -101,4 +101,30 @@ where
             logic.set_flashcard_list(slint::ModelRc::new(slint::VecModel::from(stacks)));
         });
     }
+
+    {
+        let ui_weak = ui.as_weak();
+        logic.on_flashcard_reordered(move |from_index, to_index| {
+            let ui = ui_weak.unwrap();
+            let logic = ui.global::<FlashcardAppLogic>();
+            let stack_idx = logic.get_selected_stack_index();
+            if stack_idx < 0 || from_index < 0 || to_index < 0 || from_index == to_index {
+                return;
+            }
+            let stack_idx = stack_idx as usize;
+            let from = from_index as usize;
+            let to = to_index as usize;
+            let mut stacks: Vec<flashcard::FlashcardStackModel> =
+                logic.get_flashcard_list().iter().collect();
+            if let Some(stack) = stacks.get_mut(stack_idx) {
+                let mut cards: Vec<flashcard::FlashcardModel> = stack.flashcards.iter().collect();
+                if from < cards.len() && to < cards.len() {
+                    let card = cards.remove(from);
+                    cards.insert(to, card);
+                }
+                stack.flashcards = slint::ModelRc::new(slint::VecModel::from(cards));
+            }
+            logic.set_flashcard_list(slint::ModelRc::new(slint::VecModel::from(stacks)));
+        });
+    }
 }
