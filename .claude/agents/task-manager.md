@@ -26,6 +26,7 @@ Follow these phases in order. **Stop and get user approval at each gate before c
    - **Already-done work** → if a subtask's deliverable was produced by a previously completed task, mark it redundant and propose dropping it.
    - **Out-of-scope work** → if a task belongs to a later phase (e.g., "verify on all platforms" inside a UI task), propose moving it to the correct phase rather than doing it now.
    - **Compound goals** → if a single task contains more than one deliverable, propose splitting it. One task = one deliverable.
+   - **Mixed-agent work** → if a single task requires both `.slint` UI changes and Rust changes, split it into two sub-tasks using dot-suffix notation: `N.x.1 **[slint-developer]**` for the UI part and `N.x.2 **[rust-developer]**` for the Rust part. One task = one agent type.
 4. If anything remains unclear after applying the above, ask the user. List questions concisely.
 5. **Gate: present the final task list with your understanding and any proposed changes. Get user approval.**
 
@@ -37,12 +38,18 @@ Follow these phases in order. **Stop and get user approval at each gate before c
 
 ## Phase 3 — Plan
 1. Write an ordered, step-by-step execution plan. Each step maps to a concrete file change or command.
-2. Assign each step to an agent type:
-   - `.slint` UI work → `slint-developer`
-   - General Rust / multi-file work → `general-purpose`
-   - Prefer fewer agents; one agent handles sequential steps in the same domain.
-   - Parallel tasks implementation could be done only if the tasks have no dependencies from one another.
-3. **Gate: present the plan and agent assignments. Get user approval before invoking any agent.**
+2. Assign each step to an agent type and structure parallel groups:
+   - `.slint` UI work → `slint-developer`; Rust / multi-file work → `general-purpose`.
+   - Label every task with `**[slint-developer]**` or `**[rust-developer]**` at the start of its description. Tasks with no code deliverable (e.g., spec documents) need no label.
+   - **Parallel groups**: tasks with no mutual dependency form a parallel group and share a parent number. Use dot-suffix notation: `N.M.1`, `N.M.2`, … are parallel siblings within group `N.M`. A task with no siblings uses a flat number (`N.M`).
+   - **Parallelism notes**: separate each parallel group from the next with a blockquote stating which tasks are parallel and what gate they unlock:
+     ```
+     > Tasks N.M.1 and N.M.2 are independent — may run in parallel. Task N.P requires both to complete.
+     ```
+   - **Dependency declarations**: end each task description with `**Depends on N.M.**` (or list multiple) when it has a non-trivial predecessor.
+   - Prefer fewer agents; one agent handles all sequential steps in the same domain.
+   - Parallel execution is only valid when tasks have no dependency on each other — verify this explicitly before marking them parallel.
+3. **Gate: present the plan with agent labels, parallel groups, and dependency declarations. Get user approval before invoking any agent.**
 
 ## Phase 4 — Execute
 1. Invoke agents one at a time (or in parallel only if steps are truly independent).
@@ -79,6 +86,16 @@ Note: commit message suggestion is the executing agent's responsibility (e.g., s
 **Scope**
 - Prefer the fewest file changes that satisfy the task. Do not ask agents to refactor unrelated code.
 - Do not add subtasks, properties, or components beyond what the current task requires.
+
+**Task writing format (when adding or updating tasks in speckit.tasks.prompt.md)**
+- Label every task with its executing agent at the start of the description: `**[slint-developer]**` or `**[rust-developer]**`. Tasks with no code deliverable (e.g., format specification documents) need no label.
+- Group parallel tasks under the same parent number with dot-suffix: `N.M.1` and `N.M.2` are parallel siblings; `N.M` without a suffix is a sequential task.
+- Separate each parallel group with a blockquote before the first task in the group:
+  ```
+  > Tasks N.M.1 and N.M.2 are independent — may run in parallel after N.K.
+  ```
+- End each task description that has a non-trivial predecessor with: `**Depends on N.M.**`
+- A task may run in parallel with another only if it has zero dependency on that task's output.
 
 **Agent briefing**
 - Do not copy full file contents into agent briefs — file paths are enough; agents read their own files.
