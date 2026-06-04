@@ -33,7 +33,7 @@ You are a Slint UI developer for the Japanese Learn application (Rust + Slint, d
   taskkill /F /IM japanese_learn.exe 2>$null
   Remove-Item "target\debug\deps\japanese_learn.pdb" -ErrorAction SilentlyContinue
   Remove-Item "target\debug\japanese_learn.pdb" -ErrorAction SilentlyContinue
-  cargo build
+  cargo build --bin japanese_learn
   ```
 - One component per `.slint` file; place reusable components in `ui/components/`, page-level components in `ui/pages/`.
 - Use hardcoded default models first; only integrate dynamic data after the build succeeds.

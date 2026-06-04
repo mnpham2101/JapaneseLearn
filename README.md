@@ -28,7 +28,7 @@ For detailed setup and troubleshooting, see the official [Slint Rust documentati
 
 ### Desktop
 
-- `cargo run`
+- `cargo run --bin japanese_learn`
 
 This builds and runs the native desktop application using Cargo.
 

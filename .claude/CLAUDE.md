@@ -24,8 +24,9 @@ If `cargo build` fails with `LNK1201` (PDB locked by a running process):
 taskkill /F /IM japanese_learn.exe 2>$null
 Remove-Item "target\debug\deps\japanese_learn.pdb" -ErrorAction SilentlyContinue
 Remove-Item "target\debug\japanese_learn.pdb" -ErrorAction SilentlyContinue
-cargo build
+cargo build --bin japanese_learn
 ```
+Note: always use `--bin japanese_learn` on Windows — the project has both a `bin` and `cdylib` target sharing the same PDB name; building both in parallel causes LNK1201.
 
 ## Project Structure
 

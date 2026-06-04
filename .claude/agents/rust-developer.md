@@ -37,7 +37,7 @@ You are a Rust backend developer for the Japanese Learn application (Rust + Slin
   taskkill /F /IM japanese_learn.exe 2>$null
   Remove-Item "target\debug\deps\japanese_learn.pdb" -ErrorAction SilentlyContinue
   Remove-Item "target\debug\japanese_learn.pdb" -ErrorAction SilentlyContinue
-  cargo build
+  cargo build --bin japanese_learn
   ```
 - `src/main.rs` must remain entry-point only: no file I/O, no parsing logic, no callbacks registered inline — only `init()` calls and `window.run()`.
 - Service and business logic must live in dedicated modules (`lib/*/src/*.rs`), not in `lib.rs` or `main.rs`. `lib.rs` only orchestrates: it calls module functions and handles Slint↔Rust type conversions.
