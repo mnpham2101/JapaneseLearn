@@ -1,0 +1,37 @@
+import { FlashcardStackModel } from "model/flashcard_model.slint";
+
+export global FlashcardAppLogic {
+    in-out property <[FlashcardStackModel]> flashcard-list: [
+        {
+            stackname: "Hiragana Basics",
+            flashcards: [
+                { jap-obj: "あ", explanation: "a", known: false },
+                { jap-obj: "い", explanation: "i", known: false },
+                { jap-obj: "う", explanation: "u", known: false },
+            ],
+        },
+        {
+            stackname: "N5 Vocabulary",
+            flashcards: [
+                { jap-obj: "水", explanation: "water (mizu)", known: false },
+                { jap-obj: "火", explanation: "fire (hi)", known: false },
+            ],
+        },
+        {
+            stackname: "Travel Phrases",
+            flashcards: [
+                { jap-obj: "ありがとう", explanation: "Thank you", known: false },
+                { jap-obj: "すみません", explanation: "Excuse me", known: false },
+            ],
+        },
+    ];
+    in-out property <int> selected-stack-index: -1;
+
+    // Phase 2 callbacks — wired from UI to Rust handlers in lib/flashcard/src/lib.rs::init()
+    callback stack-create-confirmed(name: string);
+    callback stack-delete-confirmed();
+    callback flashcard-add-confirmed(jap: string, meaning: string);
+    callback flashcard-field-changed(card-index: int, jap: string, meaning: string);
+    callback flashcard-delete-confirmed(card-index: int);
+    callback flashcard-reordered(from-index: int, to-index: int);
+}
