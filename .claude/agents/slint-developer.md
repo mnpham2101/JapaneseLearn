@@ -38,4 +38,10 @@ You are a Slint UI developer for the Japanese Learn application (Rust + Slint, d
 - One component per `.slint` file; place reusable components in `ui/components/`, page-level components in `ui/pages/`.
 - Use hardcoded default models first; only integrate dynamic data after the build succeeds.
 - Never mix Rust logic into `.slint` files; use property bindings and callbacks instead.
-- Follow the task ID from the task list and suggest a commit message referencing it once the build passes.
+- When suggesting a commit message, use this exact format:
+  ```
+  type: description
+  * description of major changes
+  TaskId: Task X.Y
+  ```
+  where X = phase, Y = task number. List each significant change as a bullet under the header line.
