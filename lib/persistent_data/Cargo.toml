@@ -6,3 +6,5 @@ edition = "2021"
 [dependencies]
 pulldown-cmark = "0.12"
 rfd = "0.15"
+flashcard = { path = "../flashcard" }
+slint = { workspace = true }
