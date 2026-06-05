@@ -34,6 +34,11 @@ lib/
     ui/main_lib.slint             # re-exports all design tokens for @libC imports
     build.rs                      # compiles ui/main_lib.slint as a library
     Cargo.toml                    # name = "libC", links key, slint-build only (no slint dep)
+test/
+  [library_name]/                 # one workspace-member crate per library under test
+    tests/
+      [page_name].rs              # integration tests for a specific page (e.g. study_page.rs)
+    Cargo.toml                    # depends on the library crate; slint features = ["testing"]
 build.rs
 Cargo.toml
 ```

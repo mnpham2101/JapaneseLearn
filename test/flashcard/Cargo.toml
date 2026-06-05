@@ -1,0 +1,11 @@
+[package]
+name = "flashcard-tests"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+flashcard = { path = "../../lib/flashcard" }
+slint = { workspace = true }
+
+[dev-dependencies]
+i-slint-backend-testing = "1.16.1"

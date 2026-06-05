@@ -3,4 +3,4 @@ target/
 Cargo.lock
 .DS_Store
 rustup-init.exe
-dist/
+dist/stacks.json
