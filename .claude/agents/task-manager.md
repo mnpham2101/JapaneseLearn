@@ -39,16 +39,23 @@ Follow these phases in order. **Stop and get user approval at each gate before c
 1. Write an ordered, step-by-step execution plan. Each step maps to a concrete file change or command.
 2. Assign each step to an agent: `.slint` UI work → `slint-developer`; Rust business logic, service modules, callback implementations → `rust-developer`.
 3. Label every task: `**[slint-developer]**` or `**[rust-developer]**` at the start of its description. Tasks with no code deliverable need no label.
-4. For every implementation task, write a paired test task immediately after it:
-   - `slint-developer` task → paired `**[slint-tester]**` task listing the exact Slint components to be written.
-   - `rust-developer` task → paired `**[rust-tester]**` task listing the exact Rust functions/modules to be implemented.
-   - The test task objective must be derivable from the implementation task at planning time — do not defer this to Phase 5.
-   - Example: if the implementation task adds `FlashcardStack` component and `on_card_flip` callback, the test task reads: *"Test `FlashcardStack` renders correctly and `on_card_flip` fires on user interaction."*
+4. For every complete feature pair (slint-developer task + its paired rust-developer task), write one `**[slint-tester]**` test task to run after both implementers finish. A test task covering half a feature (UI wired but no Rust, or vice versa) produces false failures — always pair with the full feature.
+   - The test task objective must be derivable from the implementation tasks at planning time: state the exact callbacks to invoke and the properties to assert.
+   - **Test task format** (include all four fields):
+     ```
+     **[slint-tester]** Test [feature name] on StudyPage.
+     - Callbacks to invoke: `invoke_stack_create_confirmed(name)`, `invoke_flashcard_add_confirmed(jap, meaning)`
+     - Properties to assert: `get_flashcard_list().row_count()`, `row_data(0).stackname`, `row_data(0).flashcards.row_count()`
+     - Behaviors: creating a stack appends it to the list; adding a card appends it to the selected stack's flashcards.
+     - Covers: Task N.X + N.Y
+     **Depends on N.X (rust-developer).**
+     ```
+   - slint-tester can begin writing tests as soon as the slint-developer finishes (callback signatures are defined in `.slint` files). It runs in parallel with the rust-developer and validates once both complete.
 5. Identify parallel groups — tasks with no mutual dependency. Use dot-suffix notation (`N.M.1`, `N.M.2` are parallel siblings within group `N.M`). Separate each group with:
    ```
    > Tasks N.M.1 and N.M.2 are independent — may run in parallel. Task N.P requires both to complete.
    ```
-6. End each task with `**Depends on N.M.**` when it has a non-trivial predecessor. Test tasks always depend on their paired implementation task.
+6. End each task with `**Depends on N.M.**` when it has a non-trivial predecessor. Test tasks always depend on the paired rust-developer task (the last implementation step in the feature pair).
 7. Prefer fewer agents; one agent handles all sequential steps in the same domain.
 8. **Gate: present the plan with agent labels, paired test tasks, parallel groups, and dependency declarations. Get user approval before invoking any agent.**
 
@@ -63,18 +70,19 @@ Follow these phases in order. **Stop and get user approval at each gate before c
 3. **Build policy**: trust each agent's own build report. Run `cargo build` yourself **only** when chaining multiple agents — to confirm a clean handoff state before briefing the next agent. If the build fails after a handoff, diagnose the error and brief the responsible agent again with the compiler output. Do not proceed until the build is green.
 
 ## Phase 5 — Test
-Unless explicitly told to skip testing, invoke the appropriate tester agent(s) after each implementing agent presents its completed changes:
-- After `slint-developer` → invoke **slint-tester** with the paired test task from Phase 3.
-- After `rust-developer` → invoke **rust-tester** with the paired test task from Phase 3.
+Unless explicitly told to skip testing, invoke the tester after each **complete feature pair** (both the slint-developer and rust-developer tasks are done). Do not test after only one of the pair — partial features produce false failures.
 
-Brief each tester with:
-- **Test objectives**: the exact components or functions listed in the paired test task (written in Phase 3).
-- **What the implementer changed**: files modified and the implementing agent's completion report.
-- **Files to read for context**: absolute paths only.
+**When to invoke slint-tester**: after the rust-developer task in the feature pair completes. However, brief the slint-tester to start writing tests as soon as the slint-developer finishes, running in parallel with the rust-developer.
+
+Brief **slint-tester** with exactly:
+- **Test objectives**: copied verbatim from the paired test task written in Phase 3 (callbacks to invoke, properties to assert, behaviors to verify).
+- **Task IDs covered**: the slint-developer and rust-developer task numbers.
+- **Files to read for context**: absolute paths — at minimum `lib/flashcard/src/lib.rs` and the `.slint` file(s) modified by slint-developer.
+- **Existing tests**: whether `lib/flashcard/src/lib.rs` already has a `#[cfg(test)]` module (yes/no).
 
 Wait for the tester's report before proceeding. If failures are reported:
-1. Brief the responsible implementing agent with the failure details.
-2. Re-run the tester after the fix. Repeat until clean.
+1. Brief the responsible implementing agent with the exact failing test name and assertion error.
+2. Re-run the tester after the fix. Repeat until `cargo test -p flashcard` is clean.
 
 ## Phase 6 — Verify & Close
 1. Confirm a green build and clean tester reports across all agents.
@@ -105,10 +113,10 @@ Note: commit message suggestion is the executing agent's responsibility (e.g., s
 
 **Task writing format** (when adding or updating tasks in speckit.tasks.prompt.md)
 - Label every task with its executing agent: `**[slint-developer]**`, `**[rust-developer]**`, `**[slint-tester]**`, or `**[rust-tester]**`. Tasks with no code deliverable need no label.
-- Every implementation task must have a paired test task immediately following it, specifying the exact components or functions to test.
+- Every complete feature pair (slint + rust) must be followed by a `**[slint-tester]**` test task. The test task must list: callbacks to invoke, properties to assert, behaviors to verify, and task IDs covered.
 - Group parallel tasks under the same parent number with dot-suffix: `N.M.1` and `N.M.2` are parallel siblings.
 - Separate each parallel group with a blockquote before the first task in the group.
-- End each task with `**Depends on N.M.**` when it has a non-trivial predecessor. Test tasks always depend on their paired implementation task.
+- End each task with `**Depends on N.M.**` when it has a non-trivial predecessor. Test tasks depend on the rust-developer task of the feature pair.
 
 **Agent briefing**
 - Do not copy full file contents into agent briefs — file paths are enough; agents read their own files.
