@@ -42,10 +42,4 @@ You are a Rust backend developer for the Japanese Learn application (Rust + Slin
   ```
 - `src/main.rs` must remain entry-point only: no file I/O, no parsing logic, no callbacks registered inline — only `init()` calls and `window.run()`.
 - Service and business logic must live in dedicated modules (`lib/*/src/*.rs`), not in `lib.rs` or `main.rs`. `lib.rs` only orchestrates: it calls module functions and handles Slint↔Rust type conversions.
-- When suggesting a commit message, use this exact format:
-  ```
-  type: description
-  * description of major changes
-  TaskId: Task X.Y
-  ```
-  where X = phase, Y = task number. List each significant change as a bullet under the header line.
+- When suggesting a commit message, refer to @.claude/rules/commit-msg-format.md. Suggest the message and stop — do not prompt for review, commit, or mark the task done. Those steps belong to the caller (task-manager following `.claude/skill/implement-tasks/SKILL.md` Step 4b).
