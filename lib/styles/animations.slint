@@ -1,0 +1,14 @@
+// Animation constants — single source of truth for all shared durations and easing.
+// Import this file (via @styles) wherever hardcoded durations would otherwise appear.
+export global Animations {
+    // ── Durations ─────────────────────────────────────────────────────────────
+    // Card-flip animation: first half collapses, second half expands.
+    out property <duration> flip-duration: 150ms;
+    // General UI transition (show/hide panels, hover feedback).
+    out property <duration> transition-duration: 200ms;
+
+    // ── Easing descriptions (documentation only — Slint easing is set inline) ─
+    // Card collapse (first half of flip): ease-in
+    // Card expand (second half of flip): ease-out
+    // General transitions: ease
+}
