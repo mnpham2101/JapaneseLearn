@@ -16,6 +16,8 @@ The goal is to make learning efficient, engaging, and trackable across desktop a
 
 # Requirements (Now)
 
+**Milestone 1 should include the following features**
+
 ## Flashcard Management
 - Users **must** be able to create stacks of flashcards with names.
 - Users **must** be able to add Japanese words with Vietnamese meanings.
@@ -31,7 +33,7 @@ The goal is to make learning efficient, engaging, and trackable across desktop a
 - Users **must** be able to change a flashcard's status between "known" and "unknown."
 - A progress indicator **must** display known-count vs total-count within the active session.
 
-## Persistent Data Management (Desktop)
+## Persistent Data Management (Desktop - Milestone 1)
 - The application **must** support import of flashcard stacks from a markdown file.  
   Format: `## Stack Name` headings delimit stacks; a GFM pipe table (`| Japanese | Meaning |`) under each heading lists cards.
 - The application **must** support export of all stacks to a markdown file in the same format.
@@ -46,6 +48,73 @@ The goal is to make learning efficient, engaging, and trackable across desktop a
 - A dedicated `lib/styles` library (libC pattern — Slint-only, no Rust backend) **must** be created to own all design tokens.
 - The library **must** export: color palette, typography scale, spacing constants, border tokens, and animation-curve constants.
 - All other libraries and pages **must** import tokens from `@styles`; hardcoded colors, sizes, or durations **must not** appear in component files.
+
+**Milestone 2 should include the following features**
+
+## Vocabulary Study Mode and Flashcard Exercise Generation
+
+### Navigation
+- `StudyPage` gains a topic selector. Available topics: `Vocabulary`, `Grammar` (placeholder), `Reading` (placeholder).
+- Selecting `Vocabulary` shows two sub-views: `Lesson` (create and edit vocabulary lessons) and `Exercises` (view and study generated flashcard exercises).
+
+### Vocabulary Lesson Input
+- Users **must** be able to create, name, and delete vocabulary lessons.
+- For each lesson, users **must** be able to add, edit, and delete words. Each word has:
+  - `spelling` (required): hiragana, katakana, or romaji pronunciation of the word.
+  - `kanji` (optional): kanji representation of the same word.
+  - `explanation`:
+    - `meaning` (required): Vietnamese meaning.
+    - `type` (optional): part of speech — noun, verb, adjective, adverb, particle, pronoun, conjunction, interjection, or adjectival noun. User types or selects the value.
+    - `tense` (optional, repeatable): each entry is a label (e.g., "positive-polite") paired with the conjugated form (e.g., "食べます"). Users may add as many entries as needed.
+    - `example` (optional, repeatable): one or more Japanese sentences illustrating usage.
+
+### Flashcard Exercise Generation
+- The application **must** generate a `Flashcard` exercise from vocabulary lessons on demand.
+- Each vocabulary lesson maps to one flashcard stack; the stack name equals the lesson name.
+- For each word in a lesson:
+  - If `kanji` is provided: generate **two** flashcards — one with `kanji` on the front and one with `spelling` on the front. Both share the same `explanation` on the back.
+  - If `kanji` is not provided: generate **one** flashcard with `spelling` on the front and `explanation` on the back.
+- The back face of every generated flashcard **must** include: `meaning`, `type` (if set), all `tense` entries (if any), and all `example` sentences (if any).
+- Generated flashcard stacks are studied and managed using the existing `## Flashcard Management` and `## Study Mode` features.
+
+### Data Separation and Re-creation
+- Vocabulary lesson data **must** be stored independently from flashcard exercise data (separate persistence files).
+- Users **may** freely edit generated flashcards (add, delete, reorder) without affecting the source vocabulary lessons.
+- A **"Re-create Flashcards"** action **must** be available. It deletes all generated flashcard stacks and regenerates them from current vocabulary lesson data. Users **must** be prompted to confirm before the destructive re-creation.
+
+### Internal Data Stores
+- A **word bank** aggregates all unique words across all vocabulary lessons. It is an internal store used by exercise generation and future exercise types — not a user-navigable screen.
+- A **sentence bank** aggregates all example sentences across all vocabulary lessons. It is an internal store used by future exercise types (e.g., listening, reconstruction).
+
+## Persistent Data Management (Desktop - Milestone 2)
+- The application **must** support import of vocabulary lessons from a markdown file.
+- The vocabulary markdown format uses `## Lesson Name` headings to delimit lessons. Under each heading, word entries follow this structure:
+
+  ```
+  ### たべる
+  kanji: 食べる
+  meaning: to eat
+  type: verb
+  tense: positive-polite → 食べます
+  tense: negative-polite → 食べません
+  example: 私は毎日ご飯を食べる。
+  example: 彼は魚を食べません。
+  ```
+
+  The `### <spelling>` subheading starts each word entry. `kanji:`, `type:`, `tense:`, and `example:` are optional. `tense:` and `example:` may repeat for multiple values.
+- The application **must** support export of all vocabulary lessons to a markdown file in the same format.
+- File dialogs **must** use `rfd`; all `std::fs` calls **must** be gated `#[cfg(not(target_arch = "wasm32"))]`.
+
+## Vocabulary Review Mode
+- When the user opens the Review Page, it displays the same flashcard stack list as Study Mode.
+- Users **cannot** manage stacks or cards from the Review Page (no add, delete, or reorder).
+- When a user selects a stack, the application presents a **pair-matching exercise**:
+  - All flashcard fronts and all flashcard backs from the selected stack are displayed as separate, independently shuffled tiles.
+  - Users must tap or drag to pair each front tile with its correct back tile.
+  - When all pairs are correctly matched, the exercise is marked as passed.
+
+**Milestone 3 should include the following development**
+- Milestone 3 delivers **Analytics** and **Grammar Study Mode** as defined in the Future Backlog below.
 
 # Requirements (Later / Future Backlog)
 
