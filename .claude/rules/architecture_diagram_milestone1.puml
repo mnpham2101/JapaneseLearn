@@ -1,0 +1,101 @@
+@startuml Japanese Learn — Architecture Overview
+!theme plain
+skinparam componentStyle rectangle
+skinparam defaultFontSize 12
+skinparam packageFontSize 13
+skinparam arrowFontSize 11
+
+' ─────────────────────────────────────────
+' Application entry
+' ─────────────────────────────────────────
+package "Application Entry" #f5f5f5 {
+    component "src/main.rs\n(entry only)" as Main
+}
+
+' ─────────────────────────────────────────
+' Slint UI layer (root app)
+' ─────────────────────────────────────────
+package "UI Layer — Slint (root app)" #e8f4fd {
+    component "ui/main_window.slint\n(root window + page routing)" as MainWindow
+    component "ui/pages/\n(StudyPage, GrammarPage\nAnalyticsPage, ListeningPage)" as Pages
+    component "ui/components/\n(NavBtn, shared widgets)" as UIComponents
+}
+
+' ─────────────────────────────────────────
+' libC — Pure Slint design folder (no Rust)
+' ─────────────────────────────────────────
+package "lib/styles  [libC]\nPure Slint folder — not a Rust crate" #fff9e6 {
+    component "tokens.slint\nanimations.slint\nSwipeArea\n(styles.slint entry)" as Styles
+}
+
+' ─────────────────────────────────────────
+' libA — Feature libraries (Slint + Rust)
+' ─────────────────────────────────────────
+package "Feature Libraries  [libA]  Slint + Rust" #eaf7ea {
+    component "lib/flashcard\n— FlashcardStack, Flashcard, FlashcardList\n— CRUD handlers, JSON persistence\n— init() wires all callbacks" as Flashcard
+    component "lib/grammar\n— GrammarPage, LessonList\n— MatchingExercise, ReconstructExercise\n  FillBlankExercise\n— exercise_engine, scoring, persistence" as Grammar
+    component "lib/analytics\n— ProgressBarChart, SessionHistoryChart\n— session_log, stats\n— init() wires session recording" as Analytics
+}
+
+' ─────────────────────────────────────────
+' libB — Service libraries (Rust only)
+' ─────────────────────────────────────────
+package "Service Libraries  [libB]  Rust only" #fdeaea {
+    component "lib/persistent_data\n— markdown_io (pulldown-cmark)\n— file_io (rfd + WASM stubs)\n— Android stub" as PersistData
+    component "lib/audio\n— tts_desktop (tts crate / SAPI)\n— tts_wasm (web_sys SpeechSynthesis)\n— pub fn speak(text)" as Audio
+}
+
+' ─────────────────────────────────────────
+' Platform targets
+' ─────────────────────────────────────────
+package "Platform Targets" #f0f0f0 {
+    component "Windows\nWebAssembly\nAndroid" as Platforms
+}
+
+' ─────────────────────────────────────────
+' Relationships
+' ─────────────────────────────────────────
+
+' Entry wires everything
+Main --> MainWindow      : slint::include_modules!()
+Main --> Flashcard       : flashcard::init()
+Main --> Grammar         : grammar::init()
+Main --> Analytics       : analytics::init()
+Main --> PersistData     : persistent_data::init()
+Main --> Audio           : audio::init()
+
+' UI layer consumes libA Slint components
+MainWindow --> Pages
+MainWindow --> UIComponents
+Pages --> Flashcard  : @flashcard
+Pages --> Grammar    : @grammar
+Pages --> Analytics  : @analytics
+
+' All Slint consumers pull from styles (via with_library_paths in each client build.rs)
+Flashcard   --> Styles : @styles
+Grammar     --> Styles : @styles
+Analytics   --> Styles : @styles
+UIComponents --> Styles : @styles
+
+' Service dependencies (Rust calls, not Slint)
+Flashcard  ..> PersistData : stacks.json
+Grammar    ..> PersistData : grammar.json
+Analytics  ..> PersistData : sessions.json
+Flashcard  ..> Audio       : speak(word)
+Grammar    ..> Audio       : speak(sentence)
+
+' Platform
+Main --> Platforms : cargo / cargo-apk / wasm-pack
+
+' ─────────────────────────────────────────
+' Legend
+' ─────────────────────────────────────────
+legend right
+  libA  Slint UI + Rust init() + callbacks
+  libB  Rust service, no Slint types
+  libC  Pure Slint folder, no Cargo.toml
+  ──    compile-time dependency
+  ..    runtime call (Rust function)
+endlegend
+
+@enduml
