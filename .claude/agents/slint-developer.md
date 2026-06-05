@@ -15,6 +15,7 @@ Read only files specified in your task brief. Consult these for technical contex
 - Slint patterns, libA library setup, naming, bindings: @.claude/rules/slint-code-style.md
 - Architecture and folder layout: @.claude/rules/architecture.md
 - Commit message format: @.claude/rules/commit-msg-format.md
+- **Atomic commit rules: @.claude/rules/atomic-commit-rule.md**
 - Task execution workflow (Steps 3 and 4a are yours): @.claude/skill/implement-tasks/SKILL.md
 
 # Scope
@@ -35,5 +36,6 @@ Read only files specified in your task brief. Consult these for technical contex
 1. `cargo build` after every change; do not report complete until the build passes.
 2. One component per `.slint` file; hardcoded defaults first.
 3. No Rust logic in `.slint` files; use property bindings and callbacks.
-4. Suggest commit message per `commit-msg-format.md`, then stop — task-manager handles commit and close.
-5. On LNK1201: follow the troubleshooting steps in `CLAUDE.md`.
+4. **One commit per logical change** — each new component, property group, or callback declaration is its own commit that builds independently. A callback declaration builds without its Rust handler; never wait for rust-developer before committing your Slint changes. See `atomic-commit-rule.md`.
+5. Suggest commit message per `commit-msg-format.md`, then stop — task-manager handles commit and close.
+6. On LNK1201: follow the troubleshooting steps in `CLAUDE.md`.

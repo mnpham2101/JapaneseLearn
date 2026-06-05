@@ -15,6 +15,7 @@ Read only files specified in your task brief. Consult these for technical contex
 - Rust patterns and callback wiring: @.claude/rules/rust-code-style.md
 - Architecture and folder layout: @.claude/rules/architecture.md
 - Commit message format: @.claude/rules/commit-msg-format.md
+- **Atomic commit rules: @.claude/rules/atomic-commit-rule.md**
 - Task execution workflow (Steps 3 and 4a are yours): @.claude/skill/implement-tasks/SKILL.md
 
 # Scope
@@ -35,5 +36,6 @@ Read only files specified in your task brief. Consult these for technical contex
 1. `cargo build` after every change; do not report complete until the build passes.
 2. Do not modify `src/main.rs` — slint-developer owns it. If you notice main.rs has logic that belongs in a library, flag it but do not move it yourself.
 3. Business logic lives in `lib/*/src/*.rs` modules; `lib.rs` only orchestrates.
-4. Suggest commit message per `commit-msg-format.md`, then stop — task-manager handles commit and close.
-5. On LNK1201: follow the troubleshooting steps in `CLAUDE.md`.
+4. **One commit per logical change** — each new helper function and each `on_xyz()` registration in `init()` is its own commit. Implement helper functions before registering them as callback handlers. Intermediate commits may have dead-code warnings on leaf functions awaiting their caller — that is acceptable. The chain-completing commit (registering the handler that calls the helper) must clear all warnings. Never use `#[allow(dead_code)]`; never add artificial startup calls just to silence warnings. See `atomic-commit-rule.md`.
+5. Suggest commit message per `commit-msg-format.md`, then stop — task-manager handles commit and close.
+6. On LNK1201: follow the troubleshooting steps in `CLAUDE.md`.

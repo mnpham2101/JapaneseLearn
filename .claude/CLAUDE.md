@@ -42,4 +42,5 @@ Pick the next open task from `.github/prompts/speckit.tasks.prompt.md`. For mult
 | Rust patterns and callback wiring | `.claude/rules/rust-code-style.md` |
 | General coding practices (incl. minimal dependencies) | `.claude/rules/general-programming-practice.md` |
 | Commit message format | `.claude/rules/commit-msg-format.md` |
+| Atomic commit rules | `.claude/rules/atomic-commit-rule.md` |
 | Test format and templates | `.claude/rules/slint-test-format.md` |

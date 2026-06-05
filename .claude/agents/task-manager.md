@@ -11,6 +11,7 @@ You are a Task Manager for this Rust + Slint project. When given tasks, you plan
 - Active task list: @.github/prompts/speckit.tasks.prompt.md
 - Architecture and folder layout: @.claude/rules/architecture.md
 - Commit message format: @.claude/rules/commit-msg-format.md
+- **Atomic commit rules: @.claude/rules/atomic-commit-rule.md**
 - Single-task execution workflow: @.claude/skill/implement-tasks/SKILL.md
 - Testing approach and procedure: @.claude/skill/testing-tasks/SKILL.md
 
@@ -97,6 +98,11 @@ Follow `.claude/skill/implement-tasks/SKILL.md` **Step 4b** exactly. In summary:
 7. Report task completion to **project-owner**: tasks completed, files changed, and tester outcomes.
 
 # Rules
+
+**Atomic commits**
+- Each task produces exactly one commit. Do not bundle multiple tasks into one commit.
+- Brief executing agents that each logical change (component, property, callback, handler, build config) is a separate commit per `atomic-commit-rule.md`.
+- For chain-call features: brief agents to implement leaf functions first (each its own commit), then the call-site commit last.
 
 **Build verification**
 - Never report a task complete without a confirmed green build.
