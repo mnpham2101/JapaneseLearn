@@ -2,19 +2,18 @@ import { Tokens } from "@styles";
 import {
     CommonList,
     CommonBtn,
-    Flashcard,
     FlashcardStackModel,
     FlashcardList,
     FlashcardStack,
     FlashcardAppLogic,
 } from "@flashcard";
+import { StudySessionView } from "study_session_view.slint";
 
 export component StudyPage {
     width: 100%;
     height: 100%;
     property <bool> show-stack: FlashcardAppLogic.selected-stack-index >= 0;
     property <bool> show-create-form: false;
-    property <int> current-card-index: 0;
 
     // Reset the create form whenever the stack detail opens so that the
     // "Add Stack" toggle button returns to its unchecked state.
@@ -57,76 +56,7 @@ export component StudyPage {
 
                 // Study session view — shown when a session is active.
                 // The stack list and stack detail are hidden while this is visible.
-                if FlashcardAppLogic.study-session-active: VerticalLayout {
-                    spacing: Tokens.spacing-md;
-                    alignment: LayoutAlignment.center;
-
-                    // Progress counter
-                    Text {
-                        text: FlashcardAppLogic.known-count + " / " + FlashcardAppLogic.total-count + " known";
-                        font-size: Tokens.font-size-body;
-                        color: Tokens.text-secondary;
-                        horizontal-alignment: center;
-                    }
-
-                    // Flashcard bound to the current card in the active stack.
-                    HorizontalLayout {
-                        alignment: center;
-                        session-card := Flashcard {
-                            width: 360px;
-                            data: FlashcardAppLogic.flashcard-list[FlashcardAppLogic.selected-stack-index].flashcards[root.current-card-index];
-
-                            // Notify Rust whenever the known status changes so it can persist and update counts.
-                            changed known => {
-                                FlashcardAppLogic.known-changed(
-                                    FlashcardAppLogic.selected-stack-index,
-                                    root.current-card-index,
-                                    self.known
-                                );
-                            }
-                        }
-                    }
-
-                    // Navigation row: Prev / Next + Close
-                    HorizontalLayout {
-                        spacing: Tokens.spacing-sm;
-                        alignment: center;
-
-                        CommonBtn {
-                            width: 100px;
-                            text: "Previous";
-                            enabled: root.current-card-index > 0;
-                            clicked => {
-                                if (root.current-card-index > 0) {
-                                    root.current-card-index = root.current-card-index - 1;
-                                }
-                                session-card.show-back = false;
-                            }
-                        }
-
-                        CommonBtn {
-                            width: 80px;
-                            text: "Close";
-                            clicked => {
-                                FlashcardAppLogic.study-session-active = false;
-                            }
-                        }
-
-                        CommonBtn {
-                            width: 100px;
-                            text: "Next";
-                            enabled: root.current-card-index <
-                                FlashcardAppLogic.flashcard-list[FlashcardAppLogic.selected-stack-index].flashcards.length - 1;
-                            clicked => {
-                                if (root.current-card-index <
-                                    FlashcardAppLogic.flashcard-list[FlashcardAppLogic.selected-stack-index].flashcards.length - 1) {
-                                    root.current-card-index = root.current-card-index + 1;
-                                }
-                                session-card.show-back = false;
-                            }
-                        }
-                    }
-                }
+                if FlashcardAppLogic.study-session-active: StudySessionView { }
 
                 if !FlashcardAppLogic.study-session-active && root.show-create-form: Rectangle {
                     background: Tokens.input-form-background;
@@ -181,7 +111,6 @@ export component StudyPage {
                     stack: FlashcardAppLogic.flashcard-list[FlashcardAppLogic.selected-stack-index];
                     study-clicked => {
                         FlashcardAppLogic.study-session-active = true;
-                        root.current-card-index = 0;
                     }
                     close-clicked => {
                         FlashcardAppLogic.selected-stack-index = -1;
