@@ -15,6 +15,9 @@ export component StudyPage {
     property <bool> show-stack: FlashcardAppLogic.selected-stack-index >= 0;
     property <bool> show-create-form: false;
 
+    callback import-stack-clicked();
+    callback export-stack-clicked();
+
     // Reset the create form whenever the stack detail opens so that the
     // "Add Stack" toggle button returns to its unchecked state.
     changed show-stack => {
@@ -41,11 +44,26 @@ export component StudyPage {
             padding: 20px;
             spacing: 20px;
 
-            Text {
-                text: "Study Mode";
-                font-size: Tokens.font-size-heading;
-                color: Tokens.text-primary;
-                horizontal-alignment: center;
+            HorizontalLayout {
+                spacing: 10px;
+
+                Text {
+                    text: "Study Mode";
+                    font-size: Tokens.font-size-heading;
+                    color: Tokens.text-primary;
+                    vertical-alignment: center;
+                    horizontal-stretch: 1;
+                }
+
+                import-btn := CommonBtn {
+                    text: "Import";
+                    clicked => { root.import-stack-clicked(); }
+                }
+
+                export-btn := CommonBtn {
+                    text: "Export";
+                    clicked => { root.export-stack-clicked(); }
+                }
             }
 
             // Vertically stacked pattern: form slides in above the list.
