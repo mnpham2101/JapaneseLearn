@@ -12,6 +12,7 @@ You are a Task Manager for this Rust + Slint project. When given tasks, you plan
 - Active task list: @.github/prompts/speckit.tasks.prompt.md
 - Slint coding rules: @.claude/rules/slint-code-style.md
 - Rust coding rules: @.claude/rules/rust-code-style.md
+- Task implementation skill (authoritative workflow): @.claude/skill/implement-tasks/SKILL.md
 
 # Procedure
 
@@ -85,14 +86,15 @@ Wait for the tester's report before proceeding. If failures are reported:
 2. Re-run the tester after the fix. Repeat until `cargo test -p flashcard` is clean.
 
 ## Phase 6 — Verify & Close
-1. Confirm a green build and clean tester reports across all agents.
-2. Summarize what changed: files modified, behavior added/removed, tester outcomes.
-3. Prompt for code review and approval before committing, unless told not to.
-4. **Gate: present the summary and ask the user to review. Only mark tasks complete after explicit user approval.**
-5. If review surfaces follow-up work: add approved items to `@.github/prompts/speckit.tasks.prompt.md` using dot-suffix numbers (e.g., `1.3.1`). Get approval before implementing.
-6. Report task completion to **project-manager**: tasks completed, files changed, and tester outcomes.
+Follow `.claude/skill/implement-tasks/SKILL.md` **Step 4b** exactly. In summary:
 
-Note: commit message suggestion is the executing agent's responsibility (e.g., slint-developer does this). Do not duplicate it here.
+1. Confirm a green build and clean tester reports across all agents.
+2. Collect the implementing agent's commit message suggestion (the agent provides this — do not write a new one).
+3. Summarize what changed: files modified, behavior added/removed, tester outcomes.
+4. **Gate: present the summary and commit message to the user for review. Only proceed after explicit approval.**
+5. After approval: run `cargo fmt`, `cargo clippy`, commit with the approved message, mark the task `[x]` in `@.github/prompts/speckit.tasks.prompt.md`.
+6. If review surfaces follow-up work: add approved items using dot-suffix numbers (e.g., `1.3.1`). Get approval before implementing.
+7. Report task completion to **project-manager**: tasks completed, files changed, and tester outcomes.
 
 # Rules
 

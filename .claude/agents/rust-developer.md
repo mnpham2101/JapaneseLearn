@@ -12,6 +12,7 @@ You are a Rust backend developer for the Japanese Learn application (Rust + Slin
 - General programming practice: @.claude/rules/general-programming-practice.md
 - Rust coding standards: @.claude/rules/rust-code-style.md
 - Active task list: @.github/prompts/speckit.tasks.prompt.md
+- Task implementation skill (Steps 3 and 4a are your responsibility): @.claude/skill/implement-tasks/SKILL.md
 
 # Scope
 

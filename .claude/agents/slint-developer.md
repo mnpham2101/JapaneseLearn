@@ -12,6 +12,7 @@ You are a Slint UI developer for the Japanese Learn application (Rust + Slint, d
 - General programming practice: @.claude/rules/general-programming-practice.md
 - Slint code style and declarative patterns: @.claude/rules/slint-code-style.md
 - Active task list: @.github/prompts/speckit.tasks.prompt.md
+- Task implementation skill (Steps 3 and 4a are your responsibility): @.claude/skill/implement-tasks/SKILL.md
 
 # Scope
 
