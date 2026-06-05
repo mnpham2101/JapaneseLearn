@@ -150,7 +150,7 @@ export component Demo {
 }
 ```
 
-## Build slint components as reusable library:
+## Build slint components as reusable library by Rust crate:
 
 Related components serving a common purpose **must** be packaged as a Cargo workspace member (the **libA** pattern). This section covers the complete setup — library side, client side, and common pitfalls.
 
@@ -298,3 +298,91 @@ After a successful build, confirm `init` is called by adding a `println!` to `in
 | `cannot find function init in module my_library` | Generated `use my_library::my_library` shadows the crate name | Call `::my_library::init(&window)` (leading `::` = explicit crate reference) |
 | `expected &LibraryComponent, found &MainWindow` (E0308) | `as_library` + `rust_module` not used — client regenerates types inline so `Global<MainWindow>` impl is missing | Add `as_library("my_library").rust_module("my_library")` to library build.rs, add the feature flag, add `pub mod` wrapper |
 | Build succeeds but `init` not called | `::my_library::init(&window)` missing from client `main()` | Add the call before `window.run()` |
+
+---
+
+## Use purely Slint reusable library (libC pattern)
+
+When a reusable library contains **only Slint** — design tokens, animation curves, or shared UI primitives with no Rust callback logic — it does **not** need a Rust crate (`Cargo.toml`, `build.rs`, or `src/`). It is just a folder of `.slint` files. Each client registers the folder path in its own `build.rs` using `with_library_paths`.
+
+### When to use
+- Design system: color palette, typography scale, spacing tokens, border tokens.
+- Animation constants: easing curves, duration tokens.
+- Shared UI primitives that have no backend callbacks (e.g., `SwipeArea`, icon components).
+
+### Folder structure
+
+```
+lib/
+  my_lib/
+    tokens.slint          # design tokens
+    animations.slint      # easing + duration constants
+    my_lib.slint          # entry file — re-exports everything
+```
+
+Internal files import each other by relative path. The entry file re-exports the public surface:
+
+```slint
+// lib/my_lib/my_lib.slint
+export { Tokens }     from "tokens.slint";
+export { Animations } from "animations.slint";
+```
+
+### Client `build.rs`
+
+Each client (libA crate or the root app) registers the library path in its `build.rs`:
+
+```rust
+fn main() {
+    let manifest_dir = std::path::PathBuf::from(std::env::var("CARGO_MANIFEST_DIR").unwrap());
+    let library_paths = std::collections::HashMap::from([(
+        "my_lib".to_string(),
+        manifest_dir.join("../../lib/my_lib/my_lib.slint"),  // path to the entry file
+    )]);
+    slint_build::compile_with_config(
+        "ui/entry.slint",
+        slint_build::CompilerConfiguration::new()
+            .with_library_paths(library_paths),
+    ).unwrap();
+}
+```
+
+> The path **must point to the entry `.slint` file**, not the folder. Pointing to a directory causes `Access is denied (os error 5)`.
+
+### Importing in `.slint` files
+
+```slint
+import { Tokens, Animations } from "@my_lib";
+```
+
+### No Rust crate needed — no Cargo.toml, no workspace member
+
+Because the library has no Rust source, it is **not** added to the workspace `members` list and not listed as a `[dependency]`. Only the `build.rs` of each client needs to know the path.
+
+### Animation note — flip effects without Rust
+
+A convincing card-flip animation is achievable in pure Slint using the **width-compression trick**:
+
+1. Animate the card `width` from `parent.width` → `0` over the first half (card "collapses" edge-on).
+2. At `width = 0`, switch the displayed content (front ↔ back) using an `if` condition on a `flipped` property.
+3. Animate `width` from `0` → `parent.width` over the second half (new face "expands").
+
+```slint
+property <bool> flipped: false;
+
+front-face := Rectangle {
+    visible: !flipped;
+    width: flipped ? 0px : parent.width;
+    animate width { duration: 150ms; easing: ease-in; }
+    // front content here
+}
+
+back-face := Rectangle {
+    visible: flipped;
+    width: flipped ? parent.width : 0px;
+    animate width { duration: 150ms; easing: ease-out; delay: 150ms; }
+    // back content here
+}
+```
+
+> **True perspective-correct 3D rotation** (CSS-style `rotateY` with `perspective`) is not exposed by Slint's property system and would require a custom rendering backend in Rust. Avoid unless the visual difference justifies the complexity — the width-compression trick reads as a 3D flip to users.
