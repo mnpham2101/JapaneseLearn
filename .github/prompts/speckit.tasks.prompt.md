@@ -139,13 +139,49 @@ agent: speckit.tasks
 - [ ] 5.4 **[rust-developer]** Implement the `init()` function in `lib/persistent_data/src/lib.rs`. Accept `&MainWindow` and register two callback handlers. `on_import_stack_clicked`: call `file_io::open_markdown_file()` → `markdown_io::parse_stacks()` → convert each `StackData` to `FlashcardStackModel` (SharedString fields, VecModel for cards) → push to `StudyPage`'s `flashcard-list` via a weak handle. `on_export_stack_clicked`: read `flashcard-list` → convert to `Vec<StackData>` → `markdown_io::serialize_stacks()` → `file_io::save_markdown_file()`. All Slint↔Rust type conversions stay in `lib.rs`; `markdown_io` and `file_io` remain Slint-free. **Depends on 5.2.2, 5.3.1, and 5.3.2.**
 - [ ] 5.5 **[rust-developer]** Call `persistent_data::init(&ui)` in `src/main.rs` after `MainWindow::new()`, following the same init-call pattern as the flashcard library from task 1.7. `src/main.rs` must remain entry-point only. Verify on Windows: importing a `.md` file populates the stack list; exporting produces a file that round-trips back through import without data loss. **Depends on 5.4.**
 
-## Phase 6: Optimization & Testing
-- [ ] 6.1 Optimize rendering performance for Windows and WebAssembly targets.
-- [ ] 6.2 Test UI responsiveness across both targets.
-- [ ] 6.3 Add Rust unit tests for core logic (flashcard CRUD, study mode state).
-- [ ] 6.4 Add Rust integration tests for data persistence.
-- [ ] 6.5 Ensure compliance with constitution best practices (UI separation, modularity).
-- [ ] 6.6 Document testing results and performance benchmarks.
+## Phase 6: Vocabulary Study Mode and Exercise Generation
+**Goal**: Users can author vocabulary lessons, generate decoupled flashcard stacks on demand. Review Page gains a read-only matching exercise.
+
+  > Tasks 6.1 and 6.6 are independent — may run in parallel.
+
+- [ ] 6.1 **[rust-developer]** Create `lib/exercise_generator` libD scaffold: `Cargo.toml` (`name = "exercise_generator"`, `serde` dep), empty `src/lib.rs`, add `"lib/exercise_generator"` to workspace `members` in root `Cargo.toml`. No functional code yet. Verify `cargo build` passes. **Independent of 6.6 — may run in parallel.**
+- [ ] 6.2 **[rust-developer]** Implement `lib/exercise_generator/src/models.rs`: `VocabularyLesson`, `VocabularyWord`, `TenseEntry`, `FlashcardStackData`, `FlashcardCardData` plain Rust structs per `.claude/rules/libD-code-style.md §Domain Models`. Re-export from `lib.rs`. **Depends on 6.1.**
+- [ ] 6.3 **[rust-developer]** Implement `lib/exercise_generator/src/transformer.rs`: `Transformer<S,T>` trait, `ExerciseRequest` enum, `ExerciseOutput` enum per `.claude/rules/libD-code-style.md §Transformer Trait`. Re-export from `lib.rs`. **Depends on 6.2.**
+- [ ] 6.4 **[rust-developer]** Implement `lib/exercise_generator/src/service.rs`: `ExerciseGeneratorFor<S>` trait and `ExerciseGeneratorService` dispatcher per `.claude/rules/libD-code-style.md §Service Dispatcher`. Re-export from `lib.rs`. **Depends on 6.3.**
+- [ ] 6.5 **[rust-developer]** Implement `lib/exercise_generator/src/flashcard_transformer.rs`: `FlashcardExerciseTransformer` with kanji duplication rule + inline `#[cfg(test)]` unit tests (4 cases). Run `cargo test -p exercise_generator`. **Depends on 6.4.**
+
+  > Task 6.6 may run in parallel with 6.1–6.5. Tasks 6.11 and 6.12 both depend only on 6.6 and may run in parallel with each other after 6.6 is complete.
+
+- [ ] 6.6 **[slint-developer]** Create `lib/vocabulary` libA scaffold: `Cargo.toml` (`name = "vocabulary"`, `slint` + `flashcard` workspace deps), `build.rs`, `src/lib.rs` init stub, `ui/vocabulary_lib.slint` entry file, `VocabularyAppLogic` global, `VocabularyLessonModel` and `VocabularyWordModel` Slint structs. Add to workspace. Verify `cargo build` passes. **Independent of 6.1–6.5 — may run in parallel.**
+- [ ] 6.7 **[slint-developer]** Vocabulary lesson list UI in `lib/vocabulary/ui/`.
+  - [ ] 6.7.1 Add lesson CRUD callbacks to `VocabularyAppLogic` — see [speckit.subtask.6-7-1.prompt.md](.github/prompts/speckit.subtask.6-7-1.prompt.md)
+  - [ ] 6.7.2 Implement `LessonList` component — see [speckit.subtask.6-7-2.prompt.md](.github/prompts/speckit.subtask.6-7-2.prompt.md)
+
+  **Depends on 6.6.**
+- [ ] 6.8 **[slint-developer]** Vocabulary word form UI in `lib/vocabulary/ui/`.
+  - [ ] 6.8.1 Word form: spelling, kanji, meaning, type fields — see [speckit.subtask.6-8-1.prompt.md](.github/prompts/speckit.subtask.6-8-1.prompt.md)
+  - [ ] 6.8.2 Word form: tense list and example list — see [speckit.subtask.6-8-2.prompt.md](.github/prompts/speckit.subtask.6-8-2.prompt.md)
+
+  **Depends on 6.7.**
+- [ ] 6.9 **[rust-developer]** `lib/vocabulary` Rust backend: persistence, CRUD handlers, vocabulary markdown import/export.
+  - [ ] 6.9.1 Persistence: `load_vocabulary()` / `save_vocabulary()` for `vocabulary.json` — see [speckit.subtask.6-9-1.prompt.md](.github/prompts/speckit.subtask.6-9-1.prompt.md)
+  - [ ] 6.9.2 CRUD handlers for lessons and words wired in `init()` — see [speckit.subtask.6-9-2.prompt.md](.github/prompts/speckit.subtask.6-9-2.prompt.md)
+  - [ ] 6.9.3 Vocabulary markdown import/export (`vocabulary_markdown_io.rs`) — see [speckit.subtask.6-9-3.prompt.md](.github/prompts/speckit.subtask.6-9-3.prompt.md)
+
+  **Depends on 6.8.**
+- [ ] 6.10 **[rust-developer]** Wire `on_generate_exercises_clicked` in `lib/vocabulary/src/lib.rs`: convert `VocabularyAppLogic` state → `Vec<VocabularyLesson>`, call `ExerciseGeneratorService::generate(ExerciseRequest::Flashcard, &lessons)`, convert output → `FlashcardStackModel`, update `FlashcardAppLogic` and call `flashcard::save_stacks()`. **Depends on 6.5 and 6.9.**
+
+  > Tasks 6.11 and 6.12 may run in parallel — both depend only on 6.6.
+
+- [ ] 6.11 **[slint-developer]** Add topic selector to `StudyPage` in `ui/pages/study_page.slint`: "Vocabulary" tab shows `VocabularyPage`; existing flashcard stack view moves under "Flashcard" tab; Grammar and Reading are placeholder tabs. **Depends on 6.6.**
+- [ ] 6.12 **[slint-developer]** Implement `MatchingExerciseView` in `lib/vocabulary/ui/components/`: card tiles with front/back text, click-to-select and click-to-match logic, locked visual state per matched pair, `callback exercise-completed`. **Depends on 6.6.**
+- [ ] 6.13 **[slint-developer]** Update `ReviewPage` in `ui/pages/review_page.slint`: show flashcard stack list in read-only mode; selecting a stack launches `MatchingExerciseView`. **Depends on 6.12.**
+- [ ] 6.14 **[rust-developer]** Call `vocabulary::init(&ui)` in `src/main.rs` after `flashcard::init` and `persistent_data::init`. `src/main.rs` must remain entry-point only. **Depends on 6.10.**
+- [ ] 6.T **[slint-tester]** Test vocabulary CRUD on `VocabularyPage`: create lesson, add word, update word, delete word, delete lesson, persistence round-trip.
+  - Callbacks to invoke: `invoke_lesson_create_confirmed(name)`, `invoke_word_add_confirmed(lesson_idx, spelling, kanji, meaning)`, `invoke_word_field_changed(lesson_idx, word_idx, ...)`, `invoke_word_delete_confirmed(lesson_idx, word_idx)`, `invoke_lesson_delete_confirmed(lesson_idx)`.
+  - Properties to assert: `get_lesson_list().row_count()`, `get_lesson_list().row_data(0).words.row_count()`.
+  - Covers: Task 6.7 + 6.8 + 6.9.
+  **Depends on 6.9.**
 
 ## Phase 7: Future Backlog (Extensible)
 - [ ] 7.1 Add audio playback (Japanese text‑to‑speech integration).
