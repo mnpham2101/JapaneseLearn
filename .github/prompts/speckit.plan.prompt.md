@@ -41,10 +41,12 @@ See `.claude/rules/architecture.md` for the full libA / libB / libC definitions.
 |---|---|---|---|
 | `lib/flashcard` | libA | 1–4 | Flashcard CRUD, stack management, session persistence, study mode |
 | `lib/styles` | libC (Slint folder, not a crate) | 3 | Design tokens, color palette, typography, spacing, animation curves |
-| `lib/persistent_data` | libB | 5 | Markdown + JSON file I/O, file dialogs |
-| `lib/analytics` | libA | 8 | Session logging, statistics computation, chart Slint components |
-| `lib/grammar` | libA | 9 | Grammar lesson models, exercise UI, exercise engine |
-| `lib/audio` | libB | 10 | TTS and playback — OS engine on desktop, Web Speech API on WASM |
+| `lib/persistent_data` | libB | 5 | Basic flashcard markdown + JSON file I/O, file dialogs |
+| `lib/vocabulary` | libA | 6 | Vocabulary lesson CRUD UI, lesson persistence to `vocabulary.json`, vocabulary markdown import/export; word/sentence banks are internal data structures |
+| `lib/exercise_generator` | libD | 6 | Transformer service: converts `VocabularyLesson` data into exercise datasets on demand; no Slint, no `build.rs`, no `init()` |
+| `lib/analytics` | libA | 9 | Session logging, statistics computation, chart Slint components |
+| `lib/grammar` | libA | 10 | Grammar lesson models, exercise UI, exercise engine |
+| `lib/audio` | libB | 11 | TTS and playback — OS engine on desktop, Web Speech API on WASM |
 
 ## Layered Architecture
 - **UI Layer (Slint)**: presentation, property bindings, user interactions.
@@ -66,7 +68,7 @@ See `.claude/rules/architecture.md` for the full libA / libB / libC definitions.
 - Implement JSON session persistence.
 - Write automation CRUD tests.
 
-## Phase 3: Universal Styling Library
+## Phase 3: Universal Styling Library ✓
 **Goal**: Extract all design tokens into a standalone `lib/styles` folder (libC) so every component in every library imports from `@styles` — no hardcoded colors, sizes, or durations anywhere.
 
 - **Library type**: libC — pure Slint folder, **not a Rust crate** (no `Cargo.toml`, no `src/`).
@@ -76,7 +78,7 @@ See `.claude/rules/architecture.md` for the full libA / libB / libC definitions.
 - Each client library and the root app registers the path in its `build.rs` via `with_library_paths`; see `slint-code-style.md` § *Use purely Slint reusable library*.
 - Migrate all `.slint` files in `lib/flashcard/` and root `ui/` to import from `@styles`.
 
-## Phase 4: Study Mode
+## Phase 4: Study Mode ✓
 **Goal**: Deliver a functional single-card study session within the existing `StudyPage`, wired to live Rust-computed progress counts. Depends on Phase 3 (`@styles` tokens must be available).
 
 - Add a study session view to `StudyPage`: one `Flashcard` at a time with Previous/Next navigation and a close callback.
@@ -93,7 +95,48 @@ See `.claude/rules/architecture.md` for the full libA / libB / libC definitions.
 - Wire Import and Export buttons in `StudyPage`; call `persistent_data::init(&ui)` from `src/main.rs`.
 - Verify round-trip on Windows: import → edit → export → re-import without data loss.
 
-## Phase 6: Mobile Support (Android + Swipe Gestures)
+## Phase 6: Vocabulary Study Mode and Exercise Generation
+**Goal**: Users can author vocabulary lessons (words with kanji, spelling, meaning, type, tense, and example sentences), then generate decoupled flashcard stacks from those lessons on demand. The Review Page gains a read-only matching exercise. Editing flashcard stacks does not affect the vocabulary lesson database, and vice versa.
+
+**New libraries**:
+- `lib/exercise_generator` (libD) — pure Rust transformer service; no Slint, no `build.rs`, no `init()`. Converts `VocabularyLesson` structs into `FlashcardStackData` structs. See `.claude/rules/libD-code-style.md` for the full pattern.
+- `lib/vocabulary` (libA) — vocabulary lesson CRUD UI + Rust backend; persists to `vocabulary.json`; handles vocabulary markdown import/export (separate format from the basic flashcard markdown in `lib/persistent_data`).
+
+**Data flow** (decoupled databases):
+```
+[vocabulary.json]  ──on demand──>  [FlashcardExerciseTransformer (libD)]  ──>  [stacks.json]
+    (vocabulary DB)                    pure Rust, stateless                       (exercise DB)
+```
+
+**Key rules**:
+- libD owns the plain Rust domain model structs (`VocabularyLesson`, `VocabularyWord`, `FlashcardStackData`). Word bank and sentence bank are internal aggregates of these structs — no separate UI or persistence.
+- All type conversions (Slint ↔ plain Rust) happen in `lib/vocabulary/src/lib.rs` — never inside libD.
+- "Generate Exercises" / "Re-create Exercises": clears `stacks.json` and regenerates from vocabulary data; vocabulary database is unchanged.
+- Kanji duplication rule: if a word has a kanji field, two flashcard cards are created — one with kanji front, one with spelling front; both share the same explanation back.
+- Vocabulary markdown format — lessons delimited by `## Lesson Name` headings; each word entry opened by a `### <spelling>` subheading; `kanji:`, `meaning:`, `type:`, `tense:`, `example:` as key-value lines below (tense and example may repeat) — is owned by `lib/vocabulary`. It is separate from and must not be mixed into the basic flashcard markdown format in `lib/persistent_data`.
+
+**Modules**:
+- `lib/exercise_generator/src/models.rs` — `VocabularyLesson`, `VocabularyWord`, `TenseEntry`, `FlashcardStackData`, `FlashcardCardData`.
+- `lib/exercise_generator/src/transformer.rs` — `Transformer<S,T>` trait, `ExerciseRequest` enum, `ExerciseOutput` enum.
+- `lib/exercise_generator/src/service.rs` — `ExerciseGeneratorService` dispatcher.
+- `lib/exercise_generator/src/flashcard_transformer.rs` — `FlashcardExerciseTransformer` impl + unit tests.
+- `lib/vocabulary/ui/` — `VocabularyLessonModel`, `VocabularyWordModel` Slint structs, `VocabularyAppLogic` global, lesson list, word form (spelling, kanji, meaning, type, tense list, example list).
+- `lib/vocabulary/src/lib.rs` — vocabulary persistence, CRUD handlers, vocabulary markdown import/export, `on_generate_exercises_clicked` (calls libD, updates flashcard lib).
+- `lib/vocabulary` depends on `lib/flashcard` as a workspace Rust dep: the `on_generate_exercises_clicked` handler reads from `VocabularyAppLogic`, calls `ExerciseGeneratorService`, then writes to `FlashcardAppLogic` and calls `flashcard::save_stacks()`. All Slint ↔ Rust type conversions stay in `lib/vocabulary/src/lib.rs`.
+
+**Study Page navigation**:
+- `StudyPage` gains a topic selector. "Vocabulary" is the first topic; selecting it shows the vocabulary lesson list (not the flashcard stack list). The existing flashcard stack view moves under the "Vocabulary" → "Exercises" → "Flashcard" path.
+- Grammar and Reading topics are placeholders at this phase; they become active in Phases 10 and beyond.
+
+**Vocabulary Review Mode** (Review Page):
+- The Review Page shows the flashcard stack list in read-only mode — no add/delete/edit controls.
+- Selecting a stack launches a matching exercise: all flashcard fronts and backs for that stack are displayed as separate tiles in randomised order; the user clicks a front tile then clicks its matching back tile; matched pairs lock and are visually distinguished; the exercise passes when all pairs are matched.
+- Interaction model: click-to-select (works on desktop, WASM, and mobile without drag-and-drop).
+- The matching exercise UI is implemented in `lib/vocabulary/ui/` as a `MatchingExerciseView` component.
+
+**Milestone completion check**: create a vocabulary lesson → add words with and without kanji → click Generate Exercises → confirm flashcard stacks appear with kanji duplication → manually edit a flashcard stack → click Re-create → confirm stacks reset to vocabulary-derived data with vocabulary lesson unchanged → open Review Page → select a stack → complete the matching exercise → confirm all pairs resolve correctly.
+
+## Phase 7: Mobile Support (Android + Swipe Gestures)
 **Goal**: Deploy on Android; add swipe navigation. Placed here so all subsequent feature phases are built mobile-ready from the start.
 
 - Configure Android build (`cargo apk`); verify blank window on Android emulator.
@@ -103,8 +146,8 @@ See `.claude/rules/architecture.md` for the full libA / libB / libC definitions.
 - Audit all interactive elements for minimum 44 dp touch targets.
 - Note: Slint's Android backend is included via Slint's feature flags — no additional crate dependency.
 
-## Phase 7: Optimization & Testing
-**Goal**: Harden the application after Phases 1–6 — performance, coverage, and cross-platform compliance across Windows, WebAssembly, and Android.
+## Phase 8: Optimization & Testing
+**Goal**: Harden the application after Phases 1–7 — performance, coverage, and cross-platform compliance across Windows, WebAssembly, and Android.
 
 - Optimize rendering performance across all three targets.
 - Add Rust unit tests for core logic (flashcard CRUD, study mode state).
@@ -112,7 +155,7 @@ See `.claude/rules/architecture.md` for the full libA / libB / libC definitions.
 - Ensure compliance with constitution best practices (UI separation, modularity, `@styles` usage).
 - Document testing results and performance benchmarks.
 
-## Phase 8: Analytics
+## Phase 9: Analytics
 **Goal**: Track study sessions and display per-stack progress using pure Slint chart components — no charting library.
 
 - **Library type**: libA — `lib/analytics/`.
@@ -122,7 +165,7 @@ See `.claude/rules/architecture.md` for the full libA / libB / libC definitions.
 - Add `AnalyticsPage` with navigation in `MainWindow`; record a session entry on study session close.
 - No new third-party dependencies beyond `serde`/`serde_json`.
 
-## Phase 9: Grammar Study Mode
+## Phase 10: Grammar Study Mode
 **Goal**: Grammar lessons with three exercise types and pass/fail tracking per exercise.
 
 - **Library type**: libA — `lib/grammar/`.
@@ -133,8 +176,8 @@ See `.claude/rules/architecture.md` for the full libA / libB / libC definitions.
 - Japanese tokenization uses `SentenceModel.tokens` supplied by the teacher — no NLP library.
 - When all exercises for a lesson pass, mark the lesson `known`.
 
-## Phase 10: Audio (TTS + Playback)
-**Goal**: Play Japanese TTS for flashcard words and grammar sentences. Depends on Phase 9 (`GrammarPage` must exist before wiring audio to it).
+## Phase 11: Audio (TTS + Playback)
+**Goal**: Play Japanese TTS for flashcard words and grammar sentences. Depends on Phase 10 (`GrammarPage` must exist before wiring audio to it).
 
 - **Library type**: libB — `lib/audio/`, no Slint UI.
 - Desktop: `tts = "0.26"` (Windows SAPI / macOS AVSpeechSynthesizer), gated `#[cfg(not(target_arch = "wasm32"))]`.
@@ -151,8 +194,8 @@ tts = "0.26"
 web-sys = { version = "0.3", features = ["SpeechSynthesis", "SpeechSynthesisUtterance", "Window"] }
 ```
 
-## Phase 11: Listening Study Mode & Review Mode
-**Goal**: Listening exercises that test comprehension using TTS playback. Depends on Phase 10.
+## Phase 12: Listening Study Mode & Review Mode
+**Goal**: Listening exercises that test comprehension using TTS playback. Depends on Phase 11.
 
 - **Study Listening Mode**: a toggle in the study session view switches to audio-only (hide Japanese text, auto-play TTS on card advance); user can still tap to reveal.
 - **Review — Multiple Choice**: pick a random card or sentence, speak it via `audio::speak`, display 3–4 text choices (correct + distractors from the same stack), user selects.
