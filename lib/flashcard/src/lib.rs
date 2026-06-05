@@ -81,6 +81,29 @@ fn load_stacks() -> Option<Vec<flashcard::FlashcardStackModel>> {
     None
 }
 
+fn update_progress<T>(ui: &T)
+where
+    T: slint::ComponentHandle + 'static,
+    for<'a> FlashcardAppLogic<'a>: slint::Global<'a, T>,
+{
+    let logic = ui.global::<FlashcardAppLogic>();
+    let stack_idx = logic.get_selected_stack_index();
+    if stack_idx < 0 {
+        logic.set_known_count(0);
+        logic.set_total_count(0);
+        return;
+    }
+    let stacks: Vec<flashcard::FlashcardStackModel> = logic.get_flashcard_list().iter().collect();
+    if let Some(stack) = stacks.get(stack_idx as usize) {
+        let cards: Vec<flashcard::FlashcardModel> = stack.flashcards.iter().collect();
+        logic.set_total_count(cards.len() as i32);
+        logic.set_known_count(cards.iter().filter(|c| c.known).count() as i32);
+    } else {
+        logic.set_known_count(0);
+        logic.set_total_count(0);
+    }
+}
+
 pub fn init<T>(ui: &T)
 where
     T: slint::ComponentHandle + 'static,
