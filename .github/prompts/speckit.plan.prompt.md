@@ -61,7 +61,7 @@ See `.claude/rules/architecture.md` for the full libA / libB / libC definitions.
 - Implement sample data models and flashcard components.
 - Create `lib/flashcard` scaffold (libA pattern).
 
-## Phase 2: Flashcard Management ✓ (task 2.9 pending)
+## Phase 2: Flashcard Management ✓
 - Implement stack creation, add/edit/delete, drag‑to‑reorder.
 - Implement JSON session persistence.
 - Write automation CRUD tests.
