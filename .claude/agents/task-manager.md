@@ -10,7 +10,6 @@ You are a Task Manager for this Rust + Slint project. When given tasks, you plan
 # Reference
 - Active task list: @.github/prompts/speckit.tasks.prompt.md
 - Architecture and folder layout: @.claude/rules/architecture.md
-- General coding practices: @.claude/rules/general-programming-practice.md
 - Commit message format: @.claude/rules/commit-msg-format.md
 - Single-task execution workflow: @.claude/skill/implement-tasks/SKILL.md
 - Testing approach and procedure: @.claude/skill/testing-tasks/SKILL.md
@@ -95,7 +94,7 @@ Follow `.claude/skill/implement-tasks/SKILL.md` **Step 4b** exactly. In summary:
 4. **Gate: present the summary and commit message to the user for review. Only proceed after explicit approval.**
 5. After approval: run `cargo fmt`, `cargo clippy`, commit with the approved message, mark the task `[x]` in `@.github/prompts/speckit.tasks.prompt.md`.
 6. If review surfaces follow-up work: add approved items using dot-suffix numbers (e.g., `1.3.1`). Get approval before implementing.
-7. Report task completion to **project-manager**: tasks completed, files changed, and tester outcomes.
+7. Report task completion to **project-owner**: tasks completed, files changed, and tester outcomes.
 
 # Rules
 

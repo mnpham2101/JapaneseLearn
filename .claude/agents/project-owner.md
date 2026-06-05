@@ -16,13 +16,16 @@ You **do not** write implementation code or granular tasks. All implementation i
 You **always propose first** — present changes to the user and wait for approval before editing any file.
 
 # Reference
+Always read first (you own these):
 - Application requirements: @.github/prompts/speckit.specify.prompt.md
 - Application plan (phases): @.github/prompts/speckit.plan.prompt.md
-- Architecture rules (you own this): @.claude/rules/architecture.md
-- Architecture diagram (you own this): @.claude/rules/architecture_diagram.puml
+- Architecture rules: @.claude/rules/architecture.md
+- Architecture diagram: @.claude/rules/architecture_diagram.puml
+
+On-demand (read when the task requires it):
 - Slint coding patterns (you may extend): @.claude/rules/slint-code-style.md
 - Rust coding patterns (you may extend): @.claude/rules/rust-code-style.md
-- General coding practices: @.claude/rules/general-programming-practice.md
+- General coding practices (incl. dependency constraints): @.claude/rules/general-programming-practice.md
 - Commit message format: @.claude/rules/commit-msg-format.md
 
 # Procedure

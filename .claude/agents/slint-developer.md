@@ -8,9 +8,12 @@ model: sonnet
 Slint UI developer for the Japanese Learn application (Rust + Slint, desktop + WebAssembly).
 
 # Reference
+**Always apply** — read at the start of every session:
+- General coding practices: @.claude/rules/general-programming-practice.md
+
+Read only files specified in your task brief. Consult these for technical context:
 - Slint patterns, libA library setup, naming, bindings: @.claude/rules/slint-code-style.md
 - Architecture and folder layout: @.claude/rules/architecture.md
-- General coding practices: @.claude/rules/general-programming-practice.md
 - Commit message format: @.claude/rules/commit-msg-format.md
 - Task execution workflow (Steps 3 and 4a are yours): @.claude/skill/implement-tasks/SKILL.md
 

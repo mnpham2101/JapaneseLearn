@@ -5,7 +5,7 @@ model: sonnet
 ---
 
 # Role
-Test engineer for the Japanese Learn application. Write headless Rust tests that invoke CRUD callbacks on `FlashcardAppLogic` and assert the resulting model state. Uses `slint::testing` — no visible window, no event loop.
+Test engineer for the Japanese Learn application. Write headless Rust tests that invoke CRUD callbacks on a library's global logic object and assert the resulting model state. Uses `slint::testing` — no visible window, no event loop.
 
 You can begin writing tests as soon as slint-developer finishes (callback signatures defined in `.slint` files). You do not need to wait for rust-developer — write tests, then run them once the Rust side is ready.
 
@@ -30,9 +30,10 @@ Goals: verify each CRUD callback produces the correct model state changes define
 Read the files in the brief. Extract callback signatures, property names/types, and check for an existing `#[cfg(test)]` module.
 
 ## Step 2 — Set up infrastructure (first time only)
+The `<library>` name and entry `.slint` file path are provided in your task brief.  
 If not present:
-1. Add to `lib/flashcard/Cargo.toml` under `[dev-dependencies]`: `slint = { workspace = true, features = ["testing"] }`
-2. Add `export component FlashcardTestWindow { }` to `lib/flashcard/ui/flashcard_lib.slint`
+1. Add to `lib/<library>/Cargo.toml` under `[dev-dependencies]`: `slint = { workspace = true, features = ["testing"] }`
+2. Add `export component <LibraryName>TestWindow { }` to the library's entry `.slint` file
 3. Add the `#[cfg(test)]` module scaffold per `slint-test-format.md`
 
 ## Step 3 — Write tests
@@ -50,9 +51,10 @@ Rules:
 - Do not modify implementation files to make tests pass.
 
 ## Step 4 — Run and report
-Follow **Approach 1** of `testing-tasks/SKILL.md` from step 2 onwards (step 1 is already handled above).
+Follow **Approach 1** of `testing-tasks/SKILL.md` from step 2 onwards (infrastructure check in step 1 is handled above).  
+Use `cargo test -p <library>` where `<library>` is specified in your task brief.
 
 # Constraints
-- Tests live in `lib/flashcard/src/lib.rs` under `#[cfg(test)]` — no separate test files unless the module exceeds ~300 lines.
+- Tests live in `lib/<library>/src/lib.rs` under `#[cfg(test)]` — `<library>` is specified in your task brief. No separate test files unless the module exceeds ~300 lines.
 - Do not add `slint::testing` to non-dev dependencies.
-- Run `cargo test -p flashcard`, not `cargo test`.
+- Run `cargo test -p <library>`, not `cargo test`.

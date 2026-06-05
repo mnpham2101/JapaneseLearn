@@ -15,15 +15,8 @@ wasm-pack build --release --target web
 python3 -m http.server
 ```
 
-### Windows LNK1201 (PDB locked)
-
-```powershell
-taskkill /F /IM japanese_learn.exe 2>$null
-Remove-Item "target\debug\deps\japanese_learn.pdb" -ErrorAction SilentlyContinue
-Remove-Item "target\debug\japanese_learn.pdb" -ErrorAction SilentlyContinue
-cargo build --bin japanese_learn
-```
-Always use `--bin japanese_learn` — parallel bin+cdylib builds share a PDB name.
+Always use `--bin japanese_learn` — parallel bin+cdylib builds share a PDB name.  
+For LNK1201 (PDB locked): see `.claude/skill/implement-tasks/SKILL.md` Step 3.
 
 ## Project Structure
 
@@ -47,6 +40,6 @@ Pick the next open task from `.github/prompts/speckit.tasks.prompt.md`. For mult
 | Architecture & folder layout | `.claude/rules/architecture.md` |
 | Slint/UI patterns and library setup | `.claude/rules/slint-code-style.md` |
 | Rust patterns and callback wiring | `.claude/rules/rust-code-style.md` |
-| General coding practices | `.claude/rules/general-programming-practice.md` |
+| General coding practices (incl. minimal dependencies) | `.claude/rules/general-programming-practice.md` |
 | Commit message format | `.claude/rules/commit-msg-format.md` |
 | Test format and templates | `.claude/rules/slint-test-format.md` |
