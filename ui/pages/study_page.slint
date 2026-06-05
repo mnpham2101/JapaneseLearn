@@ -25,7 +25,7 @@ export component StudyPage {
     Rectangle {
         width: 100%;
         height: 100%;
-        background: #ffffff;
+        background: Tokens.page-background;
 
         // Background dismiss — lower z-order than all content.
         // Captures clicks on empty areas outside the detail pane and list,
@@ -42,8 +42,8 @@ export component StudyPage {
 
             Text {
                 text: "Study Mode";
-                font-size: 28px;
-                color: #333333;
+                font-size: Tokens.font-size-heading;
+                color: Tokens.text-primary;
                 horizontal-alignment: center;
             }
 
@@ -54,29 +54,29 @@ export component StudyPage {
                 vertical-stretch: 1;
 
                 if root.show-create-form: Rectangle {
-                    background: #f5f5f5;
-                    border-radius: 8px;
+                    background: Tokens.input-form-background;
+                    border-radius: Tokens.border-radius;
                     height: 140px;
 
                     HorizontalLayout {
-                        padding: 16px;
+                        padding: Tokens.padding-lg;
                         spacing: 10px;
                         alignment: center;
 
                         Rectangle {
                             width: 260px;
                             height: 36px;
-                            border-width: 1px;
-                            border-color: #b0c4de;
-                            border-radius: 6px;
-                            background: #ffffff;
+                            border-width: Tokens.border-width;
+                            border-color: Tokens.input-border;
+                            border-radius: Tokens.border-radius;
+                            background: Tokens.input-background;
 
                             stack-name-input := TextInput {
-                                font-size: 14px;
-                                color: #2c3e50;
+                                font-size: Tokens.font-size-input;
+                                color: Tokens.input-text;
                                 vertical-alignment: center;
                                 width: parent.width - 12px;
-                                x: 6px;
+                                x: Tokens.spacing-xs;
                             }
                         }
 

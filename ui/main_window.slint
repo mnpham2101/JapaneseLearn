@@ -22,7 +22,7 @@ export component MainWindow inherits Window {
         spacing: 0;
 
         Rectangle {
-            background: #2c3e50;
+            background: Tokens.nav-background;
             height: 60px;
 
             HorizontalLayout {
@@ -32,15 +32,15 @@ export component MainWindow inherits Window {
 
                 Text {
                     text: "Japanese Learn";
-                    font-size: 24px;
-                    color: #ffffff;
+                    font-size: Tokens.font-size-nav-title;
+                    color: Tokens.text-on-dark;
                     vertical-alignment: center;
                 }
             }
         }
 
         Rectangle {
-            background: #ffffff;
+            background: Tokens.page-background;
             height: 480px;
 
             if current-page == PageType.StudyMode: StudyPage {
@@ -51,7 +51,7 @@ export component MainWindow inherits Window {
         }
 
         Rectangle {
-            background: #ecf0f1;
+            background: Tokens.nav-bar-background;
             height: 60px;
 
             HorizontalLayout {

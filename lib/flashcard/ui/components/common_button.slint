@@ -1,3 +1,5 @@
+import { Tokens } from "@styles";
+
 export component CommonBtn inherits Rectangle {
     in property<string> text: "";
     in property<bool> primary: false;
@@ -27,7 +29,10 @@ export component CommonBtn inherits Rectangle {
     accessible-enabled: enabled;
     accessible-checkable: checkable;
     accessible-checked: checked;
-    background: !enabled ? #bdc3c7 : (checked ? #2c3e50 : (primary ? #3498db : #95a5a6));
+    background: !enabled ? Tokens.btn-disabled-bg
+        : (checked ? Tokens.nav-background
+        : (primary ? Tokens.btn-primary-bg
+        : Tokens.btn-default-bg));
     opacity: pressed ? 0.9 : (enabled ? 1.0 : 0.85);
 
     HorizontalLayout {
@@ -36,10 +41,10 @@ export component CommonBtn inherits Rectangle {
 
         Text {
             text: text;
-            color: #ffffff;
+            color: !enabled ? Tokens.btn-disabled-text : Tokens.text-on-dark;
             horizontal-alignment: center;
             vertical-alignment: center;
-            font-size: 14px;
+            font-size: Tokens.font-size-input;
         }
     }
 

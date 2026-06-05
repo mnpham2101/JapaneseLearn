@@ -83,7 +83,7 @@ export component FlashcardStack {
                     border-radius: Tokens.border-radius;
                     // Highlight row that is the current drop target.
                     background: root.drag-target == i && root.drag-source != i
-                        ? #dce8f5 : transparent;
+                        ? Tokens.drag-target-highlight : transparent;
 
                     HorizontalLayout {
                     spacing: 16px;
@@ -94,8 +94,8 @@ export component FlashcardStack {
                         width: 20px;
                         Text {
                             text: "≡";
-                            color: root.drag-source == i ? Tokens.text-primary : #cccccc;
-                            font-size: 16px;
+                            color: root.drag-source == i ? Tokens.text-primary : Tokens.btn-disabled-text;
+                            font-size: Tokens.font-size-caption;
                             horizontal-alignment: center;
                             vertical-alignment: center;
                         }
@@ -179,7 +179,7 @@ export component FlashcardStack {
             // Add-flashcard form — slides in when show-add-form is true.
             // Uses the Vertically stacked up components pattern.
             if root.show-add-form: Rectangle {
-                background: #f5f5f5;
+                background: Tokens.input-form-background;
                 border-radius: Tokens.border-radius;
                 height: self.visible ? 80px : 0px;
 
@@ -209,7 +209,7 @@ export component FlashcardStack {
                             visible: jap-input.text == "";
                             text: "Japanese word...";
                             font-size: Tokens.font-size-body;
-                            color: #aaaaaa;
+                            color: Tokens.text-placeholder;
                             vertical-alignment: center;
                             x: Tokens.spacing-xs;
                         }
@@ -236,7 +236,7 @@ export component FlashcardStack {
                             visible: meaning-input.text == "";
                             text: "Vietnamese meaning...";
                             font-size: Tokens.font-size-body;
-                            color: #aaaaaa;
+                            color: Tokens.text-placeholder;
                             vertical-alignment: center;
                             x: Tokens.spacing-xs;
                         }
