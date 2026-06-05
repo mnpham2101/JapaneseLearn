@@ -29,10 +29,11 @@ lib/
     main.rs                       # entry point to build library
     Cargo.toml                    # define building codes as package
   libD/                           # Pure Rust data transformation service — no Slint, no build.rs, no ui/
-    src/lib.rs                    # Public API: re-exports factory trait and implementations
+    src/lib.rs                    # Public API: re-exports transformer trait, service, and all output types
     src/models.rs                 # Domain model structs (Slint-free, serde if needed)
-    src/factory.rs                # ExerciseFactory trait (or Transformer trait)
-    src/<name>_factory.rs         # Concrete factory implementation(s)
+    src/transformer.rs            # Transformer<S,T> trait, ExerciseRequest enum, ExerciseOutput enum
+    src/service.rs                # ExerciseGeneratorService dispatcher
+    src/<name>_transformer.rs     # Concrete transformer implementation(s) — one per (S→T) pair
     Cargo.toml                    # Pure Rust deps only (serde if models need it) — NO slint, NO slint-build
   libC/                           # Pure Slint design library — no Rust backend
     ui/tokens.slint               # color palette, typography, spacing constants
@@ -74,8 +75,8 @@ Cargo.toml
 | `lib/analytics` | libA | Study-session logging, statistics computation, chart Slint components |
 | `lib/grammar` | libA | Grammar lesson models, exercise UI (matching, reconstruct, fill-blank), exercise engine |
 | `lib/audio` | libB | TTS and audio playback — OS voice engine on desktop, Web Speech API on WASM |
-| `lib/vocabulary` | libA | Vocabulary lesson CRUD UI, word/sentence bank, lesson persistence to `vocabulary.json` |
-| `lib/exercise_generator` | libD | Factory service: transforms `VocabularyLesson` data into exercise datasets (`FlashcardStackData`, future types); databases are decoupled — conversion is on-demand only |
+| `lib/vocabulary` | libA | Vocabulary lesson CRUD UI, lesson persistence to `vocabulary.json`; word bank and sentence bank are internal data structures (not visible UI) used by exercise generation |
+| `lib/exercise_generator` | libD | Transformer service: converts `VocabularyLesson` data into exercise datasets (`FlashcardStackData`, future output types); databases are decoupled — conversion is on-demand only |
 
 ## Platform-Specific Notes
 

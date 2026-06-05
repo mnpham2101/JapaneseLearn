@@ -17,7 +17,7 @@ package "Application Entry" #f5f5f5 {
 ' ─────────────────────────────────────────
 package "UI Layer — Slint (root app)" #e8f4fd {
     component "ui/main_window.slint\n(root window + page routing)" as MainWindow
-    component "ui/pages/\n(StudyPage, GrammarPage\nAnalyticsPage, ListeningPage)" as Pages
+    component "ui/pages/\n(StudyPage, VocabularyPage\nGrammarPage, AnalyticsPage\nListeningPage)" as Pages
     component "ui/components/\n(NavBtn, shared widgets)" as UIComponents
 }
 
@@ -33,16 +33,24 @@ package "lib/styles  [libC]\nPure Slint folder — not a Rust crate" #fff9e6 {
 ' ─────────────────────────────────────────
 package "Feature Libraries  [libA]  Slint + Rust" #eaf7ea {
     component "lib/flashcard\n— FlashcardStack, Flashcard, FlashcardList\n— CRUD handlers, JSON persistence\n— init() wires all callbacks" as Flashcard
+    component "lib/vocabulary\n— VocabularyPage, LessonList\n— Word form (spelling, kanji, meaning,\n  type, tense, examples)\n— VocabularyAppLogic global\n— init() wires CRUD + generate callbacks" as Vocabulary
     component "lib/grammar\n— GrammarPage, LessonList\n— MatchingExercise, ReconstructExercise\n  FillBlankExercise\n— exercise_engine, scoring, persistence" as Grammar
     component "lib/analytics\n— ProgressBarChart, SessionHistoryChart\n— session_log, stats\n— init() wires session recording" as Analytics
 }
 
 ' ─────────────────────────────────────────
-' libB — Service libraries (Rust only)
+' libB — Service libraries (Rust only, platform-specific allowed)
 ' ─────────────────────────────────────────
-package "Service Libraries  [libB]  Rust only" #fdeaea {
+package "Service Libraries  [libB]  Rust only\n(platform cfg guards allowed)" #fdeaea {
     component "lib/persistent_data\n— markdown_io (pulldown-cmark)\n— file_io (rfd + WASM stubs)\n— Android stub" as PersistData
     component "lib/audio\n— tts_desktop (tts crate / SAPI)\n— tts_wasm (web_sys SpeechSynthesis)\n— pub fn speak(text)" as Audio
+}
+
+' ─────────────────────────────────────────
+' libD — Data transformation service (pure Rust, no platform deps)
+' ─────────────────────────────────────────
+package "Transformation Services  [libD]  Pure Rust\n(no Slint, no build.rs, no init(), no platform cfg)" #f0e6ff {
+    component "lib/exercise_generator\n— Transformer<S,T> trait\n— ExerciseGeneratorService dispatcher\n— FlashcardExerciseTransformer\n  VocabularyLesson → FlashcardStackData\n  (kanji duplication rule)\n— Domain models: VocabularyLesson,\n  VocabularyWord, TenseEntry,\n  FlashcardStackData, FlashcardCardData" as ExerciseGen
 }
 
 ' ─────────────────────────────────────────
@@ -59,6 +67,7 @@ package "Platform Targets" #f0f0f0 {
 ' Entry wires everything
 Main --> MainWindow      : slint::include_modules!()
 Main --> Flashcard       : flashcard::init()
+Main --> Vocabulary      : vocabulary::init()
 Main --> Grammar         : grammar::init()
 Main --> Analytics       : analytics::init()
 Main --> PersistData     : persistent_data::init()
@@ -67,12 +76,14 @@ Main --> Audio           : audio::init()
 ' UI layer consumes libA Slint components
 MainWindow --> Pages
 MainWindow --> UIComponents
-Pages --> Flashcard  : @flashcard
-Pages --> Grammar    : @grammar
-Pages --> Analytics  : @analytics
+Pages --> Flashcard   : @flashcard
+Pages --> Vocabulary  : @vocabulary
+Pages --> Grammar     : @grammar
+Pages --> Analytics   : @analytics
 
 ' All Slint consumers pull from styles (via with_library_paths in each client build.rs)
 Flashcard   --> Styles : @styles
+Vocabulary  --> Styles : @styles
 Grammar     --> Styles : @styles
 Analytics   --> Styles : @styles
 UIComponents --> Styles : @styles
@@ -81,8 +92,18 @@ UIComponents --> Styles : @styles
 Flashcard  ..> PersistData : stacks.json
 Grammar    ..> PersistData : grammar.json
 Analytics  ..> PersistData : sessions.json
+Vocabulary ..> PersistData : vocabulary.json
 Flashcard  ..> Audio       : speak(word)
 Grammar    ..> Audio       : speak(sentence)
+
+' libA cross-dependency: vocabulary writes generated stacks into flashcard state
+Vocabulary --> Flashcard   : workspace dep\n(update stacks + save)
+
+' libD called from libA Rust backend (on-demand, not Slint-wired)
+Vocabulary ..> ExerciseGen : ExerciseGeneratorService::generate()\non_generate_exercises_clicked
+
+' libD output flows into libA state (via Slint type conversion in vocabulary's lib.rs)
+ExerciseGen ..> Flashcard  : Vec<FlashcardStackData>\n→ converted to Slint types\n→ set_flashcard_list()
 
 ' Platform
 Main --> Platforms : cargo / cargo-apk / wasm-pack
@@ -92,8 +113,9 @@ Main --> Platforms : cargo / cargo-apk / wasm-pack
 ' ─────────────────────────────────────────
 legend right
   libA  Slint UI + Rust init() + callbacks
-  libB  Rust service, no Slint types
+  libB  Rust service, platform cfg guards allowed
   libC  Pure Slint folder, no Cargo.toml
+  libD  Pure Rust factory/transformer, no Slint, no init()
   ──    compile-time dependency
   ..    runtime call (Rust function)
 endlegend
