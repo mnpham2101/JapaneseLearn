@@ -11,12 +11,12 @@ When this skill is invoked, execute the following workflow in order.
 | Step | Responsible agent | What they do |
 |---|---|---|
 | 1 — Pick task | **task-manager** | Read task list, identify next open task |
-| 2 — Delegate | **task-manager** | Brief the implementing agent and invoke it |
-| 3 — Build verification | **slint-developer** or **rust-developer** | Run `cargo build`; report green before returning |
+| 2 — Delegate | **task-manager** | Brief the implementing or testing agent and invoke it |
+| 3 — Build/test verification | **slint-developer**, **rust-developer**, or **slint-tester** | Run `cargo build` or test suite; report result before returning |
 | 4a — Suggest commit | **slint-developer** or **rust-developer** | Suggest commit message per `commit-msg-format.md`; stop there |
 | 4b — Review gate, commit, mark done | **task-manager** | Prompt for review, commit after approval, mark task `[x]` |
 
-The implementing agent (slint-developer or rust-developer) is responsible for Steps 3 and 4a only. Steps 1, 2, and 4b are always task-manager's responsibility. The implementing agent must not prompt for review or mark tasks done — that is the caller's job.
+Implementing agents (slint-developer, rust-developer) handle Steps 3 and 4a. **slint-tester** handles Step 3 only — runs tests, reports verdict, does not commit. Steps 1, 2, and 4b are always task-manager's responsibility. No agent other than task-manager prompts for review or marks tasks done.
 
 ---
 
