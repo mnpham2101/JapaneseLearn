@@ -93,7 +93,7 @@ agent: speckit.tasks
 
 **Goal**: Deliver a functional single-card study session wired to live Rust-computed progress counts. Depends on Phase 3. Each task is one atomic commit that builds independently.
 
-- [ ] 4.1 **[slint-developer]** Add study session state to `FlashcardAppLogic` in `lib/flashcard/ui/flashcard_app_logic.slint`. Declarations only — no UI changes yet, no Rust handler needed:
+- [x] 4.1 **[slint-developer]** Add study session state to `FlashcardAppLogic` in `lib/flashcard/ui/flashcard_app_logic.slint`. Declarations only — no UI changes yet, no Rust handler needed:
   - `in-out property <bool> study-session-active: false`
   - `in property <int> known-count: 0`
   - `in property <int> total-count: 0`
@@ -101,10 +101,10 @@ agent: speckit.tasks
   - Verify build passes. **Depends on Phase 3 completion.**
   - **Atomic commit**: "feat: add study session state properties to FlashcardAppLogic"
 
-- [ ] 4.2 **[slint-developer]** Add "Study" button to `FlashcardStack` in `lib/flashcard/ui/components/flashcard_stack.slint`. Add `callback study-clicked` to `FlashcardStack`. In `ui/pages/study_page.slint`, wire `study-clicked` → `FlashcardAppLogic.study-session-active = true` and reset `current-card-index = 0` (declare `property <int> current-card-index: 0` on `StudyPage`). No Rust handler needed for study-session-active — it is a pure Slint property. Verify build passes. **Depends on 4.1.**
+- [x] 4.2 **[slint-developer]** Add "Study" button to `FlashcardStack` in `lib/flashcard/ui/components/flashcard_stack.slint`. Add `callback study-clicked` to `FlashcardStack`. In `ui/pages/study_page.slint`, wire `study-clicked` → `FlashcardAppLogic.study-session-active = true` and reset `current-card-index = 0` (declare `property <int> current-card-index: 0` on `StudyPage`). No Rust handler needed for study-session-active — it is a pure Slint property. Verify build passes. **Depends on 4.1.**
   - **Atomic commit**: "feat: add Study button to FlashcardStack and wire session activation"
 
-- [ ] 4.3 **[slint-developer]** Add the study session view to `StudyPage` in `ui/pages/study_page.slint`. Shown when `study-session-active == true` (use the Vertically stacked up components pattern). Contents:
+- [x] 4.3 **[slint-developer]** Add the study session view to `StudyPage` in `ui/pages/study_page.slint`. Shown when `study-session-active == true` (use the Vertically stacked up components pattern). Contents:
   - One `Flashcard` component bound to `flashcardList[selected-stack-index].flashcards[current-card-index]` — tap-to-flip and known toggle work automatically via existing Flashcard bindings.
   - "Previous" and "Next" `CommonBtn` buttons, bounds-clamped to `[0, stack.flashcards.row_count - 1]`.
   - Close `CommonBtn` that sets `study-session-active = false`.
@@ -113,13 +113,13 @@ agent: speckit.tasks
   - Verify build passes (Rust `on_known_changed` handler is not yet registered — that is fine). **Depends on 4.2.**
   - **Atomic commit**: "feat: add study session view with navigation and progress display"
 
-- [ ] 4.4 **[rust-developer]** Add `update_progress()` helper to `lib/flashcard/src/lib.rs`. This function reads `selected-stack-index` from the logic, iterates the active stack's flashcards, counts `known == true`, and sets `logic.set_known_count(known)` / `logic.set_total_count(total)`. This commit will produce a dead-code warning (function not yet called) — that is acceptable per `atomic-commit-rule.md`; the warning clears in task 4.5. Verify `cargo build` passes (zero errors) and all 8 tests pass. Do not add artificial calls to `init()` to suppress the warning. **Depends on 4.3.**
+- [x] 4.4 **[rust-developer]** Add `update_progress()` helper to `lib/flashcard/src/lib.rs`. This function reads `selected-stack-index` from the logic, iterates the active stack's flashcards, counts `known == true`, and sets `logic.set_known_count(known)` / `logic.set_total_count(total)`. This commit will produce a dead-code warning (function not yet called) — that is acceptable per `atomic-commit-rule.md`; the warning clears in task 4.5. Verify `cargo build` passes (zero errors) and all 8 tests pass. Do not add artificial calls to `init()` to suppress the warning. **Depends on 4.3.**
   - **Atomic commit**: "feat: add update_progress helper for study session counts"
 
-- [ ] 4.5 **[rust-developer]** Register `on_known_changed` handler in `init()` in `lib/flashcard/src/lib.rs`. The handler receives `(stack_index, card_index, known)` from the Slint callback (wired in 4.3). It: (1) reads `flashcard_list`, updates `card.known` at `[stack_index][card_index]`, (2) calls `save_stacks()` to persist, (3) calls `update_progress(ui)` to refresh the counts (already committed in 4.4). Verify `cargo build`, `cargo clippy` (zero warnings), and all 8 tests pass. **Depends on 4.4.**
+- [x] 4.5 **[rust-developer]** Register `on_known_changed` handler in `init()` in `lib/flashcard/src/lib.rs`. The handler receives `(stack_index, card_index, known)` from the Slint callback (wired in 4.3). It: (1) reads `flashcard_list`, updates `card.known` at `[stack_index][card_index]`, (2) calls `save_stacks()` to persist, (3) calls `update_progress(ui)` to refresh the counts (already committed in 4.4). Verify `cargo build`, `cargo clippy` (zero warnings), and all 8 tests pass. **Depends on 4.4.**
   - **Atomic commit**: "feat: wire on_known_changed to persist known status and update progress"
 
-- [ ] 4.6 Test study mode interactions manually on Windows: open a stack → click Study → session appears; tap card → back reveals; toggle known/unknown → icon and progress update; Prev/Next navigates; Close returns to stack list; restart app → known status persisted. **Depends on 4.5.**
+- [x] 4.6 Test study mode interactions manually on Windows: open a stack → click Study → session appears; tap card → back reveals; toggle known/unknown → icon and progress update; Prev/Next navigates; Close returns to stack list; restart app → known status persisted. **Depends on 4.5.**
 
 ## Phase 5: Persistent Data Management
 - [ ] 5.1 Define the markdown file format specification for flashcard stacks. The format uses `## Stack Name` headings to delimit stacks and a GFM pipe table (`| Japanese | Meaning |`) under each heading for cards. Document the format with a worked example in `docs/markdown-format.md`. This is a prerequisite for all tasks in this phase; complete it before starting any other Phase 5 task.
