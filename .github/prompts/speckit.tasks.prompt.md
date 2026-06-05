@@ -64,44 +64,62 @@ agent: speckit.tasks
 
 ## Phase 3: Universal Styling Library
 
-**Goal**: Extract all design tokens into a standalone `lib/styles` folder (libC — pure Slint, no Rust backend) so every component in every library imports from `@styles`. No hardcoded colors, sizes, or durations anywhere.
+**Goal**: Extract all design tokens into a standalone `lib/styles` folder (libC — pure Slint, no Rust backend) so every component in every library imports from `@styles`. No hardcoded colors, sizes, or durations anywhere. Each task is one atomic commit that builds independently.
 
-  > Tasks 3.1 → 3.2 → 3.3 → 3.4 are strictly sequential — each depends on the previous.
+- [ ] 3.1 **[slint-developer]** Create `lib/styles/` as a pure Slint libC folder (**no** `Cargo.toml`, **no** `src/`, **no** `build.rs`). Three files only — no client imports @styles yet, so the build is unaffected:
+  - `lib/styles/tokens.slint`: expand the existing token set from `lib/flashcard/ui/styles/tokens.slint` — add button state colors (default, hover, pressed, disabled), known/unknown indicator colors, page/nav backgrounds, input field colors, stack label colors.
+  - `lib/styles/animations.slint`: `flip-duration: 150ms`, `transition-duration: 200ms`, easing constants.
+  - `lib/styles/styles.slint`: entry file re-exporting `{ Tokens }` from `"tokens.slint"` and `{ Animations }` from `"animations.slint"`.
+  - **Atomic commit**: "feat: create lib/styles libC folder with design tokens"
 
-- [ ] 3.1 **[slint-developer]** Create `lib/styles/` as a pure Slint libC folder (**no** `Cargo.toml`, **no** `src/`, **no** `build.rs`). Create three files:
-  - `lib/styles/tokens.slint`: expand the existing token set from `lib/flashcard/ui/styles/tokens.slint` with any missing values: button state colors (default, hover, pressed, disabled), known/unknown indicator colors, page background, nav bar background, input border colors, font weights.
-  - `lib/styles/animations.slint`: easing-curve constants (`ease-in`, `ease-out`, `ease-in-out`) and duration tokens (`flip-duration: 150ms`, `transition-duration: 200ms`).
-  - `lib/styles/styles.slint`: entry file — re-exports `{ Tokens }` from `"tokens.slint"` and `{ Animations }` from `"animations.slint"`. This is the file clients register as `@styles`.
+  > Tasks 3.2.1 and 3.2.2 are independent — may run in parallel. Both depend on 3.1.
 
-- [ ] 3.2 **[slint-developer]** Register `@styles` library path in all `build.rs` files that compile `.slint` sources:
-  - `lib/flashcard/build.rs`: chain `.with_library_paths(...)` onto the existing `CompilerConfiguration` — keep `as_library("flashcard").rust_module("flashcard")`; add the `styles` key pointing to `../../lib/styles/styles.slint` (relative from `CARGO_MANIFEST_DIR`).
-  - Root `build.rs`: switch from `slint_build::compile(...)` to `slint_build::compile_with_config(...)` and pass `with_library_paths` pointing to `lib/styles/styles.slint`.
-  - Verify `cargo build` passes after this change alone — no import changes yet. **Depends on 3.1.**
+- [ ] 3.2.1 **[slint-developer]** Register `@styles` in `lib/flashcard/build.rs` only. Chain `.with_library_paths(styles → ../../lib/styles/styles.slint)` onto the existing `as_library / rust_module` config. No `.slint` file imports `@styles` yet — build passes unchanged. **Depends on 3.1.**
+  - **Atomic commit**: "build: register @styles path in flashcard build.rs"
 
-- [ ] 3.3 **[slint-developer]** Migrate all `.slint` files to import from `@styles`:
-  - In every file under `lib/flashcard/ui/` that imports `tokens.slint` locally, replace the local import with `import { Tokens, Animations } from "@styles"`.
-  - In every file under root `ui/` that imports local style files, do the same.
-  - Delete `lib/flashcard/ui/styles/tokens.slint` — its content is now owned by `lib/styles/tokens.slint`.
-  - Verify `cargo build` passes — all `@styles` imports resolve correctly. **Depends on 3.2.**
+- [ ] 3.2.2 **[slint-developer]** Register `@styles` in root `build.rs` only. Switch `slint_build::compile(...)` to `compile_with_config(...)` with `with_library_paths(styles → lib/styles/styles.slint)`. No root `.slint` file imports `@styles` yet — build passes. **Depends on 3.1.**
+  - **Atomic commit**: "build: register @styles path in root build.rs"
 
-- [ ] 3.4 **[slint-developer]** Audit all `.slint` files for remaining hardcoded colors (e.g., `#rrggbb`, `Colors.x`), hardcoded pixel sizes (e.g., `16px` where a token applies), or hardcoded durations (e.g., `150ms` where an `Animations` token applies). Replace every occurrence with the appropriate `Tokens.*` or `Animations.*` reference. Add new token entries to `lib/styles/tokens.slint` only when a value is genuinely missing — do not over-tokenize layout dimensions (e.g., explicit padding values in layouts are fine). Verify `cargo build` passes with zero warnings. **Depends on 3.3.**
+- [ ] 3.3 **[slint-developer]** Migrate `lib/flashcard/ui/` Slint files to `@styles`. Replace every local `import { Tokens } from "../styles/tokens.slint"` (or any relative path to the local tokens file) with `import { Tokens } from "@styles"`. Delete `lib/flashcard/ui/styles/tokens.slint` — its content now lives in `lib/styles/tokens.slint`. Verify build passes. **Depends on 3.2.1.**
+  - **Atomic commit**: "refactor: migrate flashcard library .slint files to @styles"
+
+- [ ] 3.4 **[slint-developer]** Migrate root `ui/` Slint files to `@styles`. Replace any local style imports in `ui/pages/`, `ui/components/`, `ui/main_window.slint` with `import { Tokens } from "@styles"`. Verify build passes. **Depends on 3.2.2.**
+  - **Atomic commit**: "refactor: migrate root UI .slint files to @styles"
+
+- [ ] 3.5 **[slint-developer]** Audit all `.slint` files for remaining hardcoded colors (`#rrggbb`, `Colors.x`), pixel sizes where a token applies, or durations where an `Animations` token applies. Replace every occurrence with the appropriate `Tokens.*` or `Animations.*` reference. Add new token entries to `lib/styles/tokens.slint` only when a value is genuinely missing — do not over-tokenize layout dimensions. Verify `cargo build` and `cargo clippy` pass with zero warnings. **Depends on 3.3 and 3.4.**
+  - **Atomic commit**: "refactor: replace remaining hardcoded style values with @styles tokens"
 
 ## Phase 4: Study Mode
 
-**Goal**: Deliver a functional single-card study session wired to live Rust-computed progress. Depends on Phase 3 (`@styles` tokens must be available before implementing study mode UI).
+**Goal**: Deliver a functional single-card study session wired to live Rust-computed progress counts. Depends on Phase 3. Each task is one atomic commit that builds independently.
 
-- [ ] 4.1 **[slint-developer]** In `ui/pages/study_page.slint`, add a study session view that activates when the user clicks a "Study" `CommonBtn` on the open `FlashcardStack`. The session displays one `Flashcard` component at a time (from task 1.3.3) centered on screen, with "Previous" and "Next" `CommonBtn` buttons and a `callback study-session-closed` to return to the stack list. Track `current-card-index` as an `in-out property <int>`. Use the existing `Flashcard` component — do not re-implement flip or known toggle. Apply the "Vertically stacked up components pattern" to manage visibility. **Depends on Phase 3 completion.**
+- [ ] 4.1 **[slint-developer]** Add study session state to `FlashcardAppLogic` in `lib/flashcard/ui/flashcard_app_logic.slint`. Declarations only — no UI changes yet, no Rust handler needed:
+  - `in-out property <bool> study-session-active: false`
+  - `in property <int> known-count: 0`
+  - `in property <int> total-count: 0`
+  - `callback known-changed(stack-index: int, card-index: int, known: bool)`
+  - Verify build passes. **Depends on Phase 3 completion.**
+  - **Atomic commit**: "feat: add study session state properties to FlashcardAppLogic"
 
-  > Tasks 4.2 and 4.3 both depend on 4.1 but are independent of each other — they may run in parallel.
+- [ ] 4.2 **[slint-developer]** Add "Study" button to `FlashcardStack` in `lib/flashcard/ui/components/flashcard_stack.slint`. Add `callback study-clicked` to `FlashcardStack`. In `ui/pages/study_page.slint`, wire `study-clicked` → `FlashcardAppLogic.study-session-active = true` and reset `current-card-index = 0` (declare `property <int> current-card-index: 0` on `StudyPage`). No Rust handler needed for study-session-active — it is a pure Slint property. Verify build passes. **Depends on 4.1.**
+  - **Atomic commit**: "feat: add Study button to FlashcardStack and wire session activation"
 
-- [ ] 4.2 **[slint-developer]** In the study session view, verify the reveal mechanism works end-to-end: the `Flashcard` component's `show-back` property (tap-to-flip, from task 1.3.3) shows the Japanese word first and hides the Vietnamese meaning until tapped. Confirm "Tap to reveal / Tap to hide" hint text updates correctly. No new Slint code is needed if `Flashcard` is wired correctly in 4.1 — this is a verification and any wiring fix task. **Depends on 4.1.**
-- [ ] 4.3 **[slint-developer]** In the study session view, verify the known/unknown toggle works: the `Flashcard` component's `checkable: true; checked <=> known` binding (from task 1.3.4) handles marking in both directions. Confirm the toggle icon (✓/✗) and card background color update correctly. **Depends on 4.1.**
+- [ ] 4.3 **[slint-developer]** Add the study session view to `StudyPage` in `ui/pages/study_page.slint`. Shown when `study-session-active == true` (use the Vertically stacked up components pattern). Contents:
+  - One `Flashcard` component bound to `flashcardList[selected-stack-index].flashcards[current-card-index]` — tap-to-flip and known toggle work automatically via existing Flashcard bindings.
+  - "Previous" and "Next" `CommonBtn` buttons, bounds-clamped to `[0, stack.flashcards.row_count - 1]`.
+  - Close `CommonBtn` that sets `study-session-active = false`.
+  - Progress `Text` bound to `FlashcardAppLogic.known-count` and `FlashcardAppLogic.total-count` (declared in 4.1): e.g., `known-count + " / " + total-count + " known"`.
+  - Inside the `Flashcard`, wire `changed known` → `FlashcardAppLogic.known-changed(selected-stack-index, current-card-index, card.known)` so Rust can react.
+  - Verify build passes (Rust `on_known_changed` handler is not yet registered — that is fine). **Depends on 4.2.**
+  - **Atomic commit**: "feat: add study session view with navigation and progress display"
 
-  > Tasks 4.4 and 4.5 are sequential.
+- [ ] 4.4 **[rust-developer]** Add `update_progress()` helper to `lib/flashcard/src/lib.rs`. This function reads `selected-stack-index` from the logic, iterates the active stack's flashcards, counts `known == true`, and sets `logic.set_known_count(known)` / `logic.set_total_count(total)`. This commit will produce a dead-code warning (function not yet called) — that is acceptable per `atomic-commit-rule.md`; the warning clears in task 4.5. Verify `cargo build` passes (zero errors) and all 8 tests pass. Do not add artificial calls to `init()` to suppress the warning. **Depends on 4.3.**
+  - **Atomic commit**: "feat: add update_progress helper for study session counts"
 
-- [ ] 4.4 **[slint-developer]** In `ui/pages/study_page.slint`, add a progress display to the study session view showing known vs total counts (e.g., "3 / 5 known"). Add `in property <int> known-count: 0` and `in property <int> total-count: 0` to the session component. Bind the display to these properties; use hardcoded placeholder values to verify the UI renders correctly. **Depends on 4.3.**
-- [ ] 4.5 **[rust-developer]** Wire live progress counts in `lib/flashcard/src/lib.rs`: compute `known-count` by iterating the active stack's `flashcards` and counting `known == true`; set `total-count` to the stack size. Expose `callback known-changed` on `FlashcardAppLogic` if not already present. Recompute and push both counts to `StudyPage` via a weak handle whenever the known status changes. **Depends on 4.4.**
-- [ ] 4.6 Test study mode interactions manually on Windows: flip cards, toggle known status, navigate prev/next, verify progress counts update in real time, verify session close returns to stack list. **Depends on 4.5.**
+- [ ] 4.5 **[rust-developer]** Register `on_known_changed` handler in `init()` in `lib/flashcard/src/lib.rs`. The handler receives `(stack_index, card_index, known)` from the Slint callback (wired in 4.3). It: (1) reads `flashcard_list`, updates `card.known` at `[stack_index][card_index]`, (2) calls `save_stacks()` to persist, (3) calls `update_progress(ui)` to refresh the counts (already committed in 4.4). Verify `cargo build`, `cargo clippy` (zero warnings), and all 8 tests pass. **Depends on 4.4.**
+  - **Atomic commit**: "feat: wire on_known_changed to persist known status and update progress"
+
+- [ ] 4.6 Test study mode interactions manually on Windows: open a stack → click Study → session appears; tap card → back reveals; toggle known/unknown → icon and progress update; Prev/Next navigates; Close returns to stack list; restart app → known status persisted. **Depends on 4.5.**
 
 ## Phase 5: Persistent Data Management
 - [ ] 5.1 Define the markdown file format specification for flashcard stacks. The format uses `## Stack Name` headings to delimit stacks and a GFM pipe table (`| Japanese | Meaning |`) under each heading for cards. Document the format with a worked example in `docs/markdown-format.md`. This is a prerequisite for all tasks in this phase; complete it before starting any other Phase 5 task.
