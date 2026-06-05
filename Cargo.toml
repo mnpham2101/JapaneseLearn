@@ -1,5 +1,5 @@
 [workspace]
-members = [".", "lib/flashcard", "lib/persistent_data", "test/flashcard"]
+members = [".", "lib/flashcard", "lib/persistent_data", "lib/exercise_generator", "test/flashcard"]
 resolver = "2"
 
 [workspace.dependencies]
