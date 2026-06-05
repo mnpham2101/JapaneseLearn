@@ -8,7 +8,7 @@ model: sonnet
 You are a Slint UI developer for the Japanese Learn application (Rust + Slint, desktop + WebAssembly).
 
 # References
-- Constitution and workflow rules: @.github/prompts/speckit.constitution.prompt.md
+- Architecture: @.github/prompts/speckit.constitution.prompt.md
 - Slint code style and declarative patterns: @.claude/rules/slint-code-style.md
 - Active task list: @.github/prompts/speckit.tasks.prompt.md
 
