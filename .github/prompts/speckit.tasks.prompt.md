@@ -66,7 +66,7 @@ agent: speckit.tasks
 
 **Goal**: Extract all design tokens into a standalone `lib/styles` folder (libC — pure Slint, no Rust backend) so every component in every library imports from `@styles`. No hardcoded colors, sizes, or durations anywhere. Each task is one atomic commit that builds independently.
 
-- [ ] 3.1 **[slint-developer]** Create `lib/styles/` as a pure Slint libC folder (**no** `Cargo.toml`, **no** `src/`, **no** `build.rs`). Three files only — no client imports @styles yet, so the build is unaffected:
+- [x] 3.1 **[slint-developer]** Create `lib/styles/` as a pure Slint libC folder (**no** `Cargo.toml`, **no** `src/`, **no** `build.rs`). Three files only — no client imports @styles yet, so the build is unaffected:
   - `lib/styles/tokens.slint`: expand the existing token set from `lib/flashcard/ui/styles/tokens.slint` — add button state colors (default, hover, pressed, disabled), known/unknown indicator colors, page/nav backgrounds, input field colors, stack label colors.
   - `lib/styles/animations.slint`: `flip-duration: 150ms`, `transition-duration: 200ms`, easing constants.
   - `lib/styles/styles.slint`: entry file re-exporting `{ Tokens }` from `"tokens.slint"` and `{ Animations }` from `"animations.slint"`.
@@ -74,19 +74,19 @@ agent: speckit.tasks
 
   > Tasks 3.2.1 and 3.2.2 are independent — may run in parallel. Both depend on 3.1.
 
-- [ ] 3.2.1 **[slint-developer]** Register `@styles` in `lib/flashcard/build.rs` only. Chain `.with_library_paths(styles → ../../lib/styles/styles.slint)` onto the existing `as_library / rust_module` config. No `.slint` file imports `@styles` yet — build passes unchanged. **Depends on 3.1.**
+- [x] 3.2.1 **[slint-developer]** Register `@styles` in `lib/flashcard/build.rs` only. Chain `.with_library_paths(styles → ../../lib/styles/styles.slint)` onto the existing `as_library / rust_module` config. No `.slint` file imports `@styles` yet — build passes unchanged. **Depends on 3.1.**
   - **Atomic commit**: "build: register @styles path in flashcard build.rs"
 
-- [ ] 3.2.2 **[slint-developer]** Register `@styles` in root `build.rs` only. Switch `slint_build::compile(...)` to `compile_with_config(...)` with `with_library_paths(styles → lib/styles/styles.slint)`. No root `.slint` file imports `@styles` yet — build passes. **Depends on 3.1.**
+- [x] 3.2.2 **[slint-developer]** Register `@styles` in root `build.rs` only. Switch `slint_build::compile(...)` to `compile_with_config(...)` with `with_library_paths(styles → lib/styles/styles.slint)`. No root `.slint` file imports `@styles` yet — build passes. **Depends on 3.1.**
   - **Atomic commit**: "build: register @styles path in root build.rs"
 
-- [ ] 3.3 **[slint-developer]** Migrate `lib/flashcard/ui/` Slint files to `@styles`. Replace every local `import { Tokens } from "../styles/tokens.slint"` (or any relative path to the local tokens file) with `import { Tokens } from "@styles"`. Delete `lib/flashcard/ui/styles/tokens.slint` — its content now lives in `lib/styles/tokens.slint`. Verify build passes. **Depends on 3.2.1.**
+- [x] 3.3 **[slint-developer]** Migrate `lib/flashcard/ui/` Slint files to `@styles`. Replace every local `import { Tokens } from "../styles/tokens.slint"` (or any relative path to the local tokens file) with `import { Tokens } from "@styles"`. Delete `lib/flashcard/ui/styles/tokens.slint` — its content now lives in `lib/styles/tokens.slint`. Verify build passes. **Depends on 3.2.1.**
   - **Atomic commit**: "refactor: migrate flashcard library .slint files to @styles"
 
-- [ ] 3.4 **[slint-developer]** Migrate root `ui/` Slint files to `@styles`. Replace any local style imports in `ui/pages/`, `ui/components/`, `ui/main_window.slint` with `import { Tokens } from "@styles"`. Verify build passes. **Depends on 3.2.2.**
+- [x] 3.4 **[slint-developer]** Migrate root `ui/` Slint files to `@styles`. Replace any local style imports in `ui/pages/`, `ui/components/`, `ui/main_window.slint` with `import { Tokens } from "@styles"`. Verify build passes. **Depends on 3.2.2.**
   - **Atomic commit**: "refactor: migrate root UI .slint files to @styles"
 
-- [ ] 3.5 **[slint-developer]** Audit all `.slint` files for remaining hardcoded colors (`#rrggbb`, `Colors.x`), pixel sizes where a token applies, or durations where an `Animations` token applies. Replace every occurrence with the appropriate `Tokens.*` or `Animations.*` reference. Add new token entries to `lib/styles/tokens.slint` only when a value is genuinely missing — do not over-tokenize layout dimensions. Verify `cargo build` and `cargo clippy` pass with zero warnings. **Depends on 3.3 and 3.4.**
+- [x] 3.5 **[slint-developer]** Audit all `.slint` files for remaining hardcoded colors (`#rrggbb`, `Colors.x`), pixel sizes where a token applies, or durations where an `Animations` token applies. Replace every occurrence with the appropriate `Tokens.*` or `Animations.*` reference. Add new token entries to `lib/styles/tokens.slint` only when a value is genuinely missing — do not over-tokenize layout dimensions. Verify `cargo build` and `cargo clippy` pass with zero warnings. **Depends on 3.3 and 3.4.**
   - **Atomic commit**: "refactor: replace remaining hardcoded style values with @styles tokens"
 
 ## Phase 4: Study Mode
@@ -122,7 +122,7 @@ agent: speckit.tasks
 - [x] 4.6 Test study mode interactions manually on Windows: open a stack → click Study → session appears; tap card → back reveals; toggle known/unknown → icon and progress update; Prev/Next navigates; Close returns to stack list; restart app → known status persisted. **Depends on 4.5.**
 
 ## Phase 5: Persistent Data Management
-- [ ] 5.1 Define the markdown file format specification for flashcard stacks. The format uses `## Stack Name` headings to delimit stacks and a GFM pipe table (`| Japanese | Meaning |`) under each heading for cards. Document the format with a worked example in `docs/markdown-format.md`. This is a prerequisite for all tasks in this phase; complete it before starting any other Phase 5 task.
+- [x] 5.1 Define the markdown file format specification for flashcard stacks. The format uses `## Stack Name` headings to delimit stacks and a GFM pipe table (`| Japanese | Meaning |`) under each heading for cards. Document the format with a worked example in `docs/markdown-format.md`. This is a prerequisite for all tasks in this phase; complete it before starting any other Phase 5 task.
 
   > Tasks 5.2.1 and 5.2.2 are independent of each other — they may be started in parallel after 5.1.
 
