@@ -27,6 +27,12 @@ export global FlashcardAppLogic {
     ];
     in-out property <int> selected-stack-index: -1;
 
+    // Phase 4 study session state
+    in-out property <bool> study-session-active: false;
+    in property <int> known-count: 0;
+    in property <int> total-count: 0;
+    callback known-changed(stack-index: int, card-index: int, known: bool);
+
     // Phase 2 callbacks — wired from UI to Rust handlers in lib/flashcard/src/lib.rs::init()
     callback stack-create-confirmed(name: string);
     callback stack-delete-confirmed();
