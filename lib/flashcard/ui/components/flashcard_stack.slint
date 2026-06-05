@@ -17,6 +17,7 @@ export component FlashcardStack {
     callback flashcard-delete-confirmed(card-index: int);
     callback flashcard-reordered(from-index: int, to-index: int);
     callback stack-delete-confirmed;
+    callback study-clicked;
     callback close-clicked;
 
     // Drag-to-reorder state.
@@ -57,6 +58,15 @@ export component FlashcardStack {
                     color: Tokens.text-primary;
                     vertical-alignment: center;
                     horizontal-stretch: 1;
+                }
+
+                CommonBtn {
+                    width: 80px;
+                    height: 32px;
+                    text: "Study";
+                    primary: true;
+                    accessibilityLabel: "Start study session";
+                    clicked => root.study-clicked();
                 }
 
                 CommonBtn {

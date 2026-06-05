@@ -13,6 +13,7 @@ export component StudyPage {
     height: 100%;
     property <bool> show-stack: FlashcardAppLogic.selected-stack-index >= 0;
     property <bool> show-create-form: false;
+    property <int> current-card-index: 0;
 
     // Reset the create form whenever the stack detail opens so that the
     // "Add Stack" toggle button returns to its unchecked state.
@@ -104,6 +105,10 @@ export component StudyPage {
 
                 if root.show-stack: FlashcardStack {
                     stack: FlashcardAppLogic.flashcard-list[FlashcardAppLogic.selected-stack-index];
+                    study-clicked => {
+                        FlashcardAppLogic.study-session-active = true;
+                        root.current-card-index = 0;
+                    }
                     close-clicked => {
                         FlashcardAppLogic.selected-stack-index = -1;
                     }
