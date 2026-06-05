@@ -256,4 +256,29 @@ where
             save_stacks(&stacks);
         });
     }
+
+    {
+        let ui_weak = ui.as_weak();
+        logic.on_known_changed(move |stack_index, card_index, known| {
+            let ui = ui_weak.unwrap();
+            let logic = ui.global::<FlashcardAppLogic>();
+            if stack_index < 0 || card_index < 0 {
+                return;
+            }
+            let stack_idx = stack_index as usize;
+            let card_idx = card_index as usize;
+            let mut stacks: Vec<flashcard::FlashcardStackModel> =
+                logic.get_flashcard_list().iter().collect();
+            if let Some(stack) = stacks.get_mut(stack_idx) {
+                let mut cards: Vec<flashcard::FlashcardModel> = stack.flashcards.iter().collect();
+                if let Some(card) = cards.get_mut(card_idx) {
+                    card.known = known;
+                }
+                stack.flashcards = slint::ModelRc::new(slint::VecModel::from(cards));
+            }
+            logic.set_flashcard_list(slint::ModelRc::new(slint::VecModel::from(stacks.clone())));
+            save_stacks(&stacks);
+            update_progress(&ui);
+        });
+    }
 }
