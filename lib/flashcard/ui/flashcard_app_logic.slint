@@ -40,4 +40,8 @@ export global FlashcardAppLogic {
     callback flashcard-field-changed(card-index: int, jap: string, meaning: string);
     callback flashcard-delete-confirmed(card-index: int);
     callback flashcard-reordered(from-index: int, to-index: int);
+
+    // Phase 5 — persistent data import/export (wired by persistent_data::init())
+    callback import-stack-clicked();
+    callback export-stack-clicked();
 }

@@ -15,9 +15,6 @@ export component StudyPage {
     property <bool> show-stack: FlashcardAppLogic.selected-stack-index >= 0;
     property <bool> show-create-form: false;
 
-    callback import-stack-clicked();
-    callback export-stack-clicked();
-
     // Reset the create form whenever the stack detail opens so that the
     // "Add Stack" toggle button returns to its unchecked state.
     changed show-stack => {
@@ -57,12 +54,12 @@ export component StudyPage {
 
                 import-btn := CommonBtn {
                     text: "Import";
-                    clicked => { root.import-stack-clicked(); }
+                    clicked => { FlashcardAppLogic.import-stack-clicked(); }
                 }
 
                 export-btn := CommonBtn {
                     text: "Export";
-                    clicked => { root.export-stack-clicked(); }
+                    clicked => { FlashcardAppLogic.export-stack-clicked(); }
                 }
             }
 
