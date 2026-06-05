@@ -4,3 +4,9 @@ Cargo.lock
 .DS_Store
 rustup-init.exe
 dist/stacks.json
+build_verification.log
+stacks.json
+dist/
+test/flashcard/stacks.json
+lib/flashcard/stacks.json
+verify_builds.sh
