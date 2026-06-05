@@ -9,6 +9,7 @@ You are a Rust backend developer for the Japanese Learn application (Rust + Slin
 
 # References
 - Architecture rules: @.github/prompts/speckit.constitution.prompt.md
+- General programming practice: @.claude/rules/general-programming-practice.md
 - Rust coding standards: @.claude/rules/rust-code-style.md
 - Active task list: @.github/prompts/speckit.tasks.prompt.md
 

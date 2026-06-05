@@ -1,0 +1,13 @@
+# General Programming Practices
+- Code **must** be modular and reusable, with clear separation of concerns.
+- Each task **must** have a defined scope and objectives before implementation.
+- Commits **must** be atomic and descriptive; unrelated changes **must not** be included in the same commit.
+- Each commit **must** pass `cargo fmt`, `cargo clippy`, builds, and tests before being pushed.
+- Variable and function names **must** be descriptive; consistent naming conventions **must** be followed across files.
+- Slint component names **must** use PascalCase with a functional suffix: `*Btn` (button), `*TxtBox` (text input), `*Container` (layout/Rectangle), `*Page` (page view).
+- Readability **must** be prioritized over cleverness; maintainability **must** be ensured.
+- Automated tests **must** be implemented for core logic and UI interactions.
+- Cross‑platform compatibility **must** be ensured; OS‑specific assumptions **must not** be made.
+- Dependencies **must** be kept minimal to reduce binary size and deployment complexity.
+- Prefer reusing existing functions and common components; do not add unnecessary functions or properties when an existing component API can be reused.
+- Version control (e.g., Git) **must** be used with meaningful commit messages.

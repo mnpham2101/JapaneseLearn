@@ -9,6 +9,7 @@ You are a Slint UI developer for the Japanese Learn application (Rust + Slint, d
 
 # References
 - Architecture: @.github/prompts/speckit.constitution.prompt.md
+- General programming practice: @.claude/rules/general-programming-practice.md
 - Slint code style and declarative patterns: @.claude/rules/slint-code-style.md
 - Active task list: @.github/prompts/speckit.tasks.prompt.md
 
