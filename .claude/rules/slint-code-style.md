@@ -11,6 +11,26 @@ paths:
 # Slint Best Practices
 - UI definitions **must** be separated into `.slint` files; Rust logic **must not** be mixed with UI markup.
 - Each UI component **must** be defined in its own `.slint` file and imported where needed to promote reusability and maintainability.
+- Any logical sub-view, panel, or form with its own state or callbacks **must** be extracted as a named component in its own file — even if it is only used once. Inline anonymous blocks inside a `*Page` file are only acceptable for simple one-liner layout wiring.
+  - **Anti-pattern (forbidden):** inlining a full sub-view directly inside a `*Page`:
+    ```slint
+    // study_page.slint — WRONG
+    if show-session: VerticalLayout {   // ← this block is a component; give it a name and a file
+        Text { text: progress; }
+        Flashcard { ... }
+        HorizontalLayout { CommonBtn { ... } ... }
+    }
+    ```
+  - **Correct pattern:** extract to a named component in its own file, import and reference it:
+    ```slint
+    // ui/pages/study_session_view.slint — NEW file
+    export component StudySessionView { ... }
+
+    // study_page.slint — reference the component
+    import { StudySessionView } from "study_session_view.slint";
+    if show-session: StudySessionView { ... }
+    ```
+  - The file name **must** be the kebab-case of the component name: `StudySessionView` → `study_session_view.slint`.
 - Property bindings **must** be used instead of imperative updates wherever possible.
 - The `changed` keyword **must** be used to react to property changes.
 - Component hierarchies **should** remain shallow; reusable custom components **must** be preferred over duplication.
