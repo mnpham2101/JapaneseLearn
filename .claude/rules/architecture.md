@@ -28,6 +28,12 @@ lib/
     src/*.rs                      # Rust backend logic, could include helper functions, classes, etc 
     main.rs                       # entry point to build library
     Cargo.toml                    # define building codes as package
+  libD/                           # Pure Rust data transformation service — no Slint, no build.rs, no ui/
+    src/lib.rs                    # Public API: re-exports factory trait and implementations
+    src/models.rs                 # Domain model structs (Slint-free, serde if needed)
+    src/factory.rs                # ExerciseFactory trait (or Transformer trait)
+    src/<name>_factory.rs         # Concrete factory implementation(s)
+    Cargo.toml                    # Pure Rust deps only (serde if models need it) — NO slint, NO slint-build
   libC/                           # Pure Slint design library — no Rust backend
     ui/tokens.slint               # color palette, typography, spacing constants
     ui/animations.slint           # easing curves, duration constants
@@ -52,8 +58,10 @@ Cargo.toml
 | **libA** | Yes (`src/lib.rs` + `init()`) | Yes (`ui/components/`, `ui/model/`) | UI and backend are tightly coupled (CRUD, exercise engines) |
 | **libB** | Yes (service, no `init()` required) | No | Platform service with no UI: file I/O, audio TTS |
 | **libC** | No | Yes (tokens/animations only) | Design system: tokens, color palette, typography, spacing, animation curves |
+| **libD** | Yes (pure Rust, generic `Transformer<S,T>` interface + service dispatcher) | No | Data transformation service: a generic `Transformer<S, T>` trait, concrete implementations (one per source→target pair), and a `ExerciseGeneratorService` dispatcher that selects the right transformer at runtime from an `ExerciseRequest`; no Slint types, no platform deps, no `init()` |
 
 > A libC library has no `src/` directory and no Rust `init()` function. Its `Cargo.toml` lists only `slint-build` as a build-dependency.  
+> A libD library has no `build.rs`, no `ui/` directory, and no `init()` function. It is pure Rust computation — a generic interface (`Transformer<S, T>` trait), concrete transformer structs, and a stateless service dispatcher. Adding a new exercise type never modifies existing transformer code (SOLID Open/Closed). It is called from a libA `init()` handler, never from `src/main.rs`. See `.claude/rules/libD-code-style.md` for the full pattern with code examples.  
 > All other libraries import design tokens from `@styles` (the libC instance) — never hardcode colors, sizes, or durations.
 
 ## Planned Library Catalogue
@@ -66,6 +74,8 @@ Cargo.toml
 | `lib/analytics` | libA | Study-session logging, statistics computation, chart Slint components |
 | `lib/grammar` | libA | Grammar lesson models, exercise UI (matching, reconstruct, fill-blank), exercise engine |
 | `lib/audio` | libB | TTS and audio playback — OS voice engine on desktop, Web Speech API on WASM |
+| `lib/vocabulary` | libA | Vocabulary lesson CRUD UI, word/sentence bank, lesson persistence to `vocabulary.json` |
+| `lib/exercise_generator` | libD | Factory service: transforms `VocabularyLesson` data into exercise datasets (`FlashcardStackData`, future types); databases are decoupled — conversion is on-demand only |
 
 ## Platform-Specific Notes
 

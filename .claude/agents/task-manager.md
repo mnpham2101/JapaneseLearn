@@ -34,8 +34,17 @@ Follow these phases in order. **Stop and get user approval at each gate before c
 ## Phase 2 — Investigate
 1. Use `Glob` and `Grep` to discover relevant files. Do **not** read full file contents — leave deep reading to the executing agent.
 2. Identify every file that must be modified or created. Prefer the fewest changes possible.
-3. If subtasks are needed, add them to `@.github/prompts/speckit.tasks.prompt.md`.
-4. **Gate: present the file impact list and any new subtasks. Get user approval.**
+3. **Library detection** — for each task, determine whether it requires a new library crate:
+   - Check whether the feature belongs to an existing crate (`lib/flashcard`, `lib/styles`, etc.) or needs a new one listed in the Planned Library Catalogue in `.claude/rules/architecture.md`.
+   - If a new library crate is needed, determine its type from the architecture table (libA / libB / libC / libD):
+     - **libA** (Slint + Rust UI): scaffold = `Cargo.toml`, `build.rs`, `src/lib.rs` with `init()` stub, `ui/main_lib.slint` with re-exports → assigned to **slint-developer** (scaffold) + **rust-developer** (wiring into `src/main.rs`).
+     - **libB** (Rust service, no Slint): scaffold = `Cargo.toml`, `src/lib.rs` → assigned to **rust-developer**.
+     - **libC** (Slint design tokens, no Rust): scaffold = `lib/styles/` folder with `.slint` files → assigned to **slint-developer**.
+     - **libD** (pure Rust transformation, see `.claude/rules/libD-code-style.md`): scaffold = `Cargo.toml`, `src/lib.rs`, `src/models.rs`, `src/transformer.rs`, `src/service.rs` → assigned to **rust-developer**. No `build.rs`, no `ui/`, no `init()`.
+   - If the library does not yet exist, **add a scaffold subtask** (e.g., `N.x.0`) as the first prerequisite before any feature tasks for that library. The scaffold task must verify `cargo build` passes before the feature chain starts.
+   - If the library already exists, confirm its `Cargo.toml` is already in the workspace `members` list — if not, add a registration subtask.
+4. If subtasks are needed, add them to `@.github/prompts/speckit.tasks.prompt.md`.
+5. **Gate: present the file impact list, library-type determination (if a new crate is needed), and any new subtasks. Get user approval.**
 
 ## Phase 3 — Plan
 1. Write an ordered, step-by-step execution plan. Each step maps to a concrete file change or command.

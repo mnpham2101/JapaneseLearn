@@ -7,25 +7,30 @@ paths:
 
 A **libD** library is a pure Rust data transformation service. It defines a generic interface (`Transformer<S, T>`) that concrete classes implement, and a service dispatcher (`ExerciseGeneratorService`) that routes a runtime request to the correct transformer. The source database type and target database type are **fully abstract** — any source can be transformed into any target, and new transformations are added by implementing the trait in a new concrete struct.
 
+## Purpose
+
+This library implements the **lesson-database → exercise-database transformation pipeline**. Its single responsibility is converting raw lesson data (`VocabularyLesson`, and future grammar/reading lesson types) into structured exercise datasets (`FlashcardStackData`, and future exercise formats). It has no UI, no file I/O, and no platform calls.
+
 ## When to Use libD
 
-Use libD when:
-- A feature requires **transforming data from one domain into another** on demand.
-- The source and target databases must remain **decoupled** — the user explicitly triggers the conversion.
+Use the libD pattern when:
+- The feature transforms a **source database** (e.g. vocabulary lessons) into a **target database** (e.g. exercise sets) on demand.
+- Source and target databases must remain **decoupled** — conversion is triggered explicitly, not on every data change.
 - The transformation is **pure computation** — no file I/O, no OS calls, no Slint types.
-- The system must support **multiple target exercise types** from the same source (Open/Closed Principle).
+- Multiple **output formats** from the same source are likely (Open/Closed Principle: new format = new file, no existing code changed).
 
 Do NOT use libD when:
 - The library needs a Slint UI component → use **libA**.
-- The library makes OS calls (file dialogs, TTS) → use **libB**.
+- The library makes OS calls (file dialogs, TTS, file system) → use **libB**.
 - The library only exports design tokens → use **libC**.
+- The feature does not fit any catalogue entry → **consult the Planned Library Catalogue in `architecture.md`** before creating a new crate.
 
 ## SOLID Design Principles
 
 | Principle | How libD satisfies it |
 |---|---|
 | **S** — Single Responsibility | Each concrete transformer struct does exactly one (S → T) conversion |
-| **O** — Open/Closed | New exercise types add a new struct + variant; existing transformers are never modified |
+| **O** — Open/Closed | New output formats add a new struct + variant; existing transformers are never modified |
 | **L** — Liskov Substitution | Any `impl Transformer<S, T>` can replace another with the same (S, T) |
 | **I** — Interface Segregation | `Transformer<S, T>` exposes one method — no fat interface |
 | **D** — Dependency Inversion | Callers (`lib/vocabulary`) depend on the `Transformer` trait, not on concrete structs |
