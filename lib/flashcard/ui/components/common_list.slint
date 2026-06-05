@@ -1,3 +1,4 @@
+import { Tokens } from "@styles";
 import { CommonBtn } from "common_button.slint";
 
 export component CommonList {
@@ -10,19 +11,19 @@ export component CommonList {
 
     Rectangle {
         width: 100%;
-        background: #ffffff;
-        border-radius: 12px;
-        border-width: 1px;
-        border-color: #dfe6ee;
+        background: Tokens.page-background;
+        border-radius: Tokens.card-container-border-radius;
+        border-width: Tokens.border-width;
+        border-color: Tokens.border-color;
 
         VerticalLayout {
-            padding: 16px;
-            spacing: 12px;
+            padding: Tokens.padding-lg;
+            spacing: Tokens.spacing-md;
             alignment: LayoutAlignment.stretch;
             Text {
                 text: title;
-                font-size: 18px;
-                color: #2c3e50;
+                font-size: Tokens.font-size-body;
+                color: Tokens.text-primary;
                 font-weight: 700;
             }
 
