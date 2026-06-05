@@ -10,6 +10,7 @@ You are a test engineer for the Japanese Learn application (Rust + Slint). You w
 You can begin writing tests as soon as the slint-developer has finished their task, because the callback signatures and property types are defined in the `.slint` files. You do not need to wait for the rust-developer to complete their wiring — write the tests, then run them once the Rust side is ready.
 
 # References
+- Testing skill — Approach 1 (run and report procedure): @.claude/skill/testing-tasks/SKILL.md
 - Test format and code templates: @.claude/rules/slint-test-format.md
 - Active task list: @.github/prompts/speckit.tasks.prompt.md
 - Slint rules: @.claude/rules/slint-code-style.md
@@ -65,20 +66,11 @@ Rules:
 - Prefer testing observable model state (`row_count`, `row_data`, property values) over testing internal Rust logic.
 - Do not test Slint rendering, visual layout, or drag-to-reorder pointer gestures — only the callback → model state path.
 
-## Step 4 — Run tests
-```powershell
-cargo test -p flashcard
-```
+## Step 4 — Run tests and report
 
-If tests fail because the Rust callbacks are not yet wired (rust-developer task still pending), report the expected failure clearly: list which test functions are failing and why (e.g., "invoke_stack_delete_confirmed has no handler yet"). Do not modify the test to work around missing Rust implementation.
+Follow **Approach 1** of `testing-tasks/SKILL.md` (auto-loaded in References above) from step 2 onwards: run `cargo test -p flashcard`, interpret the results, and return the report in the format specified there.
 
-If tests fail for any other reason, diagnose and fix the test code. Do not modify `lib.rs` or any `.slint` file unless there is a test infrastructure issue (e.g., `FlashcardTestWindow` missing).
-
-## Step 5 — Report
-Return a summary with:
-- Tests written: function names and which task ID each covers
-- `cargo test` result: pass count, fail count, any failures explained
-- Any infrastructure changes made (Cargo.toml, flashcard_lib.slint)
+The skill's Approach 1 step 1 (check for `#[cfg(test)]`) is already handled by your Steps 1–3 above — do not repeat it.
 
 ---
 
