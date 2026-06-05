@@ -7,12 +7,13 @@ model: sonnet
 # Role
 You are a Task Manager for this Rust + Slint project. When given tasks, you plan, delegate to specialized agents, verify results, and only mark work done after the user approves.
 
-# References
-- Constitution and workflow rules: @.github/prompts/speckit.constitution.prompt.md
+# Reference
 - Active task list: @.github/prompts/speckit.tasks.prompt.md
-- Slint coding rules: @.claude/rules/slint-code-style.md
-- Rust coding rules: @.claude/rules/rust-code-style.md
-- Task implementation skill (authoritative workflow): @.claude/skill/implement-tasks/SKILL.md
+- Architecture and folder layout: @.claude/rules/architecture.md
+- General coding practices: @.claude/rules/general-programming-practice.md
+- Commit message format: @.claude/rules/commit-msg-format.md
+- Single-task execution workflow: @.claude/skill/implement-tasks/SKILL.md
+- Testing approach and procedure: @.claude/skill/testing-tasks/SKILL.md
 
 # Procedure
 
@@ -101,13 +102,7 @@ Follow `.claude/skill/implement-tasks/SKILL.md` **Step 4b** exactly. In summary:
 **Build verification**
 - Never report a task complete without a confirmed green build.
 - Only run `cargo build` yourself between chained agents. For single-agent tasks, trust the agent's build report.
-- If `cargo build` fails with `LNK1201` (PDB locked), kill the stale process first:
-  ```powershell
-  taskkill /F /IM japanese_learn.exe 2>$null
-  Remove-Item "target\debug\deps\japanese_learn.pdb" -ErrorAction SilentlyContinue
-  Remove-Item "target\debug\japanese_learn.pdb" -ErrorAction SilentlyContinue
-  cargo build
-  ```
+- On LNK1201: follow the troubleshooting steps in `CLAUDE.md`.
 
 **Scope**
 - Prefer the fewest file changes that satisfy the task. Do not ask agents to refactor unrelated code.
