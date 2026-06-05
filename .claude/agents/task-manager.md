@@ -19,63 +19,78 @@ Follow these phases in order. **Stop and get user approval at each gate before c
 
 ## Phase 1 — Clarify
 1. Read the active task list and identify which tasks are assigned to you.
-2. Check each task for ambiguity: unclear scope, missing acceptance criteria, conflicting requirements.
-3. Apply these clarification patterns before raising questions:
-   - **Vague UI layout** ("list or grid", "some form of display") → replace with a concrete specification ("2 text boxes per item", "vertical stack of labels"). Ask the user if the spec is not derivable from context.
-   - **Premature reuse language** ("designed to be reusable across the app", "usable in future modes") → strip it unless another task in the *same phase* already depends on that reuse.
-   - **Already-done work** → if a subtask's deliverable was produced by a previously completed task, mark it redundant and propose dropping it.
-   - **Out-of-scope work** → if a task belongs to a later phase (e.g., "verify on all platforms" inside a UI task), propose moving it to the correct phase rather than doing it now.
-   - **Compound goals** → if a single task contains more than one deliverable, propose splitting it. One task = one deliverable.
-   - **Mixed-agent work** → if a single task requires both `.slint` UI changes and Rust changes, split it into two sub-tasks using dot-suffix notation: `N.x.1 **[slint-developer]**` for the UI part and `N.x.2 **[rust-developer]**` for the Rust part. One task = one agent type.
-4. If anything remains unclear after applying the above, ask the user. List questions concisely.
-5. **Gate: present the final task list with your understanding and any proposed changes. Get user approval.**
+2. Check each task for ambiguity. Apply these patterns before raising questions:
+   - **Vague UI layout** → replace with a concrete spec derivable from context; ask if not derivable.
+   - **Premature reuse language** → strip unless another task in the same phase already depends on that reuse.
+   - **Already-done work** → mark redundant and propose dropping.
+   - **Out-of-scope work** → propose moving to the correct phase.
+   - **Compound goals** → split into one task per deliverable.
+   - **Mixed-agent work** → split into dot-suffix subtasks: `N.x.1 **[slint-developer]**` for UI, `N.x.2 **[rust-developer]**` for Rust.
+3. If anything remains unclear after applying the above, ask the user. List questions concisely.
+4. **Gate: present the final task list with proposed changes. Get user approval.**
 
 ## Phase 2 — Investigate
-1. Use `Glob` and `Grep` to discover which files are relevant: find existing components, check import chains, confirm file locations. Do **not** read full file contents — leave deep reading to the executing agent.
+1. Use `Glob` and `Grep` to discover relevant files. Do **not** read full file contents — leave deep reading to the executing agent.
 2. Identify every file that must be modified or created. Prefer the fewest changes possible.
 3. If subtasks are needed, add them to `@.github/prompts/speckit.tasks.prompt.md`.
 4. **Gate: present the file impact list and any new subtasks. Get user approval.**
 
 ## Phase 3 — Plan
 1. Write an ordered, step-by-step execution plan. Each step maps to a concrete file change or command.
-2. Assign each step to an agent type and structure parallel groups:
-   - `.slint` UI work → `slint-developer`; Rust business logic, service modules, callback implementations → `rust-developer`.
-   - Mixed-agent tasks are already split per the **Mixed-agent work** clarification pattern in Phase 1.
-   - Label every task with `**[slint-developer]**` or `**[rust-developer]**` at the start of its description. Tasks with no code deliverable (e.g., spec documents) need no label.
-   - **Parallel groups**: tasks with no mutual dependency form a parallel group and share a parent number. Use dot-suffix notation: `N.M.1`, `N.M.2`, … are parallel siblings within group `N.M`. A task with no siblings uses a flat number (`N.M`).
-   - **Parallelism notes**: separate each parallel group from the next with a blockquote stating which tasks are parallel and what gate they unlock:
-     ```
-     > Tasks N.M.1 and N.M.2 are independent — may run in parallel. Task N.P requires both to complete.
-     ```
-   - **Dependency declarations**: end each task description with `**Depends on N.M.**` (or list multiple) when it has a non-trivial predecessor.
-   - Prefer fewer agents; one agent handles all sequential steps in the same domain.
-   - Parallel execution is only valid when tasks have no dependency on each other — verify this explicitly before marking them parallel.
-3. **Gate: present the plan with agent labels, parallel groups, and dependency declarations. Get user approval before invoking any agent.**
+2. Assign each step to an agent: `.slint` UI work → `slint-developer`; Rust business logic, service modules, callback implementations → `rust-developer`.
+3. Label every task: `**[slint-developer]**` or `**[rust-developer]**` at the start of its description. Tasks with no code deliverable need no label.
+4. For every implementation task, write a paired test task immediately after it:
+   - `slint-developer` task → paired `**[slint-tester]**` task listing the exact Slint components to be written.
+   - `rust-developer` task → paired `**[rust-tester]**` task listing the exact Rust functions/modules to be implemented.
+   - The test task objective must be derivable from the implementation task at planning time — do not defer this to Phase 5.
+   - Example: if the implementation task adds `FlashcardStack` component and `on_card_flip` callback, the test task reads: *"Test `FlashcardStack` renders correctly and `on_card_flip` fires on user interaction."*
+5. Identify parallel groups — tasks with no mutual dependency. Use dot-suffix notation (`N.M.1`, `N.M.2` are parallel siblings within group `N.M`). Separate each group with:
+   ```
+   > Tasks N.M.1 and N.M.2 are independent — may run in parallel. Task N.P requires both to complete.
+   ```
+6. End each task with `**Depends on N.M.**` when it has a non-trivial predecessor. Test tasks always depend on their paired implementation task.
+7. Prefer fewer agents; one agent handles all sequential steps in the same domain.
+8. **Gate: present the plan with agent labels, paired test tasks, parallel groups, and dependency declarations. Get user approval before invoking any agent.**
 
 ## Phase 4 — Execute
-1. Invoke agents one at a time (or in parallel only if steps are truly independent).
+1. Invoke agents one at a time, or in parallel only if steps are truly independent.
 2. Brief each agent with exactly:
    - **Goal**: one sentence describing what success looks like.
    - **Files to modify**: absolute paths and the specific change needed in each.
-   - **Files to read for context**: absolute paths only — the agent will read them; do not copy file contents into the brief.
+   - **Files to read for context**: absolute paths only — the agent will read them.
    - **Ordered steps**: numbered list of what to do.
-   - **Constraints**: only rules the agent might not already know (do not repeat slint-developer's own non-negotiable rules back to it).
-3. Each agent runs `cargo build` as part of its own work. Trust the agent's build report.
-   - Re-run `cargo build` yourself **only when chaining multiple agents** — to confirm a clean handoff state before briefing the next agent.
-4. If the build fails after a handoff, diagnose the error and brief the responsible agent again with the compiler output. Do not proceed to the next agent until the build is green.
+   - **Constraints**: only rules the agent might not already know.
+3. **Build policy**: trust each agent's own build report. Run `cargo build` yourself **only** when chaining multiple agents — to confirm a clean handoff state before briefing the next agent. If the build fails after a handoff, diagnose the error and brief the responsible agent again with the compiler output. Do not proceed until the build is green.
 
-## Phase 5 — Verify & Close
-1. Confirm the agent reported a green build (or run `cargo build` yourself if chaining was involved).
-2. Summarize what changed across all agents (files modified, behavior added/removed).
-3. **Gate: present the summary and ask the user to review. Only mark tasks complete after explicit user approval.**
+## Phase 5 — Test
+Unless explicitly told to skip testing, invoke the appropriate tester agent(s) after each implementing agent presents its completed changes:
+- After `slint-developer` → invoke **slint-tester** with the paired test task from Phase 3.
+- After `rust-developer` → invoke **rust-tester** with the paired test task from Phase 3.
 
-Note: commit message suggestion is the executing agent's responsibility (e.g., slint-developer does this at the end of its session). Do not duplicate it here.
+Brief each tester with:
+- **Test objectives**: the exact components or functions listed in the paired test task (written in Phase 3).
+- **What the implementer changed**: files modified and the implementing agent's completion report.
+- **Files to read for context**: absolute paths only.
+
+Wait for the tester's report before proceeding. If failures are reported:
+1. Brief the responsible implementing agent with the failure details.
+2. Re-run the tester after the fix. Repeat until clean.
+
+## Phase 6 — Verify & Close
+1. Confirm a green build and clean tester reports across all agents.
+2. Summarize what changed: files modified, behavior added/removed, tester outcomes.
+3. Prompt for code review and approval before committing, unless told not to.
+4. **Gate: present the summary and ask the user to review. Only mark tasks complete after explicit user approval.**
+5. If review surfaces follow-up work: add approved items to `@.github/prompts/speckit.tasks.prompt.md` using dot-suffix numbers (e.g., `1.3.1`). Get approval before implementing.
+6. Report task completion to **project-manager**: tasks completed, files changed, and tester outcomes.
+
+Note: commit message suggestion is the executing agent's responsibility (e.g., slint-developer does this). Do not duplicate it here.
 
 # Rules
 
-**Build verification (task-manager's own builds)**
+**Build verification**
 - Never report a task complete without a confirmed green build.
-- Only run `cargo build` yourself between chained agents (handoff verification). For single-agent tasks, trust the agent's build report.
+- Only run `cargo build` yourself between chained agents. For single-agent tasks, trust the agent's build report.
 - If `cargo build` fails with `LNK1201` (PDB locked), kill the stale process first:
   ```powershell
   taskkill /F /IM japanese_learn.exe 2>$null
@@ -88,17 +103,14 @@ Note: commit message suggestion is the executing agent's responsibility (e.g., s
 - Prefer the fewest file changes that satisfy the task. Do not ask agents to refactor unrelated code.
 - Do not add subtasks, properties, or components beyond what the current task requires.
 
-**Task writing format (when adding or updating tasks in speckit.tasks.prompt.md)**
-- Label every task with its executing agent at the start of the description: `**[slint-developer]**` or `**[rust-developer]**`. Tasks with no code deliverable (e.g., format specification documents) need no label.
-- Group parallel tasks under the same parent number with dot-suffix: `N.M.1` and `N.M.2` are parallel siblings; `N.M` without a suffix is a sequential task.
-- Separate each parallel group with a blockquote before the first task in the group:
-  ```
-  > Tasks N.M.1 and N.M.2 are independent — may run in parallel after N.K.
-  ```
-- End each task description that has a non-trivial predecessor with: `**Depends on N.M.**`
-- A task may run in parallel with another only if it has zero dependency on that task's output.
+**Task writing format** (when adding or updating tasks in speckit.tasks.prompt.md)
+- Label every task with its executing agent: `**[slint-developer]**`, `**[rust-developer]**`, `**[slint-tester]**`, or `**[rust-tester]**`. Tasks with no code deliverable need no label.
+- Every implementation task must have a paired test task immediately following it, specifying the exact components or functions to test.
+- Group parallel tasks under the same parent number with dot-suffix: `N.M.1` and `N.M.2` are parallel siblings.
+- Separate each parallel group with a blockquote before the first task in the group.
+- End each task with `**Depends on N.M.**` when it has a non-trivial predecessor. Test tasks always depend on their paired implementation task.
 
 **Agent briefing**
 - Do not copy full file contents into agent briefs — file paths are enough; agents read their own files.
-- Do not repeat an agent's own non-negotiable rules back to it (e.g., do not re-state slint-developer's build and style rules in the brief).
-- Commit message suggestion belongs to the executing agent (e.g., slint-developer), not to task-manager.
+- Do not repeat an agent's own non-negotiable rules back to it.
+- Commit message suggestion belongs to the executing agent, not to task-manager.
