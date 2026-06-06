@@ -1,0 +1,160 @@
+import { Tokens } from "@styles";
+import {
+    CommonList,
+    CommonBtn,
+    FlashcardList,
+    FlashcardStack,
+    FlashcardAppLogic,
+    StudySessionView,
+} from "@flashcard";
+
+// Self-contained component encapsulating the entire flashcard management UI.
+// Extracted from the active-topic == 0 block in study_page.slint so that
+// VocabularyPage can embed it without a circular dependency.
+export component FlashcardManagerView inherits Rectangle {
+    background: Tokens.page-background;
+
+    property <bool> show-stack: FlashcardAppLogic.selected-stack-index >= 0;
+    property <bool> show-create-form: false;
+
+    // Reset the create form whenever the stack detail opens.
+    changed show-stack => {
+        if (show-stack) {
+            show-create-form = false;
+        }
+    }
+
+    // Background dismiss TouchArea — lower z-order than all content.
+    // Captures clicks on empty areas to close the stack detail.
+    TouchArea {
+        clicked => {
+            FlashcardAppLogic.selected-stack-index = -1;
+        }
+    }
+
+    VerticalLayout {
+        padding: 20px;
+        spacing: 20px;
+
+        // Header row
+        HorizontalLayout {
+            spacing: 10px;
+
+            Text {
+                text: "Study Mode";
+                font-size: Tokens.font-size-heading;
+                color: Tokens.text-primary;
+                vertical-alignment: center;
+                horizontal-stretch: 1;
+            }
+
+            CommonBtn {
+                text: "Import";
+                clicked => { FlashcardAppLogic.import-stack-clicked(); }
+            }
+
+            CommonBtn {
+                text: "Export";
+                clicked => { FlashcardAppLogic.export-stack-clicked(); }
+            }
+        }
+
+        // Vertically stacked pattern: alignment end keeps list anchored at bottom.
+        VerticalLayout {
+            alignment: LayoutAlignment.end;
+            vertical-stretch: 1;
+
+            // Study session view — shown when a session is active.
+            if FlashcardAppLogic.study-session-active: StudySessionView { }
+
+            if !FlashcardAppLogic.study-session-active && root.show-create-form: Rectangle {
+                background: Tokens.input-form-background;
+                border-radius: Tokens.border-radius;
+                height: 140px;
+
+                HorizontalLayout {
+                    padding: Tokens.padding-lg;
+                    spacing: 10px;
+                    alignment: center;
+
+                    Rectangle {
+                        width: 260px;
+                        height: 36px;
+                        border-width: Tokens.border-width;
+                        border-color: Tokens.input-border;
+                        border-radius: Tokens.border-radius;
+                        background: Tokens.input-background;
+
+                        stack-name-input := TextInput {
+                            font-size: Tokens.font-size-input;
+                            color: Tokens.input-text;
+                            vertical-alignment: center;
+                            width: parent.width - 12px;
+                            x: Tokens.spacing-xs;
+                        }
+                    }
+
+                    CommonBtn {
+                        width: 100px;
+                        text: "Confirm";
+                        primary: true;
+                        clicked => {
+                            FlashcardAppLogic.stack-create-confirmed(stack-name-input.text);
+                            stack-name-input.text = "";
+                            root.show-create-form = false;
+                        }
+                    }
+
+                    CommonBtn {
+                        width: 100px;
+                        text: "Cancel";
+                        clicked => {
+                            stack-name-input.text = "";
+                            root.show-create-form = false;
+                        }
+                    }
+                }
+            }
+
+            if !FlashcardAppLogic.study-session-active && root.show-stack: FlashcardStack {
+                stack: FlashcardAppLogic.flashcard-list[FlashcardAppLogic.selected-stack-index];
+                study-clicked => {
+                    FlashcardAppLogic.study-session-active = true;
+                }
+                close-clicked => {
+                    FlashcardAppLogic.selected-stack-index = -1;
+                }
+                flashcard-add-confirmed(jap, meaning) => {
+                    FlashcardAppLogic.flashcard-add-confirmed(jap, meaning);
+                }
+                flashcard-field-changed(card-index, jap, meaning) => {
+                    FlashcardAppLogic.flashcard-field-changed(card-index, jap, meaning);
+                }
+                flashcard-delete-confirmed(card-index) => {
+                    FlashcardAppLogic.flashcard-delete-confirmed(card-index);
+                }
+                flashcard-reordered(from-index, to-index) => {
+                    FlashcardAppLogic.flashcard-reordered(from-index, to-index);
+                }
+                stack-delete-confirmed => {
+                    FlashcardAppLogic.stack-delete-confirmed();
+                }
+            }
+
+            if !FlashcardAppLogic.study-session-active && FlashcardAppLogic.selected-stack-index == -1: HorizontalLayout {
+                alignment: center;
+
+                CommonList {
+                    width: 400px;
+                    title: "Flashcard Stacks";
+                    add-stack <=> root.show-create-form;
+                    flashcard-list := FlashcardList {
+                        stacks: FlashcardAppLogic.flashcard-list;
+                        selected-index <=> FlashcardAppLogic.selected-stack-index;
+                    }
+                    addButtonText: "Add Stack";
+                }
+            }
+        }
+    }
+}
