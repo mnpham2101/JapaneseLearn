@@ -1,0 +1,379 @@
+[
+  {
+    "name": "N5 Vocabulary — People",
+    "words": [
+      {
+        "spelling": "がくせい",
+        "kanji": "学生",
+        "meaning": "student",
+        "word_type": "noun",
+        "tenses": [],
+        "examples": [
+          "わたしは がくせいです。(I am a student.)"
+        ]
+      },
+      {
+        "spelling": "せんせい",
+        "kanji": "先生",
+        "meaning": "teacher",
+        "word_type": "noun",
+        "tenses": [],
+        "examples": [
+          "せんせいは やさしいです。(The teacher is kind.)"
+        ]
+      },
+      {
+        "spelling": "ともだち",
+        "kanji": "友達",
+        "meaning": "friend",
+        "word_type": "noun",
+        "tenses": [],
+        "examples": [
+          "ともだちと えいがを みます。(I watch a movie with my friend.)"
+        ]
+      },
+      {
+        "spelling": "かぞく",
+        "kanji": "家族",
+        "meaning": "family",
+        "word_type": "noun",
+        "tenses": [],
+        "examples": [
+          "かぞくと たべます。(I eat with my family.)"
+        ]
+      },
+      {
+        "spelling": "ひと",
+        "kanji": "人",
+        "meaning": "person; people",
+        "word_type": "noun",
+        "tenses": [],
+        "examples": [
+          "あのひとは だれですか。(Who is that person?)"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "N5 Vocabulary — Objects",
+    "words": [
+      {
+        "spelling": "ほん",
+        "kanji": "本",
+        "meaning": "book",
+        "word_type": "noun",
+        "tenses": [],
+        "examples": [
+          "ほんを よみます。(I read a book.)",
+          "つくえの うえに ほんが あります。(There is a book on the desk.)"
+        ]
+      },
+      {
+        "spelling": "くるま",
+        "kanji": "車",
+        "meaning": "car; vehicle",
+        "word_type": "noun",
+        "tenses": [],
+        "examples": [
+          "くるまで いきます。(I go by car.)"
+        ]
+      },
+      {
+        "spelling": "でんわ",
+        "kanji": "電話",
+        "meaning": "telephone",
+        "word_type": "noun",
+        "tenses": [],
+        "examples": [
+          "でんわを かけます。(I make a phone call.)"
+        ]
+      },
+      {
+        "spelling": "かばん",
+        "kanji": "鞄",
+        "meaning": "bag; briefcase",
+        "word_type": "noun",
+        "tenses": [],
+        "examples": [
+          "かばんの なかに ほんが あります。(There is a book in the bag.)"
+        ]
+      },
+      {
+        "spelling": "めがね",
+        "kanji": "眼鏡",
+        "meaning": "glasses; spectacles",
+        "word_type": "noun",
+        "tenses": [],
+        "examples": [
+          "めがねを かけます。(I wear glasses.)"
+        ]
+      },
+      {
+        "spelling": "かみ",
+        "kanji": "紙",
+        "meaning": "paper",
+        "word_type": "noun",
+        "tenses": [],
+        "examples": [
+          "かみに かきます。(I write on paper.)"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "N5 Vocabulary — Places",
+    "words": [
+      {
+        "spelling": "いえ",
+        "kanji": "家",
+        "meaning": "house; home",
+        "word_type": "noun",
+        "tenses": [],
+        "examples": [
+          "いえに かえります。(I return home.)",
+          "いえが おおきいです。(The house is big.)"
+        ]
+      },
+      {
+        "spelling": "がっこう",
+        "kanji": "学校",
+        "meaning": "school",
+        "word_type": "noun",
+        "tenses": [],
+        "examples": [
+          "がっこうに いきます。(I go to school.)"
+        ]
+      },
+      {
+        "spelling": "えき",
+        "kanji": "駅",
+        "meaning": "train station",
+        "word_type": "noun",
+        "tenses": [],
+        "examples": [
+          "えきの まえに あります。(It is in front of the station.)"
+        ]
+      },
+      {
+        "spelling": "みせ",
+        "kanji": "店",
+        "meaning": "shop; store",
+        "word_type": "noun",
+        "tenses": [],
+        "examples": [
+          "みせで かいものを します。(I shop at the store.)"
+        ]
+      },
+      {
+        "spelling": "びょういん",
+        "kanji": "病院",
+        "meaning": "hospital",
+        "word_type": "noun",
+        "tenses": [],
+        "examples": [
+          "びょういんに いきます。(I go to the hospital.)"
+        ]
+      },
+      {
+        "spelling": "としょかん",
+        "kanji": "図書館",
+        "meaning": "library",
+        "word_type": "noun",
+        "tenses": [],
+        "examples": [
+          "としょかんで べんきょうします。(I study at the library.)"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "N5 Vocabulary — Food and Drink",
+    "words": [
+      {
+        "spelling": "みず",
+        "kanji": "水",
+        "meaning": "water",
+        "word_type": "noun",
+        "tenses": [],
+        "examples": [
+          "みずを のみます。(I drink water.)"
+        ]
+      },
+      {
+        "spelling": "ごはん",
+        "kanji": "ご飯",
+        "meaning": "rice; meal",
+        "word_type": "noun",
+        "tenses": [],
+        "examples": [
+          "ごはんを たべます。(I eat a meal.)"
+        ]
+      },
+      {
+        "spelling": "やさい",
+        "kanji": "野菜",
+        "meaning": "vegetable",
+        "word_type": "noun",
+        "tenses": [],
+        "examples": [
+          "やさいを たべます。(I eat vegetables.)"
+        ]
+      },
+      {
+        "spelling": "にく",
+        "kanji": "肉",
+        "meaning": "meat",
+        "word_type": "noun",
+        "tenses": [],
+        "examples": [
+          "にくが すきです。(I like meat.)"
+        ]
+      },
+      {
+        "spelling": "さかな",
+        "kanji": "魚",
+        "meaning": "fish",
+        "word_type": "noun",
+        "tenses": [],
+        "examples": [
+          "さかなを たべます。(I eat fish.)"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "N5 Vocabulary — Time",
+    "words": [
+      {
+        "spelling": "きょう",
+        "kanji": "今日",
+        "meaning": "today",
+        "word_type": "noun",
+        "tenses": [],
+        "examples": [
+          "きょうは もくようびです。(Today is Thursday.)"
+        ]
+      },
+      {
+        "spelling": "あした",
+        "kanji": "明日",
+        "meaning": "tomorrow",
+        "word_type": "noun",
+        "tenses": [],
+        "examples": [
+          "あしたも がっこうに いきます。(I will go to school tomorrow too.)"
+        ]
+      },
+      {
+        "spelling": "きのう",
+        "kanji": "昨日",
+        "meaning": "yesterday",
+        "word_type": "noun",
+        "tenses": [],
+        "examples": [
+          "きのうは てんきが わるかったです。(The weather was bad yesterday.)"
+        ]
+      },
+      {
+        "spelling": "まいにち",
+        "kanji": "毎日",
+        "meaning": "every day",
+        "word_type": "noun",
+        "tenses": [],
+        "examples": [
+          "まいにち にほんごを べんきょうします。(I study Japanese every day.)"
+        ]
+      },
+      {
+        "spelling": "いま",
+        "kanji": "今",
+        "meaning": "now",
+        "word_type": "noun",
+        "tenses": [],
+        "examples": [
+          "いまは なんじですか。(What time is it now?)"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "N5 Vocabulary — Numbers and Quantities",
+    "words": [
+      {
+        "spelling": "いくら",
+        "kanji": "幾ら",
+        "meaning": "how much (price)",
+        "word_type": "noun",
+        "tenses": [],
+        "examples": [
+          "これは いくらですか。(How much is this?)"
+        ]
+      },
+      {
+        "spelling": "なんにん",
+        "kanji": "何人",
+        "meaning": "how many people",
+        "word_type": "noun",
+        "tenses": [],
+        "examples": [
+          "なんにんですか。(How many people are there?)"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "N5 Vocabulary — Nature and Weather",
+    "words": [
+      {
+        "spelling": "てんき",
+        "kanji": "天気",
+        "meaning": "weather",
+        "word_type": "noun",
+        "tenses": [],
+        "examples": [
+          "きょうは いい てんきです。(The weather is good today.)"
+        ]
+      },
+      {
+        "spelling": "はれ",
+        "kanji": "晴れ",
+        "meaning": "sunny; clear sky",
+        "word_type": "noun",
+        "tenses": [],
+        "examples": [
+          "きょうは はれです。(It is sunny today.)"
+        ]
+      },
+      {
+        "spelling": "あめ",
+        "kanji": "雨",
+        "meaning": "rain",
+        "word_type": "noun",
+        "tenses": [],
+        "examples": [
+          "あめが ふります。(It rains.)"
+        ]
+      },
+      {
+        "spelling": "やま",
+        "kanji": "山",
+        "meaning": "mountain",
+        "word_type": "noun",
+        "tenses": [],
+        "examples": [
+          "やまに のぼります。(I climb a mountain.)"
+        ]
+      },
+      {
+        "spelling": "うみ",
+        "kanji": "海",
+        "meaning": "sea; ocean",
+        "word_type": "noun",
+        "tenses": [],
+        "examples": [
+          "うみで およぎます。(I swim in the sea.)"
+        ]
+      }
+    ]
+  }
+]

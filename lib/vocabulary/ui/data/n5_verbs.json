@@ -1,0 +1,500 @@
+[
+  {
+    "name": "N5 Verbs — Eating and Drinking",
+    "words": [
+      {
+        "spelling": "たべる",
+        "kanji": "食べる",
+        "meaning": "to eat",
+        "word_type": "verb (ru-verb)",
+        "tenses": [
+          { "name": "present", "conjugation": "たべます" },
+          { "name": "past", "conjugation": "たべました" },
+          { "name": "negative", "conjugation": "たべません" },
+          { "name": "te-form", "conjugation": "たべて" }
+        ],
+        "examples": [
+          "まいにち やさいを たべます。(I eat vegetables every day.)",
+          "パンを たべました。(I ate bread.)"
+        ]
+      },
+      {
+        "spelling": "のむ",
+        "kanji": "飲む",
+        "meaning": "to drink",
+        "word_type": "verb (u-verb)",
+        "tenses": [
+          { "name": "present", "conjugation": "のみます" },
+          { "name": "past", "conjugation": "のみました" },
+          { "name": "negative", "conjugation": "のみません" },
+          { "name": "te-form", "conjugation": "のんで" }
+        ],
+        "examples": [
+          "みずを のみます。(I drink water.)",
+          "コーヒーを のみました。(I drank coffee.)"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "N5 Verbs — Movement",
+    "words": [
+      {
+        "spelling": "いく",
+        "kanji": "行く",
+        "meaning": "to go",
+        "word_type": "verb (u-verb)",
+        "tenses": [
+          { "name": "present", "conjugation": "いきます" },
+          { "name": "past", "conjugation": "いきました" },
+          { "name": "negative", "conjugation": "いきません" },
+          { "name": "te-form", "conjugation": "いって" }
+        ],
+        "examples": [
+          "がっこうに いきます。(I go to school.)",
+          "どこに いきましたか。(Where did you go?)"
+        ]
+      },
+      {
+        "spelling": "くる",
+        "kanji": "来る",
+        "meaning": "to come",
+        "word_type": "verb (irregular)",
+        "tenses": [
+          { "name": "present", "conjugation": "きます" },
+          { "name": "past", "conjugation": "きました" },
+          { "name": "negative", "conjugation": "きません" },
+          { "name": "te-form", "conjugation": "きて" }
+        ],
+        "examples": [
+          "ともだちが きます。(A friend is coming.)",
+          "にほんに きました。(I came to Japan.)"
+        ]
+      },
+      {
+        "spelling": "かえる",
+        "kanji": "帰る",
+        "meaning": "to return home",
+        "word_type": "verb (u-verb)",
+        "tenses": [
+          { "name": "present", "conjugation": "かえります" },
+          { "name": "past", "conjugation": "かえりました" },
+          { "name": "negative", "conjugation": "かえりません" },
+          { "name": "te-form", "conjugation": "かえって" }
+        ],
+        "examples": [
+          "うちに かえります。(I return home.)",
+          "はやく かえりました。(I returned home early.)"
+        ]
+      },
+      {
+        "spelling": "でる",
+        "kanji": "出る",
+        "meaning": "to leave; to exit",
+        "word_type": "verb (ru-verb)",
+        "tenses": [
+          { "name": "present", "conjugation": "でます" },
+          { "name": "past", "conjugation": "でました" },
+          { "name": "negative", "conjugation": "でません" },
+          { "name": "te-form", "conjugation": "でて" }
+        ],
+        "examples": [
+          "うちを でます。(I leave the house.)"
+        ]
+      },
+      {
+        "spelling": "はいる",
+        "kanji": "入る",
+        "meaning": "to enter",
+        "word_type": "verb (u-verb)",
+        "tenses": [
+          { "name": "present", "conjugation": "はいります" },
+          { "name": "past", "conjugation": "はいりました" },
+          { "name": "negative", "conjugation": "はいりません" },
+          { "name": "te-form", "conjugation": "はいって" }
+        ],
+        "examples": [
+          "へやに はいります。(I enter the room.)"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "N5 Verbs — Daily Actions",
+    "words": [
+      {
+        "spelling": "する",
+        "kanji": "",
+        "meaning": "to do",
+        "word_type": "verb (irregular)",
+        "tenses": [
+          { "name": "present", "conjugation": "します" },
+          { "name": "past", "conjugation": "しました" },
+          { "name": "negative", "conjugation": "しません" },
+          { "name": "te-form", "conjugation": "して" }
+        ],
+        "examples": [
+          "しゅくだいを します。(I do homework.)",
+          "かいものを しました。(I went shopping.)"
+        ]
+      },
+      {
+        "spelling": "みる",
+        "kanji": "見る",
+        "meaning": "to see; to watch",
+        "word_type": "verb (ru-verb)",
+        "tenses": [
+          { "name": "present", "conjugation": "みます" },
+          { "name": "past", "conjugation": "みました" },
+          { "name": "negative", "conjugation": "みません" },
+          { "name": "te-form", "conjugation": "みて" }
+        ],
+        "examples": [
+          "テレビを みます。(I watch TV.)",
+          "えいがを みました。(I watched a movie.)"
+        ]
+      },
+      {
+        "spelling": "きく",
+        "kanji": "聞く",
+        "meaning": "to listen; to hear; to ask",
+        "word_type": "verb (u-verb)",
+        "tenses": [
+          { "name": "present", "conjugation": "ききます" },
+          { "name": "past", "conjugation": "ききました" },
+          { "name": "negative", "conjugation": "ききません" },
+          { "name": "te-form", "conjugation": "きいて" }
+        ],
+        "examples": [
+          "おんがくを ききます。(I listen to music.)",
+          "せんせいに ききました。(I asked the teacher.)"
+        ]
+      },
+      {
+        "spelling": "かく",
+        "kanji": "書く",
+        "meaning": "to write",
+        "word_type": "verb (u-verb)",
+        "tenses": [
+          { "name": "present", "conjugation": "かきます" },
+          { "name": "past", "conjugation": "かきました" },
+          { "name": "negative", "conjugation": "かきません" },
+          { "name": "te-form", "conjugation": "かいて" }
+        ],
+        "examples": [
+          "てがみを かきます。(I write a letter.)",
+          "なまえを かきました。(I wrote my name.)"
+        ]
+      },
+      {
+        "spelling": "よむ",
+        "kanji": "読む",
+        "meaning": "to read",
+        "word_type": "verb (u-verb)",
+        "tenses": [
+          { "name": "present", "conjugation": "よみます" },
+          { "name": "past", "conjugation": "よみました" },
+          { "name": "negative", "conjugation": "よみません" },
+          { "name": "te-form", "conjugation": "よんで" }
+        ],
+        "examples": [
+          "ほんを よみます。(I read a book.)",
+          "しんぶんを よみました。(I read the newspaper.)"
+        ]
+      },
+      {
+        "spelling": "はなす",
+        "kanji": "話す",
+        "meaning": "to speak; to talk",
+        "word_type": "verb (u-verb)",
+        "tenses": [
+          { "name": "present", "conjugation": "はなします" },
+          { "name": "past", "conjugation": "はなしました" },
+          { "name": "negative", "conjugation": "はなしません" },
+          { "name": "te-form", "conjugation": "はなして" }
+        ],
+        "examples": [
+          "にほんごで はなします。(I speak in Japanese.)"
+        ]
+      },
+      {
+        "spelling": "おきる",
+        "kanji": "起きる",
+        "meaning": "to wake up; to get up",
+        "word_type": "verb (ru-verb)",
+        "tenses": [
+          { "name": "present", "conjugation": "おきます" },
+          { "name": "past", "conjugation": "おきました" },
+          { "name": "negative", "conjugation": "おきません" },
+          { "name": "te-form", "conjugation": "おきて" }
+        ],
+        "examples": [
+          "しちじに おきます。(I wake up at 7 o'clock.)"
+        ]
+      },
+      {
+        "spelling": "ねる",
+        "kanji": "寝る",
+        "meaning": "to sleep; to go to bed",
+        "word_type": "verb (ru-verb)",
+        "tenses": [
+          { "name": "present", "conjugation": "ねます" },
+          { "name": "past", "conjugation": "ねました" },
+          { "name": "negative", "conjugation": "ねません" },
+          { "name": "te-form", "conjugation": "ねて" }
+        ],
+        "examples": [
+          "じゅういちじに ねます。(I go to sleep at 11 o'clock.)"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "N5 Verbs — Work and Study",
+    "words": [
+      {
+        "spelling": "はたらく",
+        "kanji": "働く",
+        "meaning": "to work",
+        "word_type": "verb (u-verb)",
+        "tenses": [
+          { "name": "present", "conjugation": "はたらきます" },
+          { "name": "past", "conjugation": "はたらきました" },
+          { "name": "negative", "conjugation": "はたらきません" },
+          { "name": "te-form", "conjugation": "はたらいて" }
+        ],
+        "examples": [
+          "かいしゃで はたらきます。(I work at a company.)"
+        ]
+      },
+      {
+        "spelling": "べんきょうする",
+        "kanji": "勉強する",
+        "meaning": "to study",
+        "word_type": "verb (irregular)",
+        "tenses": [
+          { "name": "present", "conjugation": "べんきょうします" },
+          { "name": "past", "conjugation": "べんきょうしました" },
+          { "name": "negative", "conjugation": "べんきょうしません" },
+          { "name": "te-form", "conjugation": "べんきょうして" }
+        ],
+        "examples": [
+          "まいにち にほんごを べんきょうします。(I study Japanese every day.)"
+        ]
+      },
+      {
+        "spelling": "おしえる",
+        "kanji": "教える",
+        "meaning": "to teach",
+        "word_type": "verb (ru-verb)",
+        "tenses": [
+          { "name": "present", "conjugation": "おしえます" },
+          { "name": "past", "conjugation": "おしえました" },
+          { "name": "negative", "conjugation": "おしえません" },
+          { "name": "te-form", "conjugation": "おしえて" }
+        ],
+        "examples": [
+          "えいごを おしえます。(I teach English.)"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "N5 Verbs — Giving and Receiving",
+    "words": [
+      {
+        "spelling": "あげる",
+        "kanji": "上げる",
+        "meaning": "to give (to someone else)",
+        "word_type": "verb (ru-verb)",
+        "tenses": [
+          { "name": "present", "conjugation": "あげます" },
+          { "name": "past", "conjugation": "あげました" },
+          { "name": "negative", "conjugation": "あげません" },
+          { "name": "te-form", "conjugation": "あげて" }
+        ],
+        "examples": [
+          "ともだちに プレゼントを あげます。(I give a present to my friend.)"
+        ]
+      },
+      {
+        "spelling": "もらう",
+        "kanji": "貰う",
+        "meaning": "to receive",
+        "word_type": "verb (u-verb)",
+        "tenses": [
+          { "name": "present", "conjugation": "もらいます" },
+          { "name": "past", "conjugation": "もらいました" },
+          { "name": "negative", "conjugation": "もらいません" },
+          { "name": "te-form", "conjugation": "もらって" }
+        ],
+        "examples": [
+          "はなを もらいました。(I received flowers.)"
+        ]
+      },
+      {
+        "spelling": "かう",
+        "kanji": "買う",
+        "meaning": "to buy",
+        "word_type": "verb (u-verb)",
+        "tenses": [
+          { "name": "present", "conjugation": "かいます" },
+          { "name": "past", "conjugation": "かいました" },
+          { "name": "negative", "conjugation": "かいません" },
+          { "name": "te-form", "conjugation": "かって" }
+        ],
+        "examples": [
+          "スーパーで やさいを かいます。(I buy vegetables at the supermarket.)"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "N5 Verbs — Existence and State",
+    "words": [
+      {
+        "spelling": "ある",
+        "kanji": "",
+        "meaning": "to exist; to be (inanimate)",
+        "word_type": "verb (u-verb)",
+        "tenses": [
+          { "name": "present", "conjugation": "あります" },
+          { "name": "past", "conjugation": "ありました" },
+          { "name": "negative", "conjugation": "ありません" },
+          { "name": "te-form", "conjugation": "あって" }
+        ],
+        "examples": [
+          "つくえの うえに ほんが あります。(There is a book on the desk.)",
+          "じかんが ありません。(I don't have time.)"
+        ]
+      },
+      {
+        "spelling": "いる",
+        "kanji": "",
+        "meaning": "to exist; to be (animate)",
+        "word_type": "verb (ru-verb)",
+        "tenses": [
+          { "name": "present", "conjugation": "います" },
+          { "name": "past", "conjugation": "いました" },
+          { "name": "negative", "conjugation": "いません" },
+          { "name": "te-form", "conjugation": "いて" }
+        ],
+        "examples": [
+          "ねこが います。(There is a cat.)",
+          "がっこうに います。(I am at school.)"
+        ]
+      },
+      {
+        "spelling": "わかる",
+        "kanji": "分かる",
+        "meaning": "to understand",
+        "word_type": "verb (u-verb)",
+        "tenses": [
+          { "name": "present", "conjugation": "わかります" },
+          { "name": "past", "conjugation": "わかりました" },
+          { "name": "negative", "conjugation": "わかりません" },
+          { "name": "te-form", "conjugation": "わかって" }
+        ],
+        "examples": [
+          "にほんごが わかります。(I understand Japanese.)",
+          "わかりません。(I don't understand.)"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "N5 Verbs — Physical Actions",
+    "words": [
+      {
+        "spelling": "あるく",
+        "kanji": "歩く",
+        "meaning": "to walk",
+        "word_type": "verb (u-verb)",
+        "tenses": [
+          { "name": "present", "conjugation": "あるきます" },
+          { "name": "past", "conjugation": "あるきました" },
+          { "name": "negative", "conjugation": "あるきません" },
+          { "name": "te-form", "conjugation": "あるいて" }
+        ],
+        "examples": [
+          "えきまで あるきます。(I walk to the station.)"
+        ]
+      },
+      {
+        "spelling": "のる",
+        "kanji": "乗る",
+        "meaning": "to ride; to board",
+        "word_type": "verb (u-verb)",
+        "tenses": [
+          { "name": "present", "conjugation": "のります" },
+          { "name": "past", "conjugation": "のりました" },
+          { "name": "negative", "conjugation": "のりません" },
+          { "name": "te-form", "conjugation": "のって" }
+        ],
+        "examples": [
+          "バスに のります。(I ride the bus.)"
+        ]
+      },
+      {
+        "spelling": "つかう",
+        "kanji": "使う",
+        "meaning": "to use",
+        "word_type": "verb (u-verb)",
+        "tenses": [
+          { "name": "present", "conjugation": "つかいます" },
+          { "name": "past", "conjugation": "つかいました" },
+          { "name": "negative", "conjugation": "つかいません" },
+          { "name": "te-form", "conjugation": "つかって" }
+        ],
+        "examples": [
+          "パソコンを つかいます。(I use a computer.)"
+        ]
+      },
+      {
+        "spelling": "あう",
+        "kanji": "会う",
+        "meaning": "to meet",
+        "word_type": "verb (u-verb)",
+        "tenses": [
+          { "name": "present", "conjugation": "あいます" },
+          { "name": "past", "conjugation": "あいました" },
+          { "name": "negative", "conjugation": "あいません" },
+          { "name": "te-form", "conjugation": "あって" }
+        ],
+        "examples": [
+          "ともだちに あいます。(I meet a friend.)"
+        ]
+      },
+      {
+        "spelling": "まつ",
+        "kanji": "待つ",
+        "meaning": "to wait",
+        "word_type": "verb (u-verb)",
+        "tenses": [
+          { "name": "present", "conjugation": "まちます" },
+          { "name": "past", "conjugation": "まちました" },
+          { "name": "negative", "conjugation": "まちません" },
+          { "name": "te-form", "conjugation": "まって" }
+        ],
+        "examples": [
+          "えきで まちます。(I wait at the station.)"
+        ]
+      },
+      {
+        "spelling": "わすれる",
+        "kanji": "忘れる",
+        "meaning": "to forget",
+        "word_type": "verb (ru-verb)",
+        "tenses": [
+          { "name": "present", "conjugation": "わすれます" },
+          { "name": "past", "conjugation": "わすれました" },
+          { "name": "negative", "conjugation": "わすれません" },
+          { "name": "te-form", "conjugation": "わすれて" }
+        ],
+        "examples": [
+          "なまえを わすれました。(I forgot the name.)"
+        ]
+      }
+    ]
+  }
+]
