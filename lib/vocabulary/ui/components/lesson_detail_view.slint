@@ -1,0 +1,50 @@
+import { CommonBtn } from "@flashcard";
+import { LessonDetailPane } from "lesson_detail_pane.slint";
+import { VocabularyAppLogic } from "../vocabulary_app_logic.slint";
+import { Tokens } from "@styles";
+
+// Full-page component that shows a selected lesson's content.
+// Header row: lesson name Text + close CommonBtn.
+// Below header: LessonDetailPane (takes remaining height).
+export component LessonDetailView inherits Rectangle {
+    background: Tokens.page-background;
+
+    callback close-clicked;
+
+    VerticalLayout {
+        spacing: Tokens.spacing-sm;
+        padding: Tokens.padding-sm;
+
+        // Header row
+        HorizontalLayout {
+            spacing: Tokens.spacing-sm;
+            height: 36px;
+
+            Text {
+                text: VocabularyAppLogic.selected-lesson-index >= 0
+                    ? VocabularyAppLogic.lesson-list[VocabularyAppLogic.selected-lesson-index].name
+                    : "";
+                font-size: Tokens.font-size-title;
+                font-weight: 700;
+                color: Tokens.text-primary;
+                vertical-alignment: center;
+                horizontal-stretch: 1;
+            }
+
+            CommonBtn {
+                width: 36px;
+                height: 36px;
+                text: "✕";
+                accessibilityLabel: "Close lesson detail";
+                clicked => {
+                    root.close-clicked();
+                }
+            }
+        }
+
+        // Detail pane — takes remaining height
+        LessonDetailPane {
+            vertical-stretch: 1;
+        }
+    }
+}
