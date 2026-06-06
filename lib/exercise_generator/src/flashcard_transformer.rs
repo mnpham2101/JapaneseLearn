@@ -14,11 +14,7 @@ impl Transformer<VocabularyLesson, FlashcardStackData> for FlashcardExerciseTran
             .iter()
             .map(|lesson| FlashcardStackData {
                 name: lesson.name.clone(),
-                cards: lesson
-                    .words
-                    .iter()
-                    .flat_map(make_cards)
-                    .collect(),
+                cards: lesson.words.iter().flat_map(make_cards).collect(),
             })
             .collect()
     }

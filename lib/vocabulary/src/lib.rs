@@ -134,11 +134,12 @@ fn save_vocabulary(_lessons: &[LessonData]) {}
 
 // ── init ──────────────────────────────────────────────────────────────────────
 
+/// Wire all vocabulary CRUD callbacks.  Call this from every host window,
+/// including test windows that only expose `VocabularyAppLogic`.
 pub fn init<T>(ui: &T)
 where
     T: slint::ComponentHandle + 'static,
     for<'a> VocabularyAppLogic<'a>: slint::Global<'a, T>,
-    for<'a> FlashcardAppLogic<'a>: slint::Global<'a, T>,
 {
     let logic = ui.global::<VocabularyAppLogic>();
 
@@ -415,6 +416,18 @@ where
             }
         });
     }
+}
+
+/// Wire the `generate-exercises-clicked` callback.  Requires the host window to
+/// also expose `FlashcardAppLogic` as a global (e.g. `MainWindow`).  Not called
+/// from test windows that only need vocabulary CRUD.
+pub fn init_exercise_generator<T>(ui: &T)
+where
+    T: slint::ComponentHandle + 'static,
+    for<'a> VocabularyAppLogic<'a>: slint::Global<'a, T>,
+    for<'a> FlashcardAppLogic<'a>: slint::Global<'a, T>,
+{
+    let logic = ui.global::<VocabularyAppLogic>();
 
     // ── generate-exercises-clicked ────────────────────────────────────────────
     {

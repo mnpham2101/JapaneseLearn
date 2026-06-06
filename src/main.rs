@@ -8,6 +8,7 @@ fn main() {
     let window = MainWindow::new().expect("Failed to create MainWindow");
     ::flashcard::init(&window);
     ::persistent_data::init(&window);
-    ::vocabulary::init::<MainWindow>(&window);
+    ::vocabulary::init(&window);
+    ::vocabulary::init_exercise_generator::<MainWindow>(&window);
     window.run().expect("Failed to run MainWindow");
 }

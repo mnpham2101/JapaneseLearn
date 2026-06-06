@@ -1,0 +1,11 @@
+[package]
+name = "vocabulary-tests"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+vocabulary = { path = "../../lib/vocabulary" }
+slint = { workspace = true }
+
+[dev-dependencies]
+i-slint-backend-testing = "1.16.1"
