@@ -1,12 +1,12 @@
+import { LessonList } from "../components/lesson_list.slint";
 import { Tokens } from "@styles";
 
+// Top-level vocabulary page component.
+// Hosts the full-width LessonList bound to VocabularyAppLogic.
 export component VocabularyPage {
     Rectangle {
         background: Tokens.page-background;
-        Text {
-            text: "Vocabulary";
-            font-size: Tokens.font-size-heading;
-            color: Tokens.text-primary;
-        }
+
+        LessonList {}
     }
 }
