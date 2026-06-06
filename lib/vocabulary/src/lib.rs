@@ -4,30 +4,32 @@ pub mod vocabulary {
     slint::include_modules!();
 }
 
+pub mod vocabulary_markdown_io;
+
 use vocabulary::VocabularyAppLogic;
 
 // ── Shadow structs (serde-serialisable mirror of the Slint model) ─────────────
 
 #[derive(serde::Serialize, serde::Deserialize, Clone, Default)]
-struct TenseData {
-    name: String,
-    conjugation: String,
+pub(crate) struct TenseData {
+    pub(crate) name: String,
+    pub(crate) conjugation: String,
 }
 
 #[derive(serde::Serialize, serde::Deserialize, Clone, Default)]
-struct WordData {
-    spelling: String,
-    kanji: String,
-    meaning: String,
-    word_type: String,
-    tenses: Vec<TenseData>,
-    examples: Vec<String>,
+pub(crate) struct WordData {
+    pub(crate) spelling: String,
+    pub(crate) kanji: String,
+    pub(crate) meaning: String,
+    pub(crate) word_type: String,
+    pub(crate) tenses: Vec<TenseData>,
+    pub(crate) examples: Vec<String>,
 }
 
 #[derive(serde::Serialize, serde::Deserialize, Clone, Default)]
-struct LessonData {
-    name: String,
-    words: Vec<WordData>,
+pub(crate) struct LessonData {
+    pub(crate) name: String,
+    pub(crate) words: Vec<WordData>,
 }
 
 // ── Conversion helpers ────────────────────────────────────────────────────────
@@ -363,6 +365,48 @@ where
             }
             logic.set_lesson_list(slint::ModelRc::new(slint::VecModel::from(lessons.clone())));
             save_vocabulary(&slint_to_lessons(&logic));
+        });
+    }
+
+    // ── import-vocabulary-clicked ─────────────────────────────────────────────
+    {
+        let ui_weak = ui.as_weak();
+        logic.on_import_vocabulary_clicked(move || {
+            #[cfg(not(target_arch = "wasm32"))]
+            {
+                if let Some(path) = rfd::FileDialog::new()
+                    .add_filter("Markdown", &["md"])
+                    .pick_file()
+                {
+                    if let Ok(content) = std::fs::read_to_string(path) {
+                        let lessons = vocabulary_markdown_io::parse_vocabulary(&content);
+                        let ui = ui_weak.unwrap();
+                        let logic = ui.global::<VocabularyAppLogic>();
+                        logic.set_lesson_list(lessons_to_slint(&lessons));
+                        save_vocabulary(&lessons);
+                    }
+                }
+            }
+        });
+    }
+
+    // ── export-vocabulary-clicked ─────────────────────────────────────────────
+    {
+        let ui_weak = ui.as_weak();
+        logic.on_export_vocabulary_clicked(move || {
+            #[cfg(not(target_arch = "wasm32"))]
+            {
+                let ui = ui_weak.unwrap();
+                let logic = ui.global::<VocabularyAppLogic>();
+                let lessons = slint_to_lessons(&logic);
+                let content = vocabulary_markdown_io::serialize_vocabulary(&lessons);
+                if let Some(path) = rfd::FileDialog::new()
+                    .add_filter("Markdown", &["md"])
+                    .save_file()
+                {
+                    let _ = std::fs::write(path, content);
+                }
+            }
         });
     }
 }

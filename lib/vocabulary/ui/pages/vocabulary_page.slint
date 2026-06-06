@@ -1,39 +1,73 @@
 import { LessonList } from "../components/lesson_list.slint";
 import { LessonDetailPane } from "../components/lesson_detail_pane.slint";
 import { VocabularyAppLogic } from "../vocabulary_app_logic.slint";
+import { CommonBtn } from "@flashcard";
 import { Tokens } from "@styles";
 
 // Top-level vocabulary page component.
+// Header row: Import and Export buttons.
 // Left column: lesson list (always visible).
 // Right column: lesson detail pane (visible when a lesson is selected).
 export component VocabularyPage {
     Rectangle {
         background: Tokens.page-background;
 
-        HorizontalLayout {
-            spacing: Tokens.spacing-md;
+        VerticalLayout {
+            spacing: Tokens.spacing-sm;
             padding: Tokens.padding-sm;
 
-            // Left pane: lesson list, fixed width.
-            Rectangle {
-                width: 280px;
-                background: Tokens.card-container-background;
-                border-radius: Tokens.card-container-border-radius;
-                border-width: Tokens.border-width;
-                border-color: Tokens.card-container-border-color;
+            // Header row: Import / Export actions.
+            HorizontalLayout {
+                spacing: Tokens.spacing-sm;
+                alignment: end;
+                height: 36px;
 
-                LessonList {}
+                CommonBtn {
+                    width: 90px;
+                    height: 36px;
+                    text: "Import";
+                    accessibilityLabel: "Import vocabulary from markdown file";
+                    clicked => {
+                        VocabularyAppLogic.import-vocabulary-clicked();
+                    }
+                }
+
+                CommonBtn {
+                    width: 90px;
+                    height: 36px;
+                    text: "Export";
+                    accessibilityLabel: "Export vocabulary to markdown file";
+                    clicked => {
+                        VocabularyAppLogic.export-vocabulary-clicked();
+                    }
+                }
             }
 
-            // Right pane: lesson detail — visible only when a lesson is selected.
-            if VocabularyAppLogic.selected-lesson-index >= 0: Rectangle {
-                horizontal-stretch: 1;
-                background: Tokens.card-container-background;
-                border-radius: Tokens.card-container-border-radius;
-                border-width: Tokens.border-width;
-                border-color: Tokens.card-container-border-color;
+            // Main content row: lesson list and detail pane.
+            HorizontalLayout {
+                spacing: Tokens.spacing-md;
 
-                LessonDetailPane {}
+                // Left pane: lesson list, fixed width.
+                Rectangle {
+                    width: 280px;
+                    background: Tokens.card-container-background;
+                    border-radius: Tokens.card-container-border-radius;
+                    border-width: Tokens.border-width;
+                    border-color: Tokens.card-container-border-color;
+
+                    LessonList {}
+                }
+
+                // Right pane: lesson detail — visible only when a lesson is selected.
+                if VocabularyAppLogic.selected-lesson-index >= 0: Rectangle {
+                    horizontal-stretch: 1;
+                    background: Tokens.card-container-background;
+                    border-radius: Tokens.card-container-border-radius;
+                    border-width: Tokens.border-width;
+                    border-color: Tokens.card-container-border-color;
+
+                    LessonDetailPane {}
+                }
             }
         }
     }

@@ -33,4 +33,7 @@ export global VocabularyAppLogic {
     callback word-tense-delete-confirmed(lesson-idx: int, word-idx: int, tense-idx: int);
     callback word-example-add-confirmed(lesson-idx: int, word-idx: int, example: string);
     callback word-example-delete-confirmed(lesson-idx: int, word-idx: int, example-idx: int);
+
+    callback import-vocabulary-clicked();
+    callback export-vocabulary-clicked();
 }
