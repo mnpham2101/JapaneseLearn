@@ -5,7 +5,7 @@ import { FlashcardModel, FlashcardStackModel } from "../model/flashcard_model.sl
 export { FlashcardModel, FlashcardStackModel }
 
 export component Flashcard {
-    in property<FlashcardModel> data: { jap-obj: "", explanation: "", known: true };
+    in property<FlashcardModel> data: { jap-obj: "", explanation: "", known: true, is-kanji: false };
     in-out property<bool> show-back: false;
     in-out property<bool> known: data.known;
 
@@ -36,7 +36,9 @@ export component Flashcard {
 
                 Text {
                     text: data.jap-obj;
-                    font-size: Tokens.font-size-large;
+                    font-size: data.is-kanji ? Tokens.font-size-kanji : Tokens.font-size-large;
+                    font-family: data.is-kanji ? "MS Mincho" : "";
+                    font-weight: 400;
                     color: Tokens.text-primary;
                     horizontal-alignment: center;
                     vertical-alignment: center;

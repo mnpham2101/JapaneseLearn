@@ -495,6 +495,7 @@ where
                                     jap_obj: card.front.clone().into(),
                                     explanation: card.back.clone().into(),
                                     known: card.known,
+                                    is_kanji: false,
                                 })
                                 .collect::<Vec<_>>(),
                         )),

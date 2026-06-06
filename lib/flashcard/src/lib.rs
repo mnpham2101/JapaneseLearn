@@ -52,6 +52,7 @@ fn from_stack_data(data: Vec<StackData>) -> Vec<flashcard::FlashcardStackModel> 
                         jap_obj: c.jap_obj.into(),
                         explanation: c.explanation.into(),
                         known: c.known,
+                        is_kanji: false,
                     })
                     .collect::<Vec<_>>(),
             )),
@@ -164,6 +165,7 @@ where
                     jap_obj: jap,
                     explanation: meaning,
                     known: false,
+                    is_kanji: false,
                 });
                 stack.flashcards = slint::ModelRc::new(slint::VecModel::from(cards));
             }

@@ -72,6 +72,7 @@ fn cards_to_slint(cards: &[CardData]) -> ModelRc<FlashcardModel> {
             jap_obj: SharedString::from(c.japanese.as_str()),
             explanation: SharedString::from(c.meaning.as_str()),
             known: false,
+            is_kanji: false,
         })
         .collect();
     ModelRc::new(VecModel::from(vec))
