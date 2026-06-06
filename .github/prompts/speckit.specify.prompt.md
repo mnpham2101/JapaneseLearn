@@ -164,6 +164,28 @@ detail → view/add/delete/edit flashcards.
   - Users must tap or drag to pair each front tile with its correct back tile.
   - When all pairs are correctly matched, the exercise is marked as passed.
 
+## Style design
+- The application should have the following day mode colors: 
+  - #CCD5AE , #E9EDC9 , #FEFAE0, #FAEDCD, #D4A373 ,  #251504 
+  - Darker colors should be used for border, text. 
+  - Easy to view for studying.
+  - The tab buttons "Vocabulary", "Grammar", "Reading" should be distinguishable from lower buttons "Vocabulary" page such as "Lesson", "Exercise", "Flashcard", "Import Lesson".
+  - If the colors are not enough, use your best judgement to provide suitable collors for this pallete. Use this page to generate good colors if possible https://coolors.co/palettes/trending 
+- Night mode colors are not yet designed, but will be offered.
+
+
+## Button Arrangements and Colors:
+- Buttons on the same tab should have multual exclusive behavior: since only one tab is open, only one should change color on click. 
+- Buttons change color when user click and hold.
+- Tab buttons that switch page view changes colors when user click and hold. 
+- Buttons to open containers, smaller windows, or to load a feature (import file) doesn't have color.
+- Disable buttons should not appear on layout. 
+- Flashcard must have "flipped" effect. Keep the effect implementation in "animation" for future reuse.
+- Flashcard whose front is "kanji" should have extra large size. Use nice font to represent brush stroke. 
+- User can resize window; pages and views should be responsive. 
+- "Add Lesson" is too wide. Keep an appropriate maximum width and same height for buttons.
+- There is a bug, when "Add Lession" is clicked, the "Confirm" and "Cancel" button overlaps with another container. Fix it!
+
 **Milestone 3 should include the following development**
 - Milestone 3 delivers **Analytics** and **Grammar Study Mode** as defined in the Future Backlog below.
 
