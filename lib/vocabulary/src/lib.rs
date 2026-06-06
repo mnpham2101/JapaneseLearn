@@ -446,6 +446,20 @@ where
             }
         });
     }
+
+    // ── restore-defaults-clicked ──────────────────────────────────────────────
+    {
+        let ui_weak = ui.as_weak();
+        logic.on_restore_defaults_clicked(move || {
+            #[cfg(not(target_arch = "wasm32"))]
+            {
+                let defaults = load_and_save_defaults();
+                let ui = ui_weak.unwrap();
+                let logic = ui.global::<VocabularyAppLogic>();
+                logic.set_lesson_list(lessons_to_slint(&defaults));
+            }
+        });
+    }
 }
 
 /// Wire the `generate-exercises-clicked` callback.  Requires the host window to
