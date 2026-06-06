@@ -1,0 +1,99 @@
+import { Tokens } from "@styles";
+import { CommonBtn, FlashcardModel } from "@flashcard";
+
+// MatchingExerciseView — positional card-matching exercise.
+// The user selects a front tile (jap-obj) then clicks the matching back tile (explanation).
+// front[i] pairs with back[i] — pairing is positional.
+// Fires exercise-completed() when all pairs are matched.
+export component MatchingExerciseView inherits Rectangle {
+    in property <[FlashcardModel]> cards;
+    callback exercise-completed();
+
+    // Index of the currently selected front tile (-1 = none selected).
+    property <int> selected-front-index: -1;
+    // Number of confirmed matches so far.
+    property <int> matched-count: 0;
+
+    // Per-tile matched flags (up to 20 cards supported via fixed slots).
+    // true means this positional pair has been matched and tiles are locked.
+    property <[bool]> matched-flags: [
+        false, false, false, false, false,
+        false, false, false, false, false,
+        false, false, false, false, false,
+        false, false, false, false, false,
+    ];
+
+    VerticalLayout {
+        padding: Tokens.padding-lg;
+        spacing: Tokens.spacing-md;
+
+        // Header row
+        HorizontalLayout {
+            alignment: center;
+            spacing: Tokens.spacing-md;
+
+            Text {
+                text: "Match the cards";
+                font-size: Tokens.font-size-title;
+                color: Tokens.text-primary;
+                vertical-alignment: center;
+            }
+
+            Text {
+                text: matched-count + " / " + cards.length;
+                font-size: Tokens.font-size-caption;
+                color: Tokens.text-secondary;
+                vertical-alignment: center;
+            }
+        }
+
+        // Two-column tile grid
+        HorizontalLayout {
+            spacing: Tokens.spacing-md;
+
+            // Left column — front tiles (jap-obj)
+            VerticalLayout {
+                spacing: Tokens.spacing-sm;
+
+                for card[i] in cards: CommonBtn {
+                    text: card.jap-obj;
+                    enabled: !matched-flags[i];
+                    checked: (selected-front-index == i) && !matched-flags[i];
+                    checkable: false;
+                    primary: matched-flags[i];
+                    clicked => {
+                        if (!matched-flags[i]) {
+                            selected-front-index = (selected-front-index == i) ? -1 : i;
+                        }
+                    }
+                }
+            }
+
+            // Right column — back tiles (explanation)
+            VerticalLayout {
+                spacing: Tokens.spacing-sm;
+
+                for card[i] in cards: CommonBtn {
+                    text: card.explanation;
+                    enabled: !matched-flags[i];
+                    primary: matched-flags[i];
+                    checkable: false;
+                    clicked => {
+                        if (!matched-flags[i] && selected-front-index == i) {
+                            // Correct match — mark pair as matched
+                            matched-flags[i] = true;
+                            matched-count += 1;
+                            selected-front-index = -1;
+                            if (matched-count >= cards.length && cards.length > 0) {
+                                exercise-completed();
+                            }
+                        } else if (!matched-flags[i] && selected-front-index != -1) {
+                            // Wrong match — deselect front
+                            selected-front-index = -1;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
