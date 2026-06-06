@@ -1,12 +1,17 @@
 import { CommonBtn } from "@flashcard";
 import { Tokens } from "@styles";
+import { TenseEntryModel, VocabularyAppLogic } from "../vocabulary_app_logic.slint";
 
 // Inline form for adding a new vocabulary word to a lesson.
-// Caller provides lesson-idx so the confirmed callback carries the correct lesson index.
+// Caller provides lesson-idx and word-idx so the confirmed callbacks carry the correct indices.
+// tense-data and example-data are populated when editing an existing word (empty for new word).
 // word-add-confirmed fires when the user confirms the form.
 // word-cancel fires when the user cancels.
 export component WordForm inherits VerticalLayout {
     in property <int> lesson-idx: -1;
+    in property <int> word-idx: -1;
+    in property <[TenseEntryModel]> tense-data;
+    in property <[string]> example-data;
 
     callback word-add-confirmed(lesson-idx: int, spelling: string, kanji: string, meaning: string, word-type: string);
     callback word-cancel;
@@ -131,6 +136,272 @@ export component WordForm inherits VerticalLayout {
             }
         }
     }
+
+    // ── Tense section ──────────────────────────────────────────────────────────
+
+    Text {
+        text: "Tenses";
+        font-size: Tokens.font-size-caption;
+        color: Tokens.text-secondary;
+        font-weight: 600;
+    }
+
+    // Existing tense rows (read-only display + delete)
+    for tense[i] in root.tense-data: HorizontalLayout {
+        spacing: Tokens.spacing-sm;
+        padding-left: Tokens.padding-sm;
+
+        Text {
+            horizontal-stretch: 1;
+            text: tense.tense-name;
+            font-size: Tokens.font-size-body;
+            color: Tokens.text-primary;
+            vertical-alignment: center;
+        }
+
+        Text {
+            horizontal-stretch: 1;
+            text: tense.conjugation;
+            font-size: Tokens.font-size-body;
+            color: Tokens.text-secondary;
+            vertical-alignment: center;
+        }
+
+        CommonBtn {
+            width: 32px;
+            height: 32px;
+            text: "✕";
+            accessibilityLabel: "Delete tense";
+            clicked => {
+                VocabularyAppLogic.word-tense-delete-confirmed(root.lesson-idx, root.word-idx, i);
+            }
+        }
+    }
+
+    // Add-tense inline form (toggled by show-add-tense)
+    add-tense-area := VerticalLayout {
+        property <bool> show-add-tense: false;
+        spacing: Tokens.spacing-xs;
+
+        // "Add Tense" button — visible when form is hidden
+        if !add-tense-area.show-add-tense: CommonBtn {
+            width: 110px;
+            height: 32px;
+            text: "Add Tense";
+            accessibilityLabel: "Show add tense form";
+            clicked => { add-tense-area.show-add-tense = true; }
+        }
+
+        // Inline add-tense form — visible when toggled
+        if add-tense-area.show-add-tense: VerticalLayout {
+            spacing: Tokens.spacing-xs;
+
+            HorizontalLayout {
+                spacing: Tokens.spacing-sm;
+
+                tense-name-field := Rectangle {
+                    horizontal-stretch: 1;
+                    height: 36px;
+                    border-width: Tokens.border-width;
+                    border-color: Tokens.border-color;
+                    border-radius: Tokens.border-radius;
+                    background: Tokens.card-field-background;
+
+                    tense-name-input := TextInput {
+                        font-size: Tokens.font-size-body;
+                        color: Tokens.text-primary;
+                        vertical-alignment: center;
+                        width: parent.width - 12px;
+                        x: Tokens.spacing-xs;
+                    }
+
+                    Text {
+                        visible: tense-name-input.text == "";
+                        text: "Tense name";
+                        font-size: Tokens.font-size-body;
+                        color: Tokens.text-placeholder;
+                        vertical-alignment: center;
+                        x: Tokens.spacing-xs;
+                    }
+                }
+
+                conjugation-field := Rectangle {
+                    horizontal-stretch: 1;
+                    height: 36px;
+                    border-width: Tokens.border-width;
+                    border-color: Tokens.border-color;
+                    border-radius: Tokens.border-radius;
+                    background: Tokens.card-field-background;
+
+                    conjugation-input := TextInput {
+                        font-size: Tokens.font-size-body;
+                        color: Tokens.text-primary;
+                        vertical-alignment: center;
+                        width: parent.width - 12px;
+                        x: Tokens.spacing-xs;
+                    }
+
+                    Text {
+                        visible: conjugation-input.text == "";
+                        text: "Conjugation";
+                        font-size: Tokens.font-size-body;
+                        color: Tokens.text-placeholder;
+                        vertical-alignment: center;
+                        x: Tokens.spacing-xs;
+                    }
+                }
+            }
+
+            HorizontalLayout {
+                spacing: Tokens.spacing-sm;
+                alignment: end;
+
+                CommonBtn {
+                    width: 90px;
+                    height: 32px;
+                    text: "Confirm";
+                    primary: true;
+                    accessibilityLabel: "Confirm add tense";
+                    clicked => {
+                        VocabularyAppLogic.word-tense-add-confirmed(
+                            root.lesson-idx,
+                            root.word-idx,
+                            tense-name-input.text,
+                            conjugation-input.text
+                        );
+                        tense-name-input.text = "";
+                        conjugation-input.text = "";
+                        add-tense-area.show-add-tense = false;
+                    }
+                }
+
+                CommonBtn {
+                    width: 80px;
+                    height: 32px;
+                    text: "Cancel";
+                    accessibilityLabel: "Cancel add tense";
+                    clicked => {
+                        tense-name-input.text = "";
+                        conjugation-input.text = "";
+                        add-tense-area.show-add-tense = false;
+                    }
+                }
+            }
+        }
+    }
+
+    // ── Example section ────────────────────────────────────────────────────────
+
+    Text {
+        text: "Examples";
+        font-size: Tokens.font-size-caption;
+        color: Tokens.text-secondary;
+        font-weight: 600;
+    }
+
+    // Existing example rows (read-only display + delete)
+    for example[i] in root.example-data: HorizontalLayout {
+        spacing: Tokens.spacing-sm;
+        padding-left: Tokens.padding-sm;
+
+        Text {
+            horizontal-stretch: 1;
+            text: example;
+            font-size: Tokens.font-size-body;
+            color: Tokens.text-primary;
+            vertical-alignment: center;
+        }
+
+        CommonBtn {
+            width: 32px;
+            height: 32px;
+            text: "✕";
+            accessibilityLabel: "Delete example";
+            clicked => {
+                VocabularyAppLogic.word-example-delete-confirmed(root.lesson-idx, root.word-idx, i);
+            }
+        }
+    }
+
+    // Add-example inline form (toggled by show-add-example)
+    add-example-area := VerticalLayout {
+        property <bool> show-add-example: false;
+        spacing: Tokens.spacing-xs;
+
+        // "Add Example" button — visible when form is hidden
+        if !add-example-area.show-add-example: CommonBtn {
+            width: 130px;
+            height: 32px;
+            text: "Add Example";
+            accessibilityLabel: "Show add example form";
+            clicked => { add-example-area.show-add-example = true; }
+        }
+
+        // Inline add-example form — visible when toggled
+        if add-example-area.show-add-example: VerticalLayout {
+            spacing: Tokens.spacing-xs;
+
+            example-field := Rectangle {
+                height: 36px;
+                border-width: Tokens.border-width;
+                border-color: Tokens.border-color;
+                border-radius: Tokens.border-radius;
+                background: Tokens.card-field-background;
+
+                example-input := TextInput {
+                    font-size: Tokens.font-size-body;
+                    color: Tokens.text-primary;
+                    vertical-alignment: center;
+                    width: parent.width - 12px;
+                    x: Tokens.spacing-xs;
+                }
+
+                Text {
+                    visible: example-input.text == "";
+                    text: "Example sentence";
+                    font-size: Tokens.font-size-body;
+                    color: Tokens.text-placeholder;
+                    vertical-alignment: center;
+                    x: Tokens.spacing-xs;
+                }
+            }
+
+            HorizontalLayout {
+                spacing: Tokens.spacing-sm;
+                alignment: end;
+
+                CommonBtn {
+                    width: 90px;
+                    height: 32px;
+                    text: "Confirm";
+                    primary: true;
+                    accessibilityLabel: "Confirm add example";
+                    clicked => {
+                        VocabularyAppLogic.word-example-add-confirmed(
+                            root.lesson-idx,
+                            root.word-idx,
+                            example-input.text
+                        );
+                        example-input.text = "";
+                        add-example-area.show-add-example = false;
+                    }
+                }
+
+                CommonBtn {
+                    width: 80px;
+                    height: 32px;
+                    text: "Cancel";
+                    accessibilityLabel: "Cancel add example";
+                    clicked => {
+                        example-input.text = "";
+                        add-example-area.show-add-example = false;
+                    }
+                }
+            }
+        }
+    }
+
+    // ── Action buttons ─────────────────────────────────────────────────────────
 
     // Row 3: action buttons
     HorizontalLayout {

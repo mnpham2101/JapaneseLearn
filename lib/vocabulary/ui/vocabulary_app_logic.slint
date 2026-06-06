@@ -28,4 +28,9 @@ export global VocabularyAppLogic {
     callback word-add-confirmed(lesson-idx: int, spelling: string, kanji: string, meaning: string, word-type: string);
     callback word-delete-confirmed(lesson-idx: int, word-idx: int);
     callback word-field-changed(lesson-idx: int, word-idx: int, spelling: string, kanji: string, meaning: string, word-type: string);
+
+    callback word-tense-add-confirmed(lesson-idx: int, word-idx: int, tense-name: string, conjugation: string);
+    callback word-tense-delete-confirmed(lesson-idx: int, word-idx: int, tense-idx: int);
+    callback word-example-add-confirmed(lesson-idx: int, word-idx: int, example: string);
+    callback word-example-delete-confirmed(lesson-idx: int, word-idx: int, example-idx: int);
 }
