@@ -1,0 +1,23 @@
+export struct TenseEntryModel {
+    tense-name: string,
+    conjugation: string,
+}
+
+export struct VocabularyWordModel {
+    spelling: string,
+    kanji: string,
+    meaning: string,
+    word-type: string,
+    tenses: [TenseEntryModel],
+    examples: [string],
+}
+
+export struct VocabularyLessonModel {
+    name: string,
+    words: [VocabularyWordModel],
+}
+
+export global VocabularyAppLogic {
+    in-out property <[VocabularyLessonModel]> lesson-list;
+    in-out property <int> selected-lesson-index: -1;
+}

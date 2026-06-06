@@ -2,11 +2,13 @@ import { Tokens } from "@styles";
 import { NavBtn } from "components/nav_button.slint";
 import { StudyPage } from "pages/study_page.slint";
 import { ReviewPage } from "pages/review_page.slint";
+import { VocabularyPage } from "pages/vocabulary_page.slint";
 
 // Page enum to track current page
 enum PageType {
     StudyMode,
     ReviewMode,
+    VocabularyMode,
 }
 
 import { FlashcardAppLogic } from "@flashcard";
@@ -48,6 +50,9 @@ export component MainWindow inherits Window {
 
             if current-page == PageType.ReviewMode: ReviewPage {
             }
+
+            if current-page == PageType.VocabularyMode: VocabularyPage {
+            }
         }
 
         Rectangle {
@@ -76,6 +81,16 @@ export component MainWindow inherits Window {
                     primary: current-page == PageType.ReviewMode;
                     clicked => {
                         current-page = PageType.ReviewMode;
+                    }
+                }
+
+                NavBtn {
+                    width: 150px;
+                    height: 40px;
+                    button-text: "Vocabulary";
+                    primary: current-page == PageType.VocabularyMode;
+                    clicked => {
+                        current-page = PageType.VocabularyMode;
                     }
                 }
             }

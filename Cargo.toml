@@ -1,5 +1,5 @@
 [workspace]
-members = [".", "lib/flashcard", "lib/persistent_data", "lib/exercise_generator", "test/flashcard"]
+members = [".", "lib/flashcard", "lib/persistent_data", "lib/exercise_generator", "lib/vocabulary", "test/flashcard"]
 resolver = "2"
 
 [workspace.dependencies]
@@ -21,6 +21,7 @@ build = "build.rs"
 slint = { workspace = true }
 flashcard = { path = "lib/flashcard" }
 persistent_data = { path = "lib/persistent_data" }
+vocabulary = { path = "lib/vocabulary" }
 
 [build-dependencies]
 slint-build = { workspace = true }

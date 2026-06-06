@@ -1,0 +1,12 @@
+[package]
+name = "vocabulary"
+version = "0.1.0"
+edition = "2021"
+links = "vocabulary"
+
+[dependencies]
+slint = { workspace = true }
+flashcard = { workspace = true }
+
+[build-dependencies]
+slint-build = { workspace = true }
