@@ -132,6 +132,27 @@ fn save_vocabulary(lessons: &[LessonData]) {
 #[cfg(target_arch = "wasm32")]
 fn save_vocabulary(_lessons: &[LessonData]) {}
 
+// ── Default data ──────────────────────────────────────────────────────────────
+
+/// Embed the three default JSON datasets at compile time and write them to
+/// `vocabulary.json`.  Returns the combined lesson list.
+/// Only compiled on non-WASM targets (uses `save_vocabulary` which gates on
+/// the same cfg).
+#[cfg(not(target_arch = "wasm32"))]
+fn load_and_save_defaults() -> Vec<LessonData> {
+    let verbs_json = include_str!("../ui/data/n5_verbs.json");
+    let adjectives_json = include_str!("../ui/data/n5_adjectives.json");
+    let vocabulary_json = include_str!("../ui/data/n5_vocabulary.json");
+
+    let mut combined: Vec<LessonData> = Vec::new();
+    for json in &[verbs_json, adjectives_json, vocabulary_json] {
+        let lessons: Vec<LessonData> = serde_json::from_str(json).unwrap_or_default();
+        combined.extend(lessons);
+    }
+    save_vocabulary(&combined);
+    combined
+}
+
 // ── init ──────────────────────────────────────────────────────────────────────
 
 /// Wire all vocabulary CRUD callbacks.  Call this from every host window,
@@ -144,9 +165,18 @@ where
     let logic = ui.global::<VocabularyAppLogic>();
 
     // Restore persisted lessons on startup (no-op on WASM).
-    let saved = load_vocabulary();
-    if !saved.is_empty() {
-        logic.set_lesson_list(lessons_to_slint(&saved));
+    // On first launch (vocabulary.json absent) embed the bundled N5 defaults.
+    #[cfg(not(target_arch = "wasm32"))]
+    {
+        if !std::path::Path::new(VOCABULARY_FILE).exists() {
+            let defaults = load_and_save_defaults();
+            logic.set_lesson_list(lessons_to_slint(&defaults));
+        } else {
+            let saved = load_vocabulary();
+            if !saved.is_empty() {
+                logic.set_lesson_list(lessons_to_slint(&saved));
+            }
+        }
     }
 
     // ── lesson-create-confirmed ───────────────────────────────────────────────
