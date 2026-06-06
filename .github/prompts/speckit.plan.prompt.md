@@ -125,8 +125,9 @@ See `.claude/rules/architecture.md` for the full libA / libB / libC definitions.
 - `lib/vocabulary` depends on `lib/flashcard` as a workspace Rust dep: the `on_generate_exercises_clicked` handler reads from `VocabularyAppLogic`, calls `ExerciseGeneratorService`, then writes to `FlashcardAppLogic` and calls `flashcard::save_stacks()`. All Slint ↔ Rust type conversions stay in `lib/vocabulary/src/lib.rs`.
 
 **Study Page navigation**:
-- `StudyPage` gains a topic selector. "Vocabulary" is the first topic; selecting it shows the vocabulary lesson list (not the flashcard stack list). The existing flashcard stack view moves under the "Vocabulary" → "Exercises" → "Flashcard" path.
-- Grammar and Reading topics are placeholders at this phase; they become active in Phases 10 and beyond.
+- `StudyPage` has three topic tabs: **Vocabulary** (index 0), **Grammar** (index 1), **Reading** (index 2). The former Flashcard tab is removed; flashcard management is now accessible from inside `VocabularyPage`.
+- `VocabularyPage` hosts an action bar with three tab views (**Lesson** / **Exercise** / **Flashcard**) and one direct action (**Import Lesson**). Full navigation design is in `speckit.specify.prompt.md` § *Urgent requirements change*.
+- Grammar and Reading topics remain placeholders at this phase.
 
 **Vocabulary Review Mode** (Review Page):
 - The Review Page shows the flashcard stack list in read-only mode — no add/delete/edit controls.
