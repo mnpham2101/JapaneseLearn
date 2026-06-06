@@ -27,7 +27,7 @@ export component StudySessionView {
         HorizontalLayout {
             alignment: center;
             session-card := Flashcard {
-                width: 360px;
+                width: min(parent.width - 32px, 480px);
                 data: FlashcardAppLogic.flashcard-list[FlashcardAppLogic.selected-stack-index].flashcards[root.current-card-index];
 
                 // Notify Rust whenever the known status changes so it can persist and update counts.

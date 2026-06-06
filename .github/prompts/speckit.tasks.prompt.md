@@ -196,6 +196,23 @@ agent: speckit.tasks
 - [x] 6.R.6 **[slint-developer]** Redesign `VocabularyPage` with action-bar tabs (Lesson/Exercise/Flashcard) and Import Lesson action. **Depends on 6.R.3, 6.R.4, 6.R.5.** — see [speckit.subtask.6-R-6.prompt.md](.github/prompts/speckit.subtask.6-R-6.prompt.md)
 - [x] 6.R.7 **[slint-developer]** Simplify `StudyPage`: remove Flashcard tab, re-index to Vocabulary=0/Grammar=1/Reading=2, remove flashcard management block and unused imports. **Depends on 6.R.6.**
 
+## Phase 6.S: Style and UX Refinements (pre-Milestone 3)
+**Goal**: Apply the new day-mode color palette, make tab bars visually distinct, add flashcard flip animation, add kanji-card calligraphic rendering, fix layout bugs, and make all views responsive. All tasks target the current branch `feature/vocabulary-page-redesign`.
+
+> 6.S.1 must be completed first. 6.S.2 and 6.S.5 both depend on 6.S.1 and may run in parallel after it. 6.S.3 depends on 6.S.1 and leads into the sequential chain 6.S.3 → 6.S.4.1 → 6.S.4.2.
+
+- [x] 6.S.1 **[slint-developer]** Apply new day-mode color palette (#CCD5AE/#E9EDC9/#FEFAE0/#FAEDCD/#D4A373/#251504) to `tokens.slint`; add `topic-tab-bar-bg`, `action-bar-bg`, and `action-tab-btn-active-bg` tokens; update bar backgrounds in `study_page.slint` and `vocabulary_page.slint`. — see [speckit.subtask.6-S-1.prompt.md](.github/prompts/speckit.subtask.6-S-1.prompt.md)
+
+- [x] 6.S.2 **[slint-developer]** Improve `CommonBtn`: add `checked-bg` in-property (defaulting to `Tokens.nav-background`) for per-instance active color; update background expression to use `btn-pressed-bg` on press; set `visible: enabled` to hide disabled buttons from layout; apply `checked-bg: Tokens.action-tab-btn-active-bg` on the three VocabularyPage action-bar tab buttons. **Depends on 6.S.1.** — see [speckit.subtask.6-S-2.prompt.md](.github/prompts/speckit.subtask.6-S-2.prompt.md)
+
+- [x] 6.S.3 **[slint-developer]** Implement flashcard card-flip animation in `flashcard.slint` using the width-compression trick (front collapses ease-in, back expands ease-out with delay); add `flip-delay` token to `animations.slint`; import `Animations` in `flashcard.slint`. **Depends on 6.S.1.** — see [speckit.subtask.6-S-3.prompt.md](.github/prompts/speckit.subtask.6-S-3.prompt.md)
+
+- [ ] 6.S.4 **[slint-developer + rust-developer]** Kanji flashcard large-font rendering — add `is-kanji` field and calligraphic styling.
+  - [ ] 6.S.4.1 **[slint-developer]** Add `is-kanji: bool` to `FlashcardModel` Slint struct; add `font-size-kanji: 72px` to `tokens.slint`; render front face with extra-large MS Mincho font when `is-kanji` is true. **Depends on 6.S.3.** — see [speckit.subtask.6-S-4-1.prompt.md](.github/prompts/speckit.subtask.6-S-4-1.prompt.md)
+  - [ ] 6.S.4.2 **[rust-developer]** Add `is_kanji: bool` to `FlashcardCardData` in `exercise_generator`; update `FlashcardExerciseTransformer` to set `is_kanji: true` on kanji-front cards; add `is_kanji` (serde default=false) to `CardData` in `flashcard/src/lib.rs` and update conversion functions; update vocabulary `lib.rs` type conversion. **Depends on 6.S.4.1.** — see [speckit.subtask.6-S-4-2.prompt.md](.github/prompts/speckit.subtask.6-S-4-2.prompt.md)
+
+- [ ] 6.S.5 **[slint-developer]** Fix layout bugs and responsiveness: (a) fix Confirm/Cancel overlap by removing intermediate VerticalLayout wrapper in VocabularyPage Lesson view and giving LessonStackList `height: parent.height`; (b) cap "Add Lesson" button to `min(parent.width, 200px)` inside a centering HorizontalLayout; (c) replace fixed 360px Flashcard width in StudySessionView with `min(parent.width - 32px, 480px)`. **Depends on 6.S.1.** — see [speckit.subtask.6-S-5.prompt.md](.github/prompts/speckit.subtask.6-S-5.prompt.md)
+
 ## Phase 7: Future Backlog (Extensible)
 - [ ] 7.1 Add audio playback (Japanese text‑to‑speech integration).
 - [ ] 7.2 Implement spaced repetition algorithms for study scheduling.

@@ -116,13 +116,17 @@ export component LessonStackList inherits VerticalLayout {
     }
 
     // "＋ Add Lesson" button — hidden while the form is open.
-    if !root.show-create-form: CommonBtn {
-        height: 36px;
-        text: "＋ Add Lesson";
-        primary: true;
-        accessibilityLabel: "Open add lesson form";
-        clicked => {
-            root.show-create-form = true;
+    if !root.show-create-form: HorizontalLayout {
+        alignment: center;
+        CommonBtn {
+            width: min(parent.width, 200px);
+            height: 36px;
+            text: "＋ Add Lesson";
+            primary: true;
+            accessibilityLabel: "Open add lesson form";
+            clicked => {
+                root.show-create-form = true;
+            }
         }
     }
 }

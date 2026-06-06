@@ -71,22 +71,21 @@ export component VocabularyPage inherits Rectangle {
             vertical-stretch: 1;
             background: Tokens.page-background;
 
-            // Vertically stacked pattern: LessonDetailView slides up when a lesson is selected.
-            VerticalLayout {
-                alignment: LayoutAlignment.end;
-
-                if VocabularyAppLogic.selected-lesson-index >= 0: LessonDetailView {
-                    close-clicked => {
-                        VocabularyAppLogic.selected-lesson-index = -1;
-                    }
+            if VocabularyAppLogic.selected-lesson-index >= 0: LessonDetailView {
+                width: 100%;
+                height: 100%;
+                close-clicked => {
+                    VocabularyAppLogic.selected-lesson-index = -1;
                 }
+            }
 
-                if VocabularyAppLogic.selected-lesson-index < 0: HorizontalLayout {
-                    alignment: center;
+            if VocabularyAppLogic.selected-lesson-index < 0: HorizontalLayout {
+                alignment: center;
+                height: 100%;
 
-                    LessonStackList {
-                        width: 400px;
-                    }
+                LessonStackList {
+                    width: min(parent.width, 480px);
+                    height: parent.height;
                 }
             }
         }
