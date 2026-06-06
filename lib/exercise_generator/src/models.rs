@@ -34,15 +34,17 @@ pub struct FlashcardStackData {
     pub cards: Vec<FlashcardCardData>,
 }
 
-/// A single flashcard with a front, a back, and a known flag.
+/// A single flashcard with a front, a back, a known flag, and a kanji indicator.
 ///
 /// `known` is always `false` on generation.
 /// `front` is either the spelling or the kanji form — one card per form.
+/// `is_kanji` is `true` when the front face uses the kanji form (triggers large calligraphic font).
 #[derive(Debug, Clone)]
 pub struct FlashcardCardData {
-    pub front: String, // kanji OR spelling — one card per form
-    pub back: String,  // formatted explanation
-    pub known: bool,   // always false on generation
+    pub front: String,  // kanji OR spelling — one card per form
+    pub back: String,   // formatted explanation
+    pub known: bool,    // always false on generation
+    pub is_kanji: bool, // true when front is kanji form — triggers calligraphic rendering
 }
 
 // future target type (not yet implemented):

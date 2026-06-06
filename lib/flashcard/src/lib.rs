@@ -15,6 +15,8 @@ struct CardData {
     jap_obj: String,
     explanation: String,
     known: bool,
+    #[serde(default)]
+    is_kanji: bool, // default=false for backwards compat with existing stacks.json
 }
 
 #[derive(serde::Serialize, serde::Deserialize)]
@@ -35,6 +37,7 @@ fn to_stack_data(stacks: &[flashcard::FlashcardStackModel]) -> Vec<StackData> {
                     jap_obj: c.jap_obj.to_string(),
                     explanation: c.explanation.to_string(),
                     known: c.known,
+                    is_kanji: c.is_kanji,
                 })
                 .collect(),
         })
@@ -52,7 +55,7 @@ fn from_stack_data(data: Vec<StackData>) -> Vec<flashcard::FlashcardStackModel> 
                         jap_obj: c.jap_obj.into(),
                         explanation: c.explanation.into(),
                         known: c.known,
-                        is_kanji: false,
+                        is_kanji: c.is_kanji,
                     })
                     .collect::<Vec<_>>(),
             )),

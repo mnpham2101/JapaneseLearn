@@ -26,12 +26,14 @@ fn make_cards(word: &VocabularyWord) -> Vec<FlashcardCardData> {
         front: word.spelling.clone(),
         back: back.clone(),
         known: false,
+        is_kanji: false, // spelling front — not kanji
     }];
     if let Some(kanji) = &word.kanji {
         cards.push(FlashcardCardData {
             front: kanji.clone(),
             back,
             known: false,
+            is_kanji: true, // kanji front — large brush font
         });
     }
     cards
@@ -76,6 +78,7 @@ mod tests {
         let stacks = FlashcardExerciseTransformer.transform(&lessons);
         assert_eq!(stacks[0].cards.len(), 1);
         assert_eq!(stacks[0].cards[0].front, "inu");
+        assert!(!stacks[0].cards[0].is_kanji);
     }
 
     #[test]
@@ -89,6 +92,8 @@ mod tests {
         assert_eq!(stacks[0].cards[0].front, "いぬ");
         assert_eq!(stacks[0].cards[1].front, "犬");
         assert_eq!(stacks[0].cards[0].back, stacks[0].cards[1].back);
+        assert!(!stacks[0].cards[0].is_kanji); // spelling card
+        assert!(stacks[0].cards[1].is_kanji); // kanji card
     }
 
     #[test]
