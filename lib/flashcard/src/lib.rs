@@ -69,6 +69,20 @@ fn save_stacks(stacks: &[flashcard::FlashcardStackModel]) {
 #[cfg(target_arch = "wasm32")]
 fn save_stacks(_stacks: &[flashcard::FlashcardStackModel]) {}
 
+/// Save the current flashcard list held by the global to disk.
+///
+/// Called from other libraries (e.g. `vocabulary`) after they update
+/// the flashcard list via `FlashcardAppLogic`.
+pub fn save_current_list<T>(ui: &T)
+where
+    T: slint::ComponentHandle + 'static,
+    for<'a> FlashcardAppLogic<'a>: slint::Global<'a, T>,
+{
+    let logic = ui.global::<FlashcardAppLogic>();
+    let stacks: Vec<flashcard::FlashcardStackModel> = logic.get_flashcard_list().iter().collect();
+    save_stacks(&stacks);
+}
+
 #[cfg(not(target_arch = "wasm32"))]
 fn load_stacks() -> Option<Vec<flashcard::FlashcardStackModel>> {
     let json = std::fs::read_to_string(STACKS_FILE).ok()?;

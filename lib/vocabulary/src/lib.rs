@@ -6,6 +6,11 @@ pub mod vocabulary {
 
 pub mod vocabulary_markdown_io;
 
+use exercise_generator::{
+    ExerciseGeneratorFor, ExerciseGeneratorService, ExerciseOutput, ExerciseRequest, TenseEntry,
+    VocabularyLesson, VocabularyWord,
+};
+use flashcard::flashcard::FlashcardAppLogic;
 use vocabulary::VocabularyAppLogic;
 
 // ── Shadow structs (serde-serialisable mirror of the Slint model) ─────────────
@@ -133,6 +138,7 @@ pub fn init<T>(ui: &T)
 where
     T: slint::ComponentHandle + 'static,
     for<'a> VocabularyAppLogic<'a>: slint::Global<'a, T>,
+    for<'a> FlashcardAppLogic<'a>: slint::Global<'a, T>,
 {
     let logic = ui.global::<VocabularyAppLogic>();
 
@@ -406,6 +412,84 @@ where
                 {
                     let _ = std::fs::write(path, content);
                 }
+            }
+        });
+    }
+
+    // ── generate-exercises-clicked ────────────────────────────────────────────
+    {
+        let ui_weak = ui.as_weak();
+        logic.on_generate_exercises_clicked(move || {
+            let ui = ui_weak.unwrap();
+            let vocab_logic = ui.global::<VocabularyAppLogic>();
+            let flashcard_logic = ui.global::<FlashcardAppLogic>();
+
+            // Convert Slint vocabulary models to libD input types.
+            let lessons: Vec<VocabularyLesson> = vocab_logic
+                .get_lesson_list()
+                .iter()
+                .map(|lesson| VocabularyLesson {
+                    name: lesson.name.to_string(),
+                    words: lesson
+                        .words
+                        .iter()
+                        .map(|word| VocabularyWord {
+                            spelling: word.spelling.to_string(),
+                            kanji: if word.kanji.is_empty() {
+                                None
+                            } else {
+                                Some(word.kanji.to_string())
+                            },
+                            meaning: word.meaning.to_string(),
+                            word_type: if word.word_type.is_empty() {
+                                None
+                            } else {
+                                Some(word.word_type.to_string())
+                            },
+                            tenses: word
+                                .tenses
+                                .iter()
+                                .map(|t| TenseEntry {
+                                    name: t.tense_name.to_string(),
+                                    conjugation: t.conjugation.to_string(),
+                                })
+                                .collect(),
+                            examples: word.examples.iter().map(|e| e.to_string()).collect(),
+                        })
+                        .collect(),
+                })
+                .collect();
+
+            // Dispatch through the libD service — pure computation.
+            let service = ExerciseGeneratorService;
+            let output = ExerciseGeneratorFor::<VocabularyLesson>::generate(
+                &service,
+                ExerciseRequest::Flashcard,
+                &lessons,
+            );
+
+            // Convert output to Slint types and update the flashcard global.
+            if let Some(ExerciseOutput::Flashcard(stacks)) = output {
+                let slint_stacks: Vec<flashcard::flashcard::FlashcardStackModel> = stacks
+                    .iter()
+                    .map(|stack| flashcard::flashcard::FlashcardStackModel {
+                        stackname: stack.name.clone().into(),
+                        flashcards: slint::ModelRc::new(slint::VecModel::from(
+                            stack
+                                .cards
+                                .iter()
+                                .map(|card| flashcard::flashcard::FlashcardModel {
+                                    jap_obj: card.front.clone().into(),
+                                    explanation: card.back.clone().into(),
+                                    known: card.known,
+                                })
+                                .collect::<Vec<_>>(),
+                        )),
+                    })
+                    .collect();
+                flashcard_logic
+                    .set_flashcard_list(slint::ModelRc::new(slint::VecModel::from(slint_stacks)));
+                ::flashcard::save_current_list(&ui);
             }
         });
     }

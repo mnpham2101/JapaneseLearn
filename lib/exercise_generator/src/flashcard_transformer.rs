@@ -17,7 +17,7 @@ impl Transformer<VocabularyLesson, FlashcardStackData> for FlashcardExerciseTran
                 cards: lesson
                     .words
                     .iter()
-                    .flat_map(|word| make_cards(word))
+                    .flat_map(make_cards)
                     .collect(),
             })
             .collect()

@@ -6,6 +6,7 @@ resolver = "2"
 slint = { version = "1.16.1", features = ["compat-1-0"] }
 slint-build = { version = "1.16.1", features = ["experimental-module-builds"] }
 flashcard = { path = "lib/flashcard" }
+exercise_generator = { path = "lib/exercise_generator" }
 
 [package]
 name = "japanese_learn"

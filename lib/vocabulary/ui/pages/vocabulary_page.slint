@@ -41,6 +41,16 @@ export component VocabularyPage {
                         VocabularyAppLogic.export-vocabulary-clicked();
                     }
                 }
+
+                CommonBtn {
+                    width: 160px;
+                    height: 36px;
+                    text: "Generate Flashcards";
+                    accessibilityLabel: "Generate flashcard stacks from vocabulary lessons";
+                    clicked => {
+                        VocabularyAppLogic.generate-exercises-clicked();
+                    }
+                }
             }
 
             // Main content row: lesson list and detail pane.
