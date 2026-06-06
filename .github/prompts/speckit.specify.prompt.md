@@ -49,6 +49,57 @@ The goal is to make learning efficient, engaging, and trackable across desktop a
 - The library **must** export: color palette, typography scale, spacing constants, border tokens, and animation-curve constants.
 - All other libraries and pages **must** import tokens from `@styles`; hardcoded colors, sizes, or durations **must not** appear in component files.
 
+**Urgent requirements change — UI redesign (post Phase 6)**
+
+### StudyPage tab restructure
+Remove the "Flashcard" tab from `StudyPage`'s topic tab row. The row must contain exactly
+three tabs: **Vocabulary** (index 0), **Grammar** (index 1), **Reading** (index 2).
+
+### VocabularyPage redesign
+`VocabularyPage` gains an action bar with four controls: three tab-style `CommonBtn`s
+(**Lesson**, **Exercise**, **Flashcard**) that switch the visible view, and one direct-action
+`CommonBtn` (**Import Lesson**) that fires `VocabularyAppLogic.import-vocabulary-clicked()`
+without changing the active view.
+
+#### Lesson view (default, active-view = 0)
+- Render a scrollable list of lessons as `LessonStackLabel` items inside `LessonStackList`,
+  following the same layout and interaction pattern as `FlashcardLabel` + `FlashcardList`.
+- `LessonStackLabel` inherits `CommonBtn`; its text is the lesson name.
+- `LessonStackList` follows the **Vertically stacked pattern**: lesson labels in a `Flickable`,
+  an inline create-lesson form that slides up, and an "＋ Add Lesson" button.
+- Clicking a `LessonStackLabel` sets `VocabularyAppLogic.selected-lesson-index` and reveals
+  `LessonDetailView` (full lesson content + word list via existing `LessonDetailPane`, plus a
+  close `CommonBtn` that resets the index to -1). Uses the Vertically stacked pattern.
+- The existing `LessonList` component is superseded by `LessonStackList` in this view.
+
+#### Exercise view (active-view = 1)
+- Shows **Generate Flashcards** and **Export Vocabulary** action buttons.
+- No structural change to existing exercise generation logic.
+
+#### Flashcard view (active-view = 2)
+- Shows `FlashcardManagerView`: a new component that encapsulates the full flashcard
+  management UI previously under `StudyPage`'s Flashcard tab (background dismiss `TouchArea`,
+  Import/Export header, create-stack inline form, `FlashcardStack` detail pane,
+  `CommonList` + `FlashcardList`).
+- `StudySessionView` must first be moved to `lib/flashcard/ui/components/` and exported via
+  `flashcard_lib.slint` so that `FlashcardManagerView` (which lives in `lib/vocabulary`) can
+  import it from `@flashcard` without creating a circular dependency.
+
+#### New components
+| Component | File | Library |
+|---|---|---|
+| `StudySessionView` (moved) | `lib/flashcard/ui/components/study_session_view.slint` | flashcard |
+| `LessonStackLabel` | `lib/vocabulary/ui/components/lesson_stack_label.slint` | vocabulary |
+| `LessonStackList` | `lib/vocabulary/ui/components/lesson_stack_list.slint` | vocabulary |
+| `LessonDetailView` | `lib/vocabulary/ui/components/lesson_detail_view.slint` | vocabulary |
+| `FlashcardManagerView` | `lib/vocabulary/ui/components/flashcard_manager_view.slint` | vocabulary |
+
+**User flow**: StudyPage → Vocabulary tab → Import Lesson (action) → imports markdown →
+Lesson tab → view/add/delete lessons via `LessonStackList` → click lesson label →
+`LessonDetailView` (view/add/delete words) → Close. Or: Flashcard tab →
+`FlashcardManagerView` → add/delete/edit stacks → click stack label → `FlashcardStack`
+detail → view/add/delete/edit flashcards.
+
 **Milestone 2 should include the following features**
 
 ## Vocabulary Study Mode and Flashcard Exercise Generation
