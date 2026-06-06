@@ -29,7 +29,6 @@ export component StudyPage {
                     CommonBtn {
                         width: 110px;
                         text: "Vocabulary";
-                        checkable: true;
                         checked: root.active-topic == 0;
                         clicked => { root.active-topic = 0; }
                     }
@@ -37,7 +36,6 @@ export component StudyPage {
                     CommonBtn {
                         width: 110px;
                         text: "Grammar";
-                        checkable: true;
                         checked: root.active-topic == 1;
                         clicked => { root.active-topic = 1; }
                     }
@@ -45,7 +43,6 @@ export component StudyPage {
                     CommonBtn {
                         width: 110px;
                         text: "Reading";
-                        checkable: true;
                         checked: root.active-topic == 2;
                         clicked => { root.active-topic = 2; }
                     }
