@@ -20,4 +20,7 @@ export struct VocabularyLessonModel {
 export global VocabularyAppLogic {
     in-out property <[VocabularyLessonModel]> lesson-list;
     in-out property <int> selected-lesson-index: -1;
+
+    callback lesson-create-confirmed(name: string);
+    callback lesson-delete-confirmed();
 }
