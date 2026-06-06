@@ -12,12 +12,18 @@ export component CommonBtn inherits Rectangle {
     in property<bool> checkable: false;
     // if the button is pressed, it is being clicked. Useful for visual feedback when user clicks and holds the button.
     out property<bool> pressed <=> ta.pressed;
+    // Color used for the button background when checked == true.
+    // Override at usage site for action-bar tabs (distinct from topic tabs).
+    in property<color> checked-bg: Tokens.nav-background;
 
     in property<string> accessibilityLabel: "";
     in property<string> accessibilityDescription: "";
     in property<string> accessibilityId: "";
 
     callback clicked;
+
+    // Hide disabled buttons from layout flow entirely.
+    visible: enabled;
 
     width: 100%;
     height: 40px;
@@ -30,10 +36,11 @@ export component CommonBtn inherits Rectangle {
     accessible-checkable: checkable;
     accessible-checked: checked;
     background: !enabled ? Tokens.btn-disabled-bg
-        : (checked ? Tokens.nav-background
+        : (ta.pressed ? Tokens.btn-pressed-bg
+        : (checked ? checked-bg
         : (primary ? Tokens.btn-primary-bg
-        : Tokens.btn-default-bg));
-    opacity: pressed ? 0.9 : (enabled ? 1.0 : 0.85);
+        : Tokens.btn-default-bg)));
+    opacity: 1.0;
 
     HorizontalLayout {
         padding: 10px;

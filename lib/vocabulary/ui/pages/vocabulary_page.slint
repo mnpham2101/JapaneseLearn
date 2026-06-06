@@ -35,6 +35,7 @@ export component VocabularyPage inherits Rectangle {
                     text: "Lesson";
                     checkable: true;
                     checked: root.active-view == 0;
+                    checked-bg: Tokens.action-tab-btn-active-bg;
                     clicked => { root.active-view = 0; }
                 }
 
@@ -43,6 +44,7 @@ export component VocabularyPage inherits Rectangle {
                     text: "Exercise";
                     checkable: true;
                     checked: root.active-view == 1;
+                    checked-bg: Tokens.action-tab-btn-active-bg;
                     clicked => { root.active-view = 1; }
                 }
 
@@ -51,6 +53,7 @@ export component VocabularyPage inherits Rectangle {
                     text: "Flashcard";
                     checkable: true;
                     checked: root.active-view == 2;
+                    checked-bg: Tokens.action-tab-btn-active-bg;
                     clicked => { root.active-view = 2; }
                 }
 
