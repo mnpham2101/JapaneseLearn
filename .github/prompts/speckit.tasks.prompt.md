@@ -188,13 +188,13 @@ agent: speckit.tasks
 
 > Tasks 6.R.1, 6.R.2, and 6.R.3 are independent — implement sequentially for safety (single agent, no file conflicts).
 
-- [ ] 6.R.1 **[slint-developer]** Move `StudySessionView` to `lib/flashcard/ui/components/`, export from `flashcard_lib.slint`, update `study_page.slint` import. — see [speckit.subtask.6-R-1.prompt.md](.github/prompts/speckit.subtask.6-R-1.prompt.md)
-- [ ] 6.R.2 **[slint-developer]** Create `LessonStackLabel` in `lib/vocabulary/ui/components/lesson_stack_label.slint`; export from `vocabulary_lib.slint`. — see [speckit.subtask.6-R-2.prompt.md](.github/prompts/speckit.subtask.6-R-2.prompt.md)
-- [ ] 6.R.3 **[slint-developer]** Create `LessonDetailView` in `lib/vocabulary/ui/components/lesson_detail_view.slint`; export from `vocabulary_lib.slint`. — see [speckit.subtask.6-R-3.prompt.md](.github/prompts/speckit.subtask.6-R-3.prompt.md)
-- [ ] 6.R.4 **[slint-developer]** Create `LessonStackList` in `lib/vocabulary/ui/components/lesson_stack_list.slint`; export from `vocabulary_lib.slint`. **Depends on 6.R.2.** — see [speckit.subtask.6-R-4.prompt.md](.github/prompts/speckit.subtask.6-R-4.prompt.md)
-- [ ] 6.R.5 **[slint-developer]** Create `FlashcardManagerView` in `lib/vocabulary/ui/components/flashcard_manager_view.slint`; export from `vocabulary_lib.slint`. **Depends on 6.R.1.** — see [speckit.subtask.6-R-5.prompt.md](.github/prompts/speckit.subtask.6-R-5.prompt.md)
-- [ ] 6.R.6 **[slint-developer]** Redesign `VocabularyPage` with action-bar tabs (Lesson/Exercise/Flashcard) and Import Lesson action. **Depends on 6.R.3, 6.R.4, 6.R.5.** — see [speckit.subtask.6-R-6.prompt.md](.github/prompts/speckit.subtask.6-R-6.prompt.md)
-- [ ] 6.R.7 **[slint-developer]** Simplify `StudyPage`: remove Flashcard tab, re-index to Vocabulary=0/Grammar=1/Reading=2, remove flashcard management block and unused imports. **Depends on 6.R.6.**
+- [x] 6.R.1 **[slint-developer]** Move `StudySessionView` to `lib/flashcard/ui/components/`, export from `flashcard_lib.slint`, update `study_page.slint` import. — see [speckit.subtask.6-R-1.prompt.md](.github/prompts/speckit.subtask.6-R-1.prompt.md)
+- [x] 6.R.2 **[slint-developer]** Create `LessonStackLabel` in `lib/vocabulary/ui/components/lesson_stack_label.slint`; export from `vocabulary_lib.slint`. — see [speckit.subtask.6-R-2.prompt.md](.github/prompts/speckit.subtask.6-R-2.prompt.md)
+- [x] 6.R.3 **[slint-developer]** Create `LessonDetailView` in `lib/vocabulary/ui/components/lesson_detail_view.slint`; export from `vocabulary_lib.slint`. — see [speckit.subtask.6-R-3.prompt.md](.github/prompts/speckit.subtask.6-R-3.prompt.md)
+- [x] 6.R.4 **[slint-developer]** Create `LessonStackList` in `lib/vocabulary/ui/components/lesson_stack_list.slint`; export from `vocabulary_lib.slint`. **Depends on 6.R.2.** — see [speckit.subtask.6-R-4.prompt.md](.github/prompts/speckit.subtask.6-R-4.prompt.md)
+- [x] 6.R.5 **[slint-developer]** Create `FlashcardManagerView` in `lib/vocabulary/ui/components/flashcard_manager_view.slint`; export from `vocabulary_lib.slint`. **Depends on 6.R.1.** — see [speckit.subtask.6-R-5.prompt.md](.github/prompts/speckit.subtask.6-R-5.prompt.md)
+- [x] 6.R.6 **[slint-developer]** Redesign `VocabularyPage` with action-bar tabs (Lesson/Exercise/Flashcard) and Import Lesson action. **Depends on 6.R.3, 6.R.4, 6.R.5.** — see [speckit.subtask.6-R-6.prompt.md](.github/prompts/speckit.subtask.6-R-6.prompt.md)
+- [x] 6.R.7 **[slint-developer]** Simplify `StudyPage`: remove Flashcard tab, re-index to Vocabulary=0/Grammar=1/Reading=2, remove flashcard management block and unused imports. **Depends on 6.R.6.**
 
 ## Phase 7: Future Backlog (Extensible)
 - [ ] 7.1 Add audio playback (Japanese text‑to‑speech integration).
