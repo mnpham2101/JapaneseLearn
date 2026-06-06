@@ -1,9 +1,15 @@
 import { Tokens } from "@styles";
-import { CommonList, CommonBtn, Flashcard, FlashcardModel } from "@flashcard";
+import { CommonBtn, FlashcardAppLogic } from "@flashcard";
+import { MatchingExerciseView } from "@vocabulary";
 
 export component ReviewPage {
     width: 100%;
     height: 100%;
+
+    // Local state — which stack is selected for review (-1 = none).
+    property <int> selected-review-index: -1;
+    // Whether the matching exercise is currently visible.
+    property <bool> show-exercise: false;
 
     Rectangle {
         width: 100%;
@@ -11,35 +17,60 @@ export component ReviewPage {
         background: Tokens.page-background;
 
         VerticalLayout {
-            padding: 20px;
-            spacing: 20px;
+            padding: Tokens.padding-lg;
+            spacing: Tokens.spacing-md;
 
-            HorizontalLayout {
-                spacing: 10px;
-                alignment: center;
+            // Page heading
+            Text {
+                text: show-exercise
+                    ? FlashcardAppLogic.flashcard-list[selected-review-index].stackname
+                    : "Review Mode";
+                font-size: Tokens.font-size-heading;
+                color: Tokens.text-primary;
+                horizontal-alignment: center;
+            }
+
+            // Stack selection list — shown when no exercise is active
+            if !show-exercise: VerticalLayout {
+                spacing: Tokens.spacing-sm;
 
                 Text {
-                    text: "Review Mode";
-                    font-size: Tokens.font-size-heading;
-                    color: Tokens.text-primary;
+                    text: "Select a stack to practice:";
+                    font-size: Tokens.font-size-caption;
+                    color: Tokens.text-secondary;
+                    horizontal-alignment: center;
                 }
 
-                CommonBtn {
-                    width: 140px;
-                    text: "Review All";
-                    primary: true;
+                for stack[i] in FlashcardAppLogic.flashcard-list: CommonBtn {
+                    text: stack.stackname;
+                    checkable: false;
                     clicked => {
-                        // Placeholder action for review all
+                        selected-review-index = i;
+                        show-exercise = true;
                     }
                 }
             }
 
-            Flashcard {
-                width: 360px;
-                data: {
-                    jap-obj: "こんにちは",
-                    explanation: "Hello / Good afternoon",
-                };
+            // Matching exercise — shown when a stack is selected
+            if show-exercise: VerticalLayout {
+                spacing: Tokens.spacing-sm;
+
+                CommonBtn {
+                    width: 120px;
+                    text: "Back";
+                    clicked => {
+                        show-exercise = false;
+                        selected-review-index = -1;
+                    }
+                }
+
+                MatchingExerciseView {
+                    cards: FlashcardAppLogic.flashcard-list[selected-review-index].flashcards;
+                    exercise-completed => {
+                        show-exercise = false;
+                        selected-review-index = -1;
+                    }
+                }
             }
         }
     }
