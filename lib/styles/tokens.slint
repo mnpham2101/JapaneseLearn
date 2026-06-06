@@ -2,23 +2,23 @@
 // Import this file (via @styles) wherever hardcoded colors, sizes, or radii would otherwise appear.
 export global Tokens {
     // ── Border ───────────────────────────────────────────────────────────────
-    out property <color> border-color: #b0c4de;
+    out property <color> border-color: #D4A373;
     out property <length> border-width: 1px;
     out property <length> border-radius: 6px;
 
     // ── Card field background ─────────────────────────────────────────────────
-    out property <color> card-field-background: #ffffff;
+    out property <color> card-field-background: #FEFAE0;
 
     // ── Card container ────────────────────────────────────────────────────────
-    out property <color> card-container-background: #f0f4f8;
+    out property <color> card-container-background: #FAEDCD;
     out property <length> card-container-border-radius: 12px;
-    out property <color> card-container-border-color: #c8d6e5;
+    out property <color> card-container-border-color: #D4A373;
 
     // ── Text colors ───────────────────────────────────────────────────────────
-    out property <color> text-primary: #16283a;
-    out property <color> text-secondary: #7f8c8d;
+    out property <color> text-primary: #251504;
+    out property <color> text-secondary: #D4A373;
     out property <color> text-placeholder: #160303;
-    out property <color> text-on-dark: #020410;
+    out property <color> text-on-dark: #FEFAE0;
 
     // ── Spacing ───────────────────────────────────────────────────────────────
     out property <length> padding-lg: 16px;
@@ -40,55 +40,65 @@ export global Tokens {
     out property <length> font-size-nav-title: 24px;
     // Explanation text on card back
     out property <length> font-size-explanation: 26px;
+    // Extra-large font for kanji front face — brush-stroke calligraphic rendering.
+    out property <length> font-size-kanji: 72px;
 
     // ── Button state colors ───────────────────────────────────────────────────
     // Default (normal) state
-    out property <color> btn-default-bg: #ecf0f1;
-    out property <color> btn-default-text: #2c3e50;
-    out property <color> btn-default-border: #bdc3c7;
+    out property <color> btn-default-bg: #E9EDC9;
+    out property <color> btn-default-text: #251504;
+    out property <color> btn-default-border: #CCD5AE;
 
     // Hover state
-    out property <color> btn-hover-bg: #d5dbdb;
-    out property <color> btn-hover-text: #2c3e50;
+    out property <color> btn-hover-bg: #CCD5AE;
+    out property <color> btn-hover-text: #251504;
 
     // Pressed state
-    out property <color> btn-pressed-bg: #b2babb;
-    out property <color> btn-pressed-text: #2c3e50;
+    out property <color> btn-pressed-bg: #D4A373;
+    out property <color> btn-pressed-text: #251504;
 
     // Disabled state
     out property <color> btn-disabled-bg: #f2f3f4;
     out property <color> btn-disabled-text: #b2babb;
 
     // Primary button (filled)
-    out property <color> btn-primary-bg: #2980b9;
-    out property <color> btn-primary-text: #ffffff;
-    out property <color> btn-primary-hover-bg: #2471a3;
-    out property <color> btn-primary-pressed-bg: #1f618d;
+    out property <color> btn-primary-bg: #D4A373;
+    out property <color> btn-primary-text: #FEFAE0;
+    out property <color> btn-primary-hover-bg: #C08040;
+    out property <color> btn-primary-pressed-bg: #A06820;
 
     // ── Known / unknown indicator colors ──────────────────────────────────────
-    out property <color> known-bg: #eafaf1;
-    out property <color> known-border: #27ae60;
-    out property <color> known-icon-color: #27ae60;
-    out property <color> unknown-bg: #f7f9fb;
-    out property <color> unknown-border: #d0d8e6;
+    out property <color> known-bg: #E9EDC9;
+    out property <color> known-border: #CCD5AE;
+    out property <color> known-icon-color: #251504;
+    out property <color> unknown-bg: #FAEDCD;
+    out property <color> unknown-border: #D4A373;
     out property <color> unknown-icon-color: #95a5a6;
 
     // ── Page / nav backgrounds ────────────────────────────────────────────────
-    out property <color> page-background: #ffffff;
-    out property <color> nav-background: #2c3e50;
-    out property <color> nav-bar-background: #ecf0f1;
+    out property <color> page-background: #FEFAE0;
+    out property <color> nav-background: #251504;
+    out property <color> nav-bar-background: #D4A373;
 
     // ── Input field colors ────────────────────────────────────────────────────
-    out property <color> input-background: #ffffff;
-    out property <color> input-border: #b0c4de;
-    out property <color> input-text: #2c3e50;
-    out property <color> input-form-background: #f5f5f5;
+    out property <color> input-background: #FEFAE0;
+    out property <color> input-border: #D4A373;
+    out property <color> input-text: #251504;
+    out property <color> input-form-background: #FAEDCD;
 
     // ── Stack label colors ────────────────────────────────────────────────────
-    out property <color> stack-label-bg: #eaf2fb;
-    out property <color> stack-label-border: #aed6f1;
-    out property <color> stack-label-text: #1a5276;
+    out property <color> stack-label-bg: #FAEDCD;
+    out property <color> stack-label-border: #D4A373;
+    out property <color> stack-label-text: #251504;
 
     // ── Drop-target highlight ─────────────────────────────────────────────────
-    out property <color> drag-target-highlight: #dce8f5;
+    out property <color> drag-target-highlight: #CCD5AE;
+
+    // ── Bar-level distinction ─────────────────────────────────────────────────
+    // StudyPage topic tab row (top-level navigation: Vocabulary / Grammar / Reading)
+    out property <color> topic-tab-bar-bg: #D4A373;
+    // VocabularyPage action bar (secondary navigation: Lesson / Exercise / Flashcard)
+    out property <color> action-bar-bg: #CCD5AE;
+    // Active button color for VocabularyPage action bar tabs (distinct from topic-tab active = nav-background)
+    out property <color> action-tab-btn-active-bg: #D4A373;
 }
