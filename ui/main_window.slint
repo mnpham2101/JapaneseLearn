@@ -10,13 +10,14 @@ enum PageType {
 }
 
 import { FlashcardAppLogic } from "@flashcard";
+import { VocabularyAppLogic } from "@vocabulary";
 
 export component MainWindow inherits Window {
     width: 800px;
     height: 600px;
     title: "Japanese Learn";
 
-    property<PageType> current-page: PageType.StudyMode;
+    property <PageType> current-page: PageType.StudyMode;
 
     VerticalLayout {
         spacing: 0;
@@ -43,11 +44,9 @@ export component MainWindow inherits Window {
             background: Tokens.page-background;
             height: 480px;
 
-            if current-page == PageType.StudyMode: StudyPage {
-            }
+            if current-page == PageType.StudyMode: StudyPage { }
 
-            if current-page == PageType.ReviewMode: ReviewPage {
-            }
+            if current-page == PageType.ReviewMode: ReviewPage { }
         }
 
         Rectangle {
