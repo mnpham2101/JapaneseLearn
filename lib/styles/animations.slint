@@ -4,6 +4,8 @@ export global Animations {
     // ── Durations ─────────────────────────────────────────────────────────────
     // Card-flip animation: first half collapses, second half expands.
     out property <duration> flip-duration: 150ms;
+    // Delay for back-face expand — equals flip-duration so total flip = 2 × flip-duration.
+    out property <duration> flip-delay: 150ms;
     // General UI transition (show/hide panels, hover feedback).
     out property <duration> transition-duration: 200ms;
 
