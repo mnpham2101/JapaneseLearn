@@ -140,5 +140,229 @@ where
         logic.set_lesson_list(lessons_to_slint(&saved));
     }
 
-    // CRUD handlers will be wired in tasks 6.9.2–6.9.3
+    // ── lesson-create-confirmed ───────────────────────────────────────────────
+    {
+        let ui_weak = ui.as_weak();
+        logic.on_lesson_create_confirmed(move |name| {
+            let ui = ui_weak.unwrap();
+            let logic = ui.global::<VocabularyAppLogic>();
+            let mut lessons: Vec<vocabulary::VocabularyLessonModel> =
+                logic.get_lesson_list().iter().collect();
+            lessons.push(vocabulary::VocabularyLessonModel {
+                name,
+                words: slint::ModelRc::new(slint::VecModel::from(vec![])),
+            });
+            logic.set_lesson_list(slint::ModelRc::new(slint::VecModel::from(lessons.clone())));
+            save_vocabulary(&slint_to_lessons(&logic));
+        });
+    }
+
+    // ── lesson-delete-confirmed ───────────────────────────────────────────────
+    {
+        let ui_weak = ui.as_weak();
+        logic.on_lesson_delete_confirmed(move || {
+            let ui = ui_weak.unwrap();
+            let logic = ui.global::<VocabularyAppLogic>();
+            let idx = logic.get_selected_lesson_index();
+            if idx < 0 {
+                return;
+            }
+            let idx = idx as usize;
+            let mut lessons: Vec<vocabulary::VocabularyLessonModel> =
+                logic.get_lesson_list().iter().collect();
+            if idx < lessons.len() {
+                lessons.remove(idx);
+            }
+            logic.set_selected_lesson_index(-1);
+            logic.set_lesson_list(slint::ModelRc::new(slint::VecModel::from(lessons.clone())));
+            save_vocabulary(&slint_to_lessons(&logic));
+        });
+    }
+
+    // ── word-add-confirmed ────────────────────────────────────────────────────
+    {
+        let ui_weak = ui.as_weak();
+        logic.on_word_add_confirmed(move |lesson_idx, spelling, kanji, meaning, word_type| {
+            let ui = ui_weak.unwrap();
+            let logic = ui.global::<VocabularyAppLogic>();
+            if lesson_idx < 0 {
+                return;
+            }
+            let mut lessons: Vec<vocabulary::VocabularyLessonModel> =
+                logic.get_lesson_list().iter().collect();
+            if let Some(lesson) = lessons.get_mut(lesson_idx as usize) {
+                let mut words: Vec<vocabulary::VocabularyWordModel> = lesson.words.iter().collect();
+                words.push(vocabulary::VocabularyWordModel {
+                    spelling,
+                    kanji,
+                    meaning,
+                    word_type,
+                    tenses: slint::ModelRc::new(slint::VecModel::from(vec![])),
+                    examples: slint::ModelRc::new(slint::VecModel::from(vec![])),
+                });
+                lesson.words = slint::ModelRc::new(slint::VecModel::from(words));
+            }
+            logic.set_lesson_list(slint::ModelRc::new(slint::VecModel::from(lessons.clone())));
+            save_vocabulary(&slint_to_lessons(&logic));
+        });
+    }
+
+    // ── word-delete-confirmed ─────────────────────────────────────────────────
+    {
+        let ui_weak = ui.as_weak();
+        logic.on_word_delete_confirmed(move |lesson_idx, word_idx| {
+            let ui = ui_weak.unwrap();
+            let logic = ui.global::<VocabularyAppLogic>();
+            if lesson_idx < 0 || word_idx < 0 {
+                return;
+            }
+            let mut lessons: Vec<vocabulary::VocabularyLessonModel> =
+                logic.get_lesson_list().iter().collect();
+            if let Some(lesson) = lessons.get_mut(lesson_idx as usize) {
+                let mut words: Vec<vocabulary::VocabularyWordModel> = lesson.words.iter().collect();
+                if (word_idx as usize) < words.len() {
+                    words.remove(word_idx as usize);
+                }
+                lesson.words = slint::ModelRc::new(slint::VecModel::from(words));
+            }
+            logic.set_lesson_list(slint::ModelRc::new(slint::VecModel::from(lessons.clone())));
+            save_vocabulary(&slint_to_lessons(&logic));
+        });
+    }
+
+    // ── word-field-changed ────────────────────────────────────────────────────
+    {
+        let ui_weak = ui.as_weak();
+        logic.on_word_field_changed(
+            move |lesson_idx, word_idx, spelling, kanji, meaning, word_type| {
+                let ui = ui_weak.unwrap();
+                let logic = ui.global::<VocabularyAppLogic>();
+                if lesson_idx < 0 || word_idx < 0 {
+                    return;
+                }
+                let mut lessons: Vec<vocabulary::VocabularyLessonModel> =
+                    logic.get_lesson_list().iter().collect();
+                if let Some(lesson) = lessons.get_mut(lesson_idx as usize) {
+                    let mut words: Vec<vocabulary::VocabularyWordModel> =
+                        lesson.words.iter().collect();
+                    if let Some(word) = words.get_mut(word_idx as usize) {
+                        word.spelling = spelling;
+                        word.kanji = kanji;
+                        word.meaning = meaning;
+                        word.word_type = word_type;
+                    }
+                    lesson.words = slint::ModelRc::new(slint::VecModel::from(words));
+                }
+                logic.set_lesson_list(slint::ModelRc::new(slint::VecModel::from(lessons.clone())));
+                save_vocabulary(&slint_to_lessons(&logic));
+            },
+        );
+    }
+
+    // ── word-tense-add-confirmed ──────────────────────────────────────────────
+    {
+        let ui_weak = ui.as_weak();
+        logic.on_word_tense_add_confirmed(move |lesson_idx, word_idx, tense_name, conjugation| {
+            let ui = ui_weak.unwrap();
+            let logic = ui.global::<VocabularyAppLogic>();
+            if lesson_idx < 0 || word_idx < 0 {
+                return;
+            }
+            let mut lessons: Vec<vocabulary::VocabularyLessonModel> =
+                logic.get_lesson_list().iter().collect();
+            if let Some(lesson) = lessons.get_mut(lesson_idx as usize) {
+                let mut words: Vec<vocabulary::VocabularyWordModel> = lesson.words.iter().collect();
+                if let Some(word) = words.get_mut(word_idx as usize) {
+                    let mut tenses: Vec<vocabulary::TenseEntryModel> = word.tenses.iter().collect();
+                    tenses.push(vocabulary::TenseEntryModel {
+                        tense_name,
+                        conjugation,
+                    });
+                    word.tenses = slint::ModelRc::new(slint::VecModel::from(tenses));
+                }
+                lesson.words = slint::ModelRc::new(slint::VecModel::from(words));
+            }
+            logic.set_lesson_list(slint::ModelRc::new(slint::VecModel::from(lessons.clone())));
+            save_vocabulary(&slint_to_lessons(&logic));
+        });
+    }
+
+    // ── word-tense-delete-confirmed ───────────────────────────────────────────
+    {
+        let ui_weak = ui.as_weak();
+        logic.on_word_tense_delete_confirmed(move |lesson_idx, word_idx, tense_idx| {
+            let ui = ui_weak.unwrap();
+            let logic = ui.global::<VocabularyAppLogic>();
+            if lesson_idx < 0 || word_idx < 0 || tense_idx < 0 {
+                return;
+            }
+            let mut lessons: Vec<vocabulary::VocabularyLessonModel> =
+                logic.get_lesson_list().iter().collect();
+            if let Some(lesson) = lessons.get_mut(lesson_idx as usize) {
+                let mut words: Vec<vocabulary::VocabularyWordModel> = lesson.words.iter().collect();
+                if let Some(word) = words.get_mut(word_idx as usize) {
+                    let mut tenses: Vec<vocabulary::TenseEntryModel> = word.tenses.iter().collect();
+                    if (tense_idx as usize) < tenses.len() {
+                        tenses.remove(tense_idx as usize);
+                    }
+                    word.tenses = slint::ModelRc::new(slint::VecModel::from(tenses));
+                }
+                lesson.words = slint::ModelRc::new(slint::VecModel::from(words));
+            }
+            logic.set_lesson_list(slint::ModelRc::new(slint::VecModel::from(lessons.clone())));
+            save_vocabulary(&slint_to_lessons(&logic));
+        });
+    }
+
+    // ── word-example-add-confirmed ────────────────────────────────────────────
+    {
+        let ui_weak = ui.as_weak();
+        logic.on_word_example_add_confirmed(move |lesson_idx, word_idx, example| {
+            let ui = ui_weak.unwrap();
+            let logic = ui.global::<VocabularyAppLogic>();
+            if lesson_idx < 0 || word_idx < 0 {
+                return;
+            }
+            let mut lessons: Vec<vocabulary::VocabularyLessonModel> =
+                logic.get_lesson_list().iter().collect();
+            if let Some(lesson) = lessons.get_mut(lesson_idx as usize) {
+                let mut words: Vec<vocabulary::VocabularyWordModel> = lesson.words.iter().collect();
+                if let Some(word) = words.get_mut(word_idx as usize) {
+                    let mut examples: Vec<slint::SharedString> = word.examples.iter().collect();
+                    examples.push(example);
+                    word.examples = slint::ModelRc::new(slint::VecModel::from(examples));
+                }
+                lesson.words = slint::ModelRc::new(slint::VecModel::from(words));
+            }
+            logic.set_lesson_list(slint::ModelRc::new(slint::VecModel::from(lessons.clone())));
+            save_vocabulary(&slint_to_lessons(&logic));
+        });
+    }
+
+    // ── word-example-delete-confirmed ─────────────────────────────────────────
+    {
+        let ui_weak = ui.as_weak();
+        logic.on_word_example_delete_confirmed(move |lesson_idx, word_idx, example_idx| {
+            let ui = ui_weak.unwrap();
+            let logic = ui.global::<VocabularyAppLogic>();
+            if lesson_idx < 0 || word_idx < 0 || example_idx < 0 {
+                return;
+            }
+            let mut lessons: Vec<vocabulary::VocabularyLessonModel> =
+                logic.get_lesson_list().iter().collect();
+            if let Some(lesson) = lessons.get_mut(lesson_idx as usize) {
+                let mut words: Vec<vocabulary::VocabularyWordModel> = lesson.words.iter().collect();
+                if let Some(word) = words.get_mut(word_idx as usize) {
+                    let mut examples: Vec<slint::SharedString> = word.examples.iter().collect();
+                    if (example_idx as usize) < examples.len() {
+                        examples.remove(example_idx as usize);
+                    }
+                    word.examples = slint::ModelRc::new(slint::VecModel::from(examples));
+                }
+                lesson.words = slint::ModelRc::new(slint::VecModel::from(words));
+            }
+            logic.set_lesson_list(slint::ModelRc::new(slint::VecModel::from(lessons.clone())));
+            save_vocabulary(&slint_to_lessons(&logic));
+        });
+    }
 }
