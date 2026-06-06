@@ -1,84 +1,118 @@
-import { LessonList } from "../components/lesson_list.slint";
-import { LessonDetailPane } from "../components/lesson_detail_pane.slint";
-import { VocabularyAppLogic } from "../vocabulary_app_logic.slint";
-import { CommonBtn } from "@flashcard";
 import { Tokens } from "@styles";
+import { CommonBtn } from "@flashcard";
+import { VocabularyAppLogic } from "../vocabulary_app_logic.slint";
+import { LessonStackList } from "../components/lesson_stack_list.slint";
+import { LessonDetailView } from "../components/lesson_detail_view.slint";
+import { FlashcardManagerView } from "../components/flashcard_manager_view.slint";
 
-// Top-level vocabulary page component.
-// Header row: Import and Export buttons.
-// Left column: lesson list (always visible).
-// Right column: lesson detail pane (visible when a lesson is selected).
-export component VocabularyPage {
-    Rectangle {
-        background: Tokens.page-background;
+// Top-level vocabulary page with a three-tab action bar (Lesson/Exercise/Flashcard)
+// and an Import Lesson direct-action button.
+// View 0 — Lesson: LessonStackList or LessonDetailView (vertically stacked pattern).
+// View 1 — Exercise: Generate Flashcards and Export Vocabulary buttons.
+// View 2 — Flashcard: FlashcardManagerView.
+export component VocabularyPage inherits Rectangle {
+    background: Tokens.page-background;
 
-        VerticalLayout {
-            spacing: Tokens.spacing-sm;
-            padding: Tokens.padding-sm;
+    // Active tab index: 0=Lesson, 1=Exercise, 2=Flashcard.
+    property <int> active-view: 0;
 
-            // Header row: Import / Export actions.
+    VerticalLayout {
+        spacing: 0;
+
+        // ── Action bar (height: 44px) ────────────────────────────────────────
+        Rectangle {
+            height: 44px;
+            background: Tokens.nav-bar-background;
+
             HorizontalLayout {
-                spacing: Tokens.spacing-sm;
-                alignment: end;
-                height: 36px;
+                padding-left: 12px;
+                padding-right: 12px;
+                spacing: 8px;
+                alignment: start;
 
                 CommonBtn {
                     width: 90px;
-                    height: 36px;
-                    text: "Import";
-                    accessibilityLabel: "Import vocabulary from markdown file";
-                    clicked => {
-                        VocabularyAppLogic.import-vocabulary-clicked();
-                    }
+                    text: "Lesson";
+                    checkable: true;
+                    checked: root.active-view == 0;
+                    clicked => { root.active-view = 0; }
                 }
 
                 CommonBtn {
                     width: 90px;
-                    height: 36px;
-                    text: "Export";
-                    accessibilityLabel: "Export vocabulary to markdown file";
-                    clicked => {
-                        VocabularyAppLogic.export-vocabulary-clicked();
-                    }
+                    text: "Exercise";
+                    checkable: true;
+                    checked: root.active-view == 1;
+                    clicked => { root.active-view = 1; }
                 }
 
                 CommonBtn {
-                    width: 160px;
-                    height: 36px;
+                    width: 90px;
+                    text: "Flashcard";
+                    checkable: true;
+                    checked: root.active-view == 2;
+                    clicked => { root.active-view = 2; }
+                }
+
+                // Direct-action button — fires import and returns to current view.
+                CommonBtn {
+                    width: 120px;
+                    text: "Import Lesson";
+                    clicked => { VocabularyAppLogic.import-vocabulary-clicked(); }
+                }
+            }
+        }
+
+        // ── View 0: Lesson ────────────────────────────────────────────────────
+        if root.active-view == 0: Rectangle {
+            vertical-stretch: 1;
+            background: Tokens.page-background;
+
+            // Vertically stacked pattern: LessonDetailView slides up when a lesson is selected.
+            VerticalLayout {
+                alignment: LayoutAlignment.end;
+
+                if VocabularyAppLogic.selected-lesson-index >= 0: LessonDetailView {
+                    close-clicked => {
+                        VocabularyAppLogic.selected-lesson-index = -1;
+                    }
+                }
+
+                if VocabularyAppLogic.selected-lesson-index < 0: HorizontalLayout {
+                    alignment: center;
+
+                    LessonStackList {
+                        width: 400px;
+                    }
+                }
+            }
+        }
+
+        // ── View 1: Exercise ──────────────────────────────────────────────────
+        if root.active-view == 1: Rectangle {
+            vertical-stretch: 1;
+            background: Tokens.page-background;
+
+            HorizontalLayout {
+                alignment: center;
+                spacing: 12px;
+
+                CommonBtn {
                     text: "Generate Flashcards";
-                    accessibilityLabel: "Generate flashcard stacks from vocabulary lessons";
-                    clicked => {
-                        VocabularyAppLogic.generate-exercises-clicked();
-                    }
+                    primary: true;
+                    clicked => { VocabularyAppLogic.generate-exercises-clicked(); }
+                }
+
+                CommonBtn {
+                    text: "Export Vocabulary";
+                    clicked => { VocabularyAppLogic.export-vocabulary-clicked(); }
                 }
             }
+        }
 
-            // Main content row: lesson list and detail pane.
-            HorizontalLayout {
-                spacing: Tokens.spacing-md;
-
-                // Left pane: lesson list, fixed width.
-                Rectangle {
-                    width: 280px;
-                    background: Tokens.card-container-background;
-                    border-radius: Tokens.card-container-border-radius;
-                    border-width: Tokens.border-width;
-                    border-color: Tokens.card-container-border-color;
-
-                    LessonList {}
-                }
-
-                // Right pane: lesson detail — visible only when a lesson is selected.
-                if VocabularyAppLogic.selected-lesson-index >= 0: Rectangle {
-                    horizontal-stretch: 1;
-                    background: Tokens.card-container-background;
-                    border-radius: Tokens.card-container-border-radius;
-                    border-width: Tokens.border-width;
-                    border-color: Tokens.card-container-border-color;
-
-                    LessonDetailPane {}
-                }
-            }
+        // ── View 2: Flashcard ─────────────────────────────────────────────────
+        if root.active-view == 2: FlashcardManagerView {
+            vertical-stretch: 1;
         }
     }
 }
