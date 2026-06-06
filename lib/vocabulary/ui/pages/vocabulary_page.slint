@@ -1,12 +1,40 @@
 import { LessonList } from "../components/lesson_list.slint";
+import { LessonDetailPane } from "../components/lesson_detail_pane.slint";
+import { VocabularyAppLogic } from "../vocabulary_app_logic.slint";
 import { Tokens } from "@styles";
 
 // Top-level vocabulary page component.
-// Hosts the full-width LessonList bound to VocabularyAppLogic.
+// Left column: lesson list (always visible).
+// Right column: lesson detail pane (visible when a lesson is selected).
 export component VocabularyPage {
     Rectangle {
         background: Tokens.page-background;
 
-        LessonList {}
+        HorizontalLayout {
+            spacing: Tokens.spacing-md;
+            padding: Tokens.padding-sm;
+
+            // Left pane: lesson list, fixed width.
+            Rectangle {
+                width: 280px;
+                background: Tokens.card-container-background;
+                border-radius: Tokens.card-container-border-radius;
+                border-width: Tokens.border-width;
+                border-color: Tokens.card-container-border-color;
+
+                LessonList {}
+            }
+
+            // Right pane: lesson detail — visible only when a lesson is selected.
+            if VocabularyAppLogic.selected-lesson-index >= 0: Rectangle {
+                horizontal-stretch: 1;
+                background: Tokens.card-container-background;
+                border-radius: Tokens.card-container-border-radius;
+                border-width: Tokens.border-width;
+                border-color: Tokens.card-container-border-color;
+
+                LessonDetailPane {}
+            }
+        }
     }
 }

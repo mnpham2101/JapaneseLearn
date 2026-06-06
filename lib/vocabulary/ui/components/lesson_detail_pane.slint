@@ -1,0 +1,127 @@
+import { CommonBtn } from "@flashcard";
+import { VocabularyAppLogic } from "../vocabulary_app_logic.slint";
+import { WordForm } from "word_form.slint";
+import { Tokens } from "@styles";
+
+// Detail pane for the currently selected vocabulary lesson.
+// Shows the word list with delete buttons and an inline WordForm for adding new words.
+// Uses the Vertically stacked up components pattern — alignment end, form slides up from bottom.
+export component LessonDetailPane inherits VerticalLayout {
+    alignment: LayoutAlignment.end;
+
+    // Show/hide state for the add-word form.
+    property <bool> show-add-form: false;
+
+    // Scrollable word rows.
+    Flickable {
+        vertical-stretch: 1;
+        viewport-height: word-rows.preferred-height;
+
+        word-rows := VerticalLayout {
+            spacing: Tokens.spacing-sm;
+            padding: Tokens.padding-sm;
+
+            // Section header row.
+            HorizontalLayout {
+                spacing: Tokens.spacing-sm;
+
+                Text {
+                    text: VocabularyAppLogic.selected-lesson-index >= 0
+                        ? VocabularyAppLogic.lesson-list[VocabularyAppLogic.selected-lesson-index].name
+                        : "";
+                    font-size: Tokens.font-size-title;
+                    font-weight: 700;
+                    color: Tokens.text-primary;
+                    vertical-alignment: center;
+                    horizontal-stretch: 1;
+                }
+            }
+
+            // Word rows — one per word in the selected lesson.
+            for word[i] in VocabularyAppLogic.lesson-list[VocabularyAppLogic.selected-lesson-index].words: HorizontalLayout {
+                spacing: Tokens.spacing-sm;
+                padding-top: Tokens.padding-sm;
+                padding-bottom: Tokens.padding-sm;
+
+                // Spelling
+                Text {
+                    horizontal-stretch: 1;
+                    text: word.spelling;
+                    font-size: Tokens.font-size-body;
+                    color: Tokens.text-primary;
+                    vertical-alignment: center;
+                }
+
+                // Kanji
+                Text {
+                    horizontal-stretch: 1;
+                    text: word.kanji;
+                    font-size: Tokens.font-size-body;
+                    color: Tokens.text-primary;
+                    vertical-alignment: center;
+                }
+
+                // Meaning
+                Text {
+                    horizontal-stretch: 1;
+                    text: word.meaning;
+                    font-size: Tokens.font-size-body;
+                    color: Tokens.text-secondary;
+                    vertical-alignment: center;
+                }
+
+                // Word type
+                Text {
+                    width: 80px;
+                    text: word.word-type;
+                    font-size: Tokens.font-size-caption;
+                    color: Tokens.text-secondary;
+                    vertical-alignment: center;
+                }
+
+                // Delete button for this word row.
+                CommonBtn {
+                    width: 36px;
+                    height: 36px;
+                    text: "✕";
+                    accessibilityLabel: "Delete word " + word.spelling;
+                    clicked => {
+                        VocabularyAppLogic.word-delete-confirmed(
+                            VocabularyAppLogic.selected-lesson-index,
+                            i
+                        );
+                    }
+                }
+            }
+        }
+    }
+
+    // Add-word form — slides up from the bottom when show-add-form is true.
+    if root.show-add-form: Rectangle {
+        background: Tokens.input-form-background;
+        border-radius: Tokens.border-radius;
+        height: self.visible ? 160px : 0px;
+
+        WordForm {
+            lesson-idx: VocabularyAppLogic.selected-lesson-index;
+            word-add-confirmed(lesson-idx, spelling, kanji, meaning, word-type) => {
+                VocabularyAppLogic.word-add-confirmed(lesson-idx, spelling, kanji, meaning, word-type);
+                root.show-add-form = false;
+            }
+            word-cancel => {
+                root.show-add-form = false;
+            }
+        }
+    }
+
+    // "Add Word" button — hidden while the form is open.
+    if !root.show-add-form: CommonBtn {
+        height: 36px;
+        text: "＋ Add Word";
+        primary: true;
+        accessibilityLabel: "Open add word form";
+        clicked => {
+            root.show-add-form = true;
+        }
+    }
+}

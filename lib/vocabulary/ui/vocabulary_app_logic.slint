@@ -20,7 +20,12 @@ export struct VocabularyLessonModel {
 export global VocabularyAppLogic {
     in-out property <[VocabularyLessonModel]> lesson-list;
     in-out property <int> selected-lesson-index: -1;
+    in-out property <int> selected-word-index: -1;
 
     callback lesson-create-confirmed(name: string);
     callback lesson-delete-confirmed();
+
+    callback word-add-confirmed(lesson-idx: int, spelling: string, kanji: string, meaning: string, word-type: string);
+    callback word-delete-confirmed(lesson-idx: int, word-idx: int);
+    callback word-field-changed(lesson-idx: int, word-idx: int, spelling: string, kanji: string, meaning: string, word-type: string);
 }

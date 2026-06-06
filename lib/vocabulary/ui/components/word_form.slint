@@ -1,0 +1,175 @@
+import { CommonBtn } from "@flashcard";
+import { Tokens } from "@styles";
+
+// Inline form for adding a new vocabulary word to a lesson.
+// Caller provides lesson-idx so the confirmed callback carries the correct lesson index.
+// word-add-confirmed fires when the user confirms the form.
+// word-cancel fires when the user cancels.
+export component WordForm inherits VerticalLayout {
+    in property <int> lesson-idx: -1;
+
+    callback word-add-confirmed(lesson-idx: int, spelling: string, kanji: string, meaning: string, word-type: string);
+    callback word-cancel;
+
+    spacing: Tokens.spacing-sm;
+    padding: Tokens.padding-sm;
+
+    // Row 1: spelling (required) + kanji (optional)
+    HorizontalLayout {
+        spacing: Tokens.spacing-sm;
+
+        // Spelling field (required)
+        spelling-field := Rectangle {
+            horizontal-stretch: 1;
+            height: 36px;
+            border-width: Tokens.border-width;
+            border-color: Tokens.border-color;
+            border-radius: Tokens.border-radius;
+            background: Tokens.card-field-background;
+
+            spelling-input := TextInput {
+                font-size: Tokens.font-size-body;
+                color: Tokens.text-primary;
+                vertical-alignment: center;
+                width: parent.width - 12px;
+                x: Tokens.spacing-xs;
+            }
+
+            Text {
+                visible: spelling-input.text == "";
+                text: "Spelling (required)";
+                font-size: Tokens.font-size-body;
+                color: Tokens.text-placeholder;
+                vertical-alignment: center;
+                x: Tokens.spacing-xs;
+            }
+        }
+
+        // Kanji field (optional)
+        kanji-field := Rectangle {
+            horizontal-stretch: 1;
+            height: 36px;
+            border-width: Tokens.border-width;
+            border-color: Tokens.border-color;
+            border-radius: Tokens.border-radius;
+            background: Tokens.card-field-background;
+
+            kanji-input := TextInput {
+                font-size: Tokens.font-size-body;
+                color: Tokens.text-primary;
+                vertical-alignment: center;
+                width: parent.width - 12px;
+                x: Tokens.spacing-xs;
+            }
+
+            Text {
+                visible: kanji-input.text == "";
+                text: "Kanji (optional)";
+                font-size: Tokens.font-size-body;
+                color: Tokens.text-placeholder;
+                vertical-alignment: center;
+                x: Tokens.spacing-xs;
+            }
+        }
+    }
+
+    // Row 2: meaning (required) + word-type (optional)
+    HorizontalLayout {
+        spacing: Tokens.spacing-sm;
+
+        // Meaning field (required)
+        meaning-field := Rectangle {
+            horizontal-stretch: 1;
+            height: 36px;
+            border-width: Tokens.border-width;
+            border-color: Tokens.border-color;
+            border-radius: Tokens.border-radius;
+            background: Tokens.card-field-background;
+
+            meaning-input := TextInput {
+                font-size: Tokens.font-size-body;
+                color: Tokens.text-primary;
+                vertical-alignment: center;
+                width: parent.width - 12px;
+                x: Tokens.spacing-xs;
+            }
+
+            Text {
+                visible: meaning-input.text == "";
+                text: "Meaning (required)";
+                font-size: Tokens.font-size-body;
+                color: Tokens.text-placeholder;
+                vertical-alignment: center;
+                x: Tokens.spacing-xs;
+            }
+        }
+
+        // Word-type field (optional, e.g. "noun")
+        type-field := Rectangle {
+            horizontal-stretch: 1;
+            height: 36px;
+            border-width: Tokens.border-width;
+            border-color: Tokens.border-color;
+            border-radius: Tokens.border-radius;
+            background: Tokens.card-field-background;
+
+            type-input := TextInput {
+                font-size: Tokens.font-size-body;
+                color: Tokens.text-primary;
+                vertical-alignment: center;
+                width: parent.width - 12px;
+                x: Tokens.spacing-xs;
+            }
+
+            Text {
+                visible: type-input.text == "";
+                text: "Type (e.g. noun)";
+                font-size: Tokens.font-size-body;
+                color: Tokens.text-placeholder;
+                vertical-alignment: center;
+                x: Tokens.spacing-xs;
+            }
+        }
+    }
+
+    // Row 3: action buttons
+    HorizontalLayout {
+        spacing: Tokens.spacing-sm;
+        alignment: end;
+
+        CommonBtn {
+            width: 90px;
+            height: 36px;
+            text: "Confirm";
+            primary: true;
+            accessibilityLabel: "Confirm add word";
+            clicked => {
+                root.word-add-confirmed(
+                    root.lesson-idx,
+                    spelling-input.text,
+                    kanji-input.text,
+                    meaning-input.text,
+                    type-input.text
+                );
+                spelling-input.text = "";
+                kanji-input.text = "";
+                meaning-input.text = "";
+                type-input.text = "";
+            }
+        }
+
+        CommonBtn {
+            width: 80px;
+            height: 36px;
+            text: "Cancel";
+            accessibilityLabel: "Cancel add word";
+            clicked => {
+                spelling-input.text = "";
+                kanji-input.text = "";
+                meaning-input.text = "";
+                type-input.text = "";
+                root.word-cancel();
+            }
+        }
+    }
+}
