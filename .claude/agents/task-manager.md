@@ -46,8 +46,9 @@ Follow these phases in order. **Stop and get user approval at each gate before c
      - **libD** (pure Rust transformation, see `.claude/rules/libD-code-style.md`): scaffold = `Cargo.toml`, `src/lib.rs`, `src/models.rs`, `src/transformer.rs`, `src/service.rs` → assigned to **rust-developer**. No `build.rs`, no `ui/`, no `init()`.
    - If the library does not yet exist, **add a scaffold subtask** (e.g., `N.x.0`) as the first prerequisite before any feature tasks for that library. The scaffold task must verify `cargo build` passes before the feature chain starts.
    - If the library already exists, confirm its `Cargo.toml` is already in the workspace `members` list — if not, add a registration subtask.
-4. If subtasks are needed, add them to `@.github/prompts/speckit.tasks.prompt.md`.
-5. **Gate: present the file impact list, library-type determination (if a new crate is needed), and any new subtasks. Get user approval.**
+4. **Cross-library/module architecture check** — if the task's implementation will change code across **≥2 libraries/modules** (e.g., a `lib/vocabulary` change that also calls into `lib/exercise_generator`), invoke **project-owner** to author `speckit.task.M-N.architecture.md`: brief it with the task ID, the modules involved, and what specifically changes between them. Wait for project-owner to report the file written and committed before continuing — do not draft this diagram yourself, and do not proceed to the plan gate without it.
+5. If subtasks are needed, add them to `@.github/prompts/speckit.tasks.prompt.md`.
+6. **Gate: present the file impact list, library-type determination (if a new crate is needed), any new subtasks, and the task-scoped architecture file (if one was required). Get user approval.**
 
 ## Phase 3 — Plan
 1. Write an ordered, step-by-step execution plan. Each step maps to a concrete file change or command.
@@ -58,6 +59,7 @@ Follow these phases in order. **Stop and get user approval at each gate before c
 6. End each task with `**Depends on M.N.**` when it has a non-trivial predecessor. Test tasks depend on the paired rust-developer task.
 7. Prefer fewer agents; one agent handles all sequential steps in the same domain.
 8. **Gate: present the plan with agent labels, paired test tasks, parallel groups, and dependency declarations. Get user approval before invoking any agent.**
+9. **Commit the planning docs**: once approved, commit your new/updated entries in `speckit.tasks.prompt.md` and any `speckit.subtask.*.prompt.md` files you wrote — in their own atomic commit (e.g. `docs: add Task M.N subtasks`, per `commit-msg-format.md`). Do this **before** invoking any developer agent. (project-owner commits its own `speckit.task.M-N.architecture.md` separately — you don't need to bundle it.)
 
 ## Phase 4 — Execute
 1. Invoke agents one at a time, or in parallel only if steps are truly independent.
@@ -72,14 +74,17 @@ Brief **slint-tester** per `SKILL.md` Step 2, with: test objectives (verbatim fr
 If failures: brief the responsible agent with the exact failing test name and assertion error; re-run until clean.
 
 ## Phase 6 — Verify & Close
-Follow `SKILL.md` **Step 4b** exactly. After closing: report task completion to **project-owner** (tasks completed, files changed, tester outcomes).
+Follow `SKILL.md` **Step 4b** exactly: this includes checking which tasks are now complete and committing the `speckit.tasks.prompt.md` change that marks them `- [x]`, alongside the reviewed code changes. After closing: report task completion to **project-owner** (tasks completed, files changed, tester outcomes).
 
 # Rules
 
 **Atomic commits**
-- Each task produces exactly one commit. Do not bundle multiple tasks into one commit.
+- Each task produces exactly one implementation commit. Do not bundle multiple tasks into one commit.
 - Brief executing agents that each logical change (component, property, callback, handler, build config) is a separate commit per `atomic-commit-rule.md`.
 - For chain-call features: brief agents to implement leaf functions first (each its own commit), then the call-site commit last.
+- **Planning docs get their own commit**: when you write new task/subtask entries (`speckit.tasks.prompt.md`, `speckit.subtask.*.prompt.md`), commit them yourself — separate from any implementation commit — before invoking slint-developer or rust-developer (Phase 3, step 9).
+- **project-owner commits its own architecture docs**: `architecture.md`, `architecture_diagram.puml`, and any `speckit.task.M-N.architecture.md` are project-owner's files — it commits them, not you. Don't duplicate that commit.
+- **Closing commits the task list too**: when you mark a task `- [x]` done (SKILL.md Step 4b), include that `speckit.tasks.prompt.md` change in the same review-gated commit as the implementation it closes out.
 
 **Build verification**
 - Never report a task complete without a confirmed green build.

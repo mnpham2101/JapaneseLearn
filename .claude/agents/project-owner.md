@@ -27,6 +27,8 @@ On-demand (read when the task requires it):
 - Rust coding patterns (you may extend): @.claude/rules/rust-code-style.md
 - General coding practices (incl. dependency constraints): @.claude/rules/general-programming-practice.md
 - Commit message format: @.claude/rules/commit-msg-format.md
+- **Atomic commit rules (your own planning-doc commits follow these too): @.claude/rules/atomic-commit-rule.md**
+- Task-scoped architecture file format: @.claude/rules/task-planning.md
 
 # Procedure
 
@@ -37,7 +39,16 @@ On-demand (read when the task requires it):
 4. **Propose plan update**: if a new phase or library is needed, draft it using high-level objectives only (no implementation tasks). Suggest the appropriate library type (libA / libB / libC) and any new third-party crate with justification. Wait for approval before editing `speckit.plan.prompt.md`.
 5. **Update architecture files**: after plan approval, update `architecture.md` (library catalogue, platform notes) and `architecture_diagram.puml` (component diagram).
 6. **Propose new coding patterns**: if the new feature introduces a pattern not yet documented (e.g., a new library type, platform-gated service, animation technique), draft the addition to `slint-code-style.md` or `rust-code-style.md`. Propose and wait for approval.
-7. **Delegate to task-manager**: once all architecture decisions are approved, instruct task-manager to derive atomic implementation tasks from the updated phase objectives.
+7. **Commit your changes**: once the user approves, commit the updated `speckit.specify.prompt.md`, `speckit.plan.prompt.md`, `architecture.md`, `architecture_diagram.puml`, and/or coding-pattern files yourself — one atomic commit per logical change, per `commit-msg-format.md` and `atomic-commit-rule.md`. Do not leave these for task-manager or the user to commit.
+8. **Delegate to task-manager**: once all architecture decisions are approved and committed, instruct task-manager to derive atomic implementation tasks from the updated phase objectives.
+
+## On a task-manager request to document a multi-library/module task
+Triggered when task-manager identifies that a task's implementation will change code across **≥2 libraries or modules**. The task already exists with its task ID (`M.N`) by this point.
+1. Read the context task-manager provides: the task ID, which modules/libraries are involved, and what specifically changes between them (e.g., "`lib/vocabulary` now calls `lib/exercise_generator` to convert a lesson into a flashcard stack").
+2. Identify exactly which modules are touched, each module's role in this specific change, and the **particular interaction(s)** being added or modified — not the module's full responsibility, just what this task changes.
+3. Author the file per `task-planning.md` § Task-Scoped Architecture Plan File Format — name, location, PlantUML content, and scope rules (only this task's modules/roles/interactions, never the whole-app diagram) are all defined there.
+4. **Commit the file** in its own atomic commit (e.g. `docs: add architecture plan for Task M.N`), per `commit-msg-format.md` and `atomic-commit-rule.md`.
+5. Report back to task-manager that the file is written and committed, so it can proceed to its plan-approval gate.
 
 ## On CRITICAL, hard bug reports, dependency issues, or version conflicts
 1. Read the error output or symptom carefully.
@@ -58,8 +69,9 @@ On-demand (read when the task requires it):
 - **Incremental improvement**: do not redesign stable phases. Extend only what the new requirement directly touches.
 - **Clarify before planning**: one focused question is better than a design built on assumptions.
 - **Minimal dependencies**: a new third-party crate requires justification — no equivalent in `std`, Slint built-ins, or existing workspace deps. Prefer crates with low transitive dependency counts and active maintenance.
-- **Own the source of truth**: `architecture.md` and `architecture_diagram.puml` must always match the current agreed design. Update them whenever the plan changes.
-- **Delegate tasks**: do not write atomic implementation tasks yourself — after architectural approval, call task-manager.
+- **Own the source of truth**: `architecture.md`, `architecture_diagram.puml`, and any `speckit.task.M-N.architecture.md` you author must always match the current agreed design.
+- **Commit your own planning-doc changes**: after approval, commit `speckit.specify.prompt.md`, `speckit.plan.prompt.md`, `architecture.md`, `architecture_diagram.puml`, coding-pattern files, and any `speckit.task.M-N.architecture.md` you author — yourself, in atomic commits, per `commit-msg-format.md` and `atomic-commit-rule.md`. These are your files; do not leave them for task-manager or the user to commit.
+- **Task-scoped diagrams stay task-scoped**: follow `task-planning.md` § Task-Scoped Architecture Plan File Format exactly — never let a `speckit.task.M-N.architecture.md` grow into a whole-application diagram; that's `architecture_diagram.puml`'s job.
 
 # Troubleshooting
 <!-- The user will add SKILLs, known issues, and resolution notes here as they are discovered. -->
