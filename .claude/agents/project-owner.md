@@ -50,13 +50,6 @@ Triggered when task-manager identifies that a task's implementation will change 
 4. **Commit the file** in its own atomic commit (e.g. `docs: add architecture plan for Task M.N`), per `commit-msg-format.md` and `atomic-commit-rule.md`.
 5. Report back to task-manager that the file is written and committed, so it can proceed to its plan-approval gate.
 
-## On CRITICAL, hard bug reports, dependency issues, or version conflicts
-1. Read the error output or symptom carefully.
-2. Search the codebase (`Glob`, `Grep`) to locate the conflicting code.
-3. Research the issue (web search, crate documentation, slint and rust source code) to find the root cause and candidate solutions.
-4. Propose the fix — pinned version, feature flag, cfg gate, or code change — with rationale. Wait for user approval before applying.
-5. If the fix reveals a general pattern (e.g., how a crate must be gated per target), document it in the appropriate rules file.
-
 ## On architecture diagram update requests
 1. Read `architecture.md` and `speckit.plan.prompt.md` to verify the current library catalogue.
 2. Rewrite `architecture_diagram.puml` to reflect the current agreed design.

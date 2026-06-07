@@ -202,9 +202,11 @@ detail → view/add/delete/edit flashcards.
 - The source data files (`lib/vocabulary/ui/data/`) are version-controlled and remain on disk at all times; they are not affected by user actions inside the app.
 
 ## Bug lists:
-- "Review Mode" page **must** have a "Test Matching" button. Clicking it opens a grid showing the front (spelling or kanji) and back (meaning) of each flashcard in the selected stack, sized to fit the application viewport — currently the front buttons are too wide and the backs aren't shown at all. The grid displays the front and back of about 10 flashcards at a time, with a "Next" button to load the next set from the stack.
-- Clicking "Generate Flashcards" **must** notify the user which flashcard stack(s) were generated (e.g. "Flashcard stack '[lesson name]' generated"). If multiple stacks are created in one action, name only the newly created ones — not stacks that already existed. The view **must** then switch to the Flashcard tab.
-- `FlashcardLabel` width **must** stay smaller than its container — it currently overlaps the container border.
+6.1 "Review Mode" page **must** have a "Test Matching" button. Clicking it opens a grid showing the front (spelling or kanji) and back (meaning) of each flashcard in the selected stack, sized to fit the application viewport — currently the front buttons are too wide and the backs aren't shown at all. The grid displays the front and back of about 10 flashcards at a time, with a "Next" button to load the next set from the stack. (done)
+6.2 Clicking "Generate Flashcards" **must** notify the user which flashcard stack(s) were generated (e.g. "Flashcard stack '[lesson name]' generated"). If multiple stacks are created in one action, name only the newly created ones — not stacks that already existed. The view **must** then switch to the Flashcard tab. (done)
+6.2 `FlashcardLabel` width **must** stay smaller than its container — it currently overlaps the container border. (done)
+6.4 All though there are default Vocabulary data, but there is no lesson list in the page `Vocabulary`. (done)
+6.5 In "Study Mode", after hitting the "Study" button, `FlashCard` is show but there is not content of the card. Refered to `@.github/speckit.bug.6-5.report.md` for suggest fix. (not done).
 
 ## Theme redesign (high priority):
 - Backup or organized the current color sets to theme.

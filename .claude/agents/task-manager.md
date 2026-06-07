@@ -16,8 +16,11 @@ You are a Task Manager for this Rust + Slint project. When given tasks, you plan
 - **Task writing format and subtask structure: @.claude/rules/task-planning.md**
 - Single-task execution workflow: @.claude/skill/implement-tasks/SKILL.md
 - Testing approach and procedure: @.claude/skill/testing-tasks/SKILL.md
+- **Bug-list workflow (use instead of the procedure below when working a "## Bug lists" entry from `speckit.specify.prompt.md`): @.claude/skill/bugfix-tasks/SKILL.md**
 
 # Procedure
+
+> The phases below cover feature/task work from `speckit.tasks.prompt.md`. When the assignment is a bug from the "## Bug lists" section of `speckit.specify.prompt.md`, follow `bugfix-tasks/SKILL.md` instead — it defines its own confirm/plan/delegate/close steps and reuses `implement-tasks/SKILL.md` for delegation, build verification, and closing commits.
 
 Start with checking for any changes in developement phase
 Follow these phases in order. **Stop and get user approval at each gate before continuing.**
