@@ -30,6 +30,11 @@ export component StudySessionView {
                 width: min(parent.width - 32px, 480px);
                 data: FlashcardAppLogic.flashcard-list[FlashcardAppLogic.selected-stack-index].flashcards[root.current-card-index];
 
+                // TEMP — Bug 6.5 verification: print front/back text whenever the bound card changes.
+                changed data => {
+                    debug("[Bug6.5] front='", self.data.jap-obj, "' back='", self.data.explanation, "' stack-idx=", FlashcardAppLogic.selected-stack-index, " card-idx=", root.current-card-index);
+                }
+
                 // Notify Rust whenever the known status changes so it can persist and update counts.
                 changed known => {
                     FlashcardAppLogic.known-changed(
