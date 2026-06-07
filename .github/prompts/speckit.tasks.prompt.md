@@ -222,6 +222,16 @@ agent: speckit.tasks
   - [x] 6.D.3.1 **[slint-developer]** Add `callback restore-defaults-clicked()` to `VocabularyAppLogic`; add `CommonBtn { text: "Restore Defaults"; }` above `LessonStackList` in the Lesson view (active-view == 0) of `vocabulary_page.slint`. **Depends on 6.D.1.** — see [speckit.subtask.6-D-3-1.prompt.md](.github/prompts/speckit.subtask.6-D-3-1.prompt.md)
   - [x] 6.D.3.2 **[rust-developer]** Wire `on_restore_defaults_clicked` in `lib/vocabulary/src/lib.rs`: clear lesson list, reload from embedded JSON defaults via `include_str!()`, push to logic, save to `vocabulary.json`. **Depends on 6.D.3.1.** — see [speckit.subtask.6-D-3-2.prompt.md](.github/prompts/speckit.subtask.6-D-3-2.prompt.md)
 
+## Phase 6.T: Theme Redesign
+**Goal**: Make the color palette swappable via `lib/styles/themes/theme_*.slint` files, each containing the full `Tokens` global, with `styles.slint` re-exporting the active theme via a single line.
+
+> Tasks 6.T1.1 → 6.T1.2 → 6.T1.3 are sequential (each modifies the same file chain). 6.T1.4 is manual verification by task-manager.
+
+- [ ] 6.T1.1 **[slint-developer]** Move `Tokens` global from `lib/styles/tokens.slint` into `lib/styles/themes/theme_default.slint` (verbatim contents); delete `tokens.slint`. — see [speckit.subtask.6-T1-1.prompt.md](.github/prompts/speckit.subtask.6-T1-1.prompt.md)
+- [ ] 6.T1.2 **[slint-developer]** Update `lib/styles/styles.slint` to re-export `Tokens` from `themes/theme_default.slint`. **Depends on 6.T1.1.** — see [speckit.subtask.6-T1-2.prompt.md](.github/prompts/speckit.subtask.6-T1-2.prompt.md)
+- [ ] 6.T1.3 **[slint-developer]** Author `lib/styles/themes/theme_solarized_light.slint` with the Solarized Light color mapping (not wired into `styles.slint` — default theme stays active). **Depends on 6.T1.2.** — see [speckit.subtask.6-T1-3.prompt.md](.github/prompts/speckit.subtask.6-T1-3.prompt.md)
+- [ ] 6.T1.4 Manual verification: `cargo run --bin japanese_learn` shows unchanged default palette; `cargo build` green; `cargo clippy --bin japanese_learn` zero warnings. No agent — task-manager runs this directly. **Depends on 6.T1.3.**
+
 ## Phase 7: Future Backlog (Extensible)
 - [ ] 7.1 Add audio playback (Japanese text‑to‑speech integration).
 - [ ] 7.2 Implement spaced repetition algorithms for study scheduling.
