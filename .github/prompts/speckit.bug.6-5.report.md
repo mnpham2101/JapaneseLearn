@@ -97,6 +97,37 @@ Add a pointer-event-absorbing `TouchArea {}` to `StudySessionView`, mirroring th
 session never fall through to `FlashcardManagerView`'s background-dismiss handler and
 reset `selected-stack-index` to `-1`.
 
+# Fix plan — atomic tasks
+
+> Single-component, single-file fix — one slint-developer task, no subtask split needed.
+
+**Task 6.5.1 — `[slint-developer]`** Add the missing pointer-event absorber to
+`StudySessionView` (`lib/flashcard/ui/page/study_session_view.slint`):
+- Add a `TouchArea {}` as the first child of the root component (same position/role as
+  `flashcard_stack.slint:42-44`), with the same explanatory comment style:
+  `// Absorbs all pointer events so they never reach the background TouchArea in
+  FlashcardManagerView, which would dismiss this component.`
+- Manually verify the fix by running the app, opening a stack, clicking "Study", then
+  clicking empty space inside the session view — the card must keep showing real
+  front/back content (the temporary `[Bug6.5]` debug print added during confirmation
+  will keep logging non-empty `front=`/`back=` values and `stack-idx >= 0`).
+- Remove the temporary `changed data => { debug(...) }` block added to
+  `study_session_view.slint` during confirmation, now that manual verification is done —
+  this is cleanup of an investigation aid, not a separate logical change, so it belongs
+  in the same commit as the fix.
+- Build (`cargo build --bin japanese_learn`), `cargo fmt`, `cargo clippy --bin
+  japanese_learn` (zero warnings — this is the chain-completing commit), suggest a
+  commit message per `commit-msg-format.md`.
+
+**Task 6.5.2 — `[slint-tester]`** Assess whether the fix is testable with
+`slint::testing` (e.g. simulate a pointer click at a point inside `StudySessionView`
+that would previously have fallen through, then assert `selected_stack_index` stays
+`>= 0` and the bound card data stays non-empty). If a reliable simulation is possible
+within the existing `FlashcardTestWindow` setup, add it to `test/flashcard/tests/`
+following `slint-test-format.md`. If not reliably simulatable (this is fundamentally a
+pointer-event/layering fix, similar in kind to a UI-layout fix), skip per
+`bugfix-tasks/SKILL.md` Step 6 and note why in the close-out report.
+
 # Notes on issues #3, #4, #5 (ICU4X console errors / default flashcard-list not shown):
 
 - Issues #3 and #4 (ICU4X `No segmentation model for language: ja` console spam) are a
