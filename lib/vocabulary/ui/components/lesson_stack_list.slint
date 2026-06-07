@@ -5,10 +5,7 @@ import { Tokens } from "@styles";
 
 // Scrollable list of vocabulary lessons rendered as LessonStackLabel rows,
 // with an inline create-lesson form and an "＋ Add Lesson" button at the bottom.
-// Uses the Vertically stacked up components pattern (alignment: end).
 export component LessonStackList inherits VerticalLayout {
-    alignment: LayoutAlignment.end;
-
     // State for the create-lesson inline form.
     property <bool> show-create-form: false;
 
