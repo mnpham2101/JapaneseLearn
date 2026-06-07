@@ -166,7 +166,7 @@ detail → view/add/delete/edit flashcards.
 
 ## Style design
 - The application should have the following day mode colors: 
-  - #CCD5AE , #E9EDC9 , #FEFAE0, #FAEDCD, #D4A373 ,  #251504 
+  - #CCD5AE , #E9EDC9 , #FEFAE0, #FAEDCD, #D4A373 ,  #532f08 
   - Darker colors should be used for border, text. 
   - Easy to view for studying.
   - The tab buttons "Vocabulary", "Grammar", "Reading" should be distinguishable from lower buttons "Vocabulary" page such as "Lesson", "Exercise", "Flashcard", "Import Lesson".
@@ -200,6 +200,13 @@ detail → view/add/delete/edit flashcards.
 - **Restore Defaults** button: a `CommonBtn` labeled "Restore Defaults" is placed in the Lesson view of `VocabularyPage`, above the lesson list and clearly visible. Clicking it removes all current lessons (user-created and default alike) and reloads all three default datasets from the embedded files. This action is destructive — all user-edited lessons are lost.
 - Default lessons participate in flashcard generation via the existing "Generate Flashcards" button without additional steps.
 - The source data files (`lib/vocabulary/ui/data/`) are version-controlled and remain on disk at all times; they are not affected by user actions inside the app.
+
+## Bug lists:
+- "Vocabulary" page should have show a list of lessons in the middle. It doesn't now.
+- "ReviewMode" Mode page should have buttons "Test Maching". Clicking on "TestMaching" opens a grid that displaces front (spelling or kanji) and back (meaning) of each flashcard. The buttons displaying the front is too wide, and the back are not show. Should have used a grid to nicely arrange then within application's viewport.
+- The grid should display around front and back of around 10 flashcards of each flashcard stack. It should have a next button to go to the next set of to study next set of words in the flashcard stack. 
+- Clicking on "Generate FlashCard" should have noted the user that flashcard [name] have been generated; If a list of flashcard is generated, only list the new ones. The Page should switch to flashcard page. 
+
 
 **Milestone 3 should include the following development**
 - Milestone 3 delivers **Analytics** and **Grammar Study Mode** as defined in the Future Backlog below.
