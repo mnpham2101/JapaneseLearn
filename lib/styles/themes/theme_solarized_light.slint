@@ -1,0 +1,105 @@
+// Solarized Light theme — full set of design tokens (colors and non-color constants).
+// Color values derived from the user's live VSCode Solarized Light theme.
+// To activate: change the Tokens re-export path in styles.slint to point here.
+export global Tokens {
+    // ── Border ───────────────────────────────────────────────────────────────
+    out property <color> border-color: #D3AF86;
+    out property <length> border-width: 1px;
+    out property <length> border-radius: 6px;
+
+    // ── Card field background ─────────────────────────────────────────────────
+    out property <color> card-field-background: #FDF6E3;
+
+    // ── Card container ────────────────────────────────────────────────────────
+    out property <color> card-container-background: #EEE8D5;
+    out property <length> card-container-border-radius: 12px;
+    out property <color> card-container-border-color: #D3AF86;
+
+    // ── Text colors ───────────────────────────────────────────────────────────
+    out property <color> text-primary: #586E75;
+    out property <color> text-secondary: #657B83;
+    out property <color> text-placeholder: #93A1A1;
+    out property <color> text-on-dark: #FDF6E3;
+
+    // ── Spacing ───────────────────────────────────────────────────────────────
+    out property <length> padding-lg: 16px;
+    out property <length> padding-sm: 8px;
+    out property <length> spacing-md: 12px;
+    out property <length> spacing-sm: 8px;
+    out property <length> spacing-xs: 6px;
+
+    // ── Font sizes ────────────────────────────────────────────────────────────
+    out property <length> font-size-title: 20px;
+    out property <length> font-size-body: 18px;
+    out property <length> font-size-caption: 16px;
+    out property <length> font-size-heading: 28px;
+    out property <length> font-size-large: 36px;
+    out property <length> font-size-small: 12px;
+    // Input / button label text (compact controls)
+    out property <length> font-size-input: 14px;
+    // App nav title
+    out property <length> font-size-nav-title: 24px;
+    // Explanation text on card back
+    out property <length> font-size-explanation: 26px;
+    // Extra-large font for kanji front face — brush-stroke calligraphic rendering.
+    out property <length> font-size-kanji: 72px;
+
+    // ── Button state colors ───────────────────────────────────────────────────
+    // Default (normal) state
+    out property <color> btn-default-bg: #EEE8D5;
+    out property <color> btn-default-text: #586E75;
+    out property <color> btn-default-border: #D3AF86;
+
+    // Hover state
+    out property <color> btn-hover-bg: #DFCA88;
+    out property <color> btn-hover-text: #586E75;
+
+    // Pressed state
+    out property <color> btn-pressed-bg: #B58900;
+    out property <color> btn-pressed-text: #FDF6E3;
+
+    // Disabled state
+    out property <color> btn-disabled-bg: #EEE8D5;
+    out property <color> btn-disabled-text: #93A1A1;
+
+    // Primary button (filled)
+    out property <color> btn-primary-bg: #268BD2;
+    out property <color> btn-primary-text: #FDF6E3;
+    out property <color> btn-primary-hover-bg: #1E6FA8;
+    out property <color> btn-primary-pressed-bg: #15527D;
+
+    // ── Known / unknown indicator colors ──────────────────────────────────────
+    out property <color> known-bg: #EEE8D5;
+    out property <color> known-border: #859900;
+    out property <color> known-icon-color: #586E75;
+    out property <color> unknown-bg: #FDF6E3;
+    out property <color> unknown-border: #CB4B16;
+    out property <color> unknown-icon-color: #93A1A1;
+
+    // ── Page / nav backgrounds ────────────────────────────────────────────────
+    out property <color> page-background: #FDF6E3;
+    out property <color> nav-background: #073642;
+    out property <color> nav-bar-background: #586E75;
+
+    // ── Input field colors ────────────────────────────────────────────────────
+    out property <color> input-background: #FDF6E3;
+    out property <color> input-border: #D3AF86;
+    out property <color> input-text: #586E75;
+    out property <color> input-form-background: #DDD6C1;
+
+    // ── Stack label colors ────────────────────────────────────────────────────
+    out property <color> stack-label-bg: #EEE8D5;
+    out property <color> stack-label-border: #D3AF86;
+    out property <color> stack-label-text: #586E75;
+
+    // ── Drop-target highlight ─────────────────────────────────────────────────
+    out property <color> drag-target-highlight: #DFCA88;
+
+    // ── Bar-level distinction ─────────────────────────────────────────────────
+    // StudyPage topic tab row (top-level navigation: Vocabulary / Grammar / Reading)
+    out property <color> topic-tab-bar-bg: #586E75;
+    // VocabularyPage action bar (secondary navigation: Lesson / Exercise / Flashcard)
+    out property <color> action-bar-bg: #DDD6C1;
+    // Active button color for VocabularyPage action bar tabs (distinct from topic-tab active = nav-background)
+    out property <color> action-tab-btn-active-bg: #B58900;
+}
