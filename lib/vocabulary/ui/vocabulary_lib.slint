@@ -26,5 +26,8 @@ export component MatchingExerciseTestWindow inherits Window {
     out property <int> page-size <=> view.page-size;
     out property <int> selected-front-index <=> view.selected-front-index;
 
-    view := MatchingExerciseView { }
+    view := MatchingExerciseView {
+        width: 800px;
+        height: 600px;
+    }
 }

@@ -5,6 +5,7 @@ edition = "2021"
 
 [dependencies]
 vocabulary = { path = "../../lib/vocabulary" }
+flashcard = { path = "../../lib/flashcard" }
 slint = { workspace = true }
 
 [dev-dependencies]
