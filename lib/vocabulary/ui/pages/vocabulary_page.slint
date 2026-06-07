@@ -112,16 +112,26 @@ export component VocabularyPage inherits Rectangle {
 
                 HorizontalLayout {
                     alignment: center;
+                    spacing: Tokens.spacing-sm;
+
                     CommonBtn {
                         text: "Restore Defaults";
                         clicked => { VocabularyAppLogic.restore-defaults-clicked(); }
+                    }
+
+                    CommonBtn {
+                        text: "＋ Add Lesson";
+                        primary: true;
+                        checkable: true;
+                        checked <=> lesson-stack-list.show-create-form;
+                        accessibilityLabel: "Open add lesson form";
                     }
                 }
 
                 HorizontalLayout {
                     alignment: center;
                     vertical-stretch: 1;
-                    LessonStackList {
+                    lesson-stack-list := LessonStackList {
                         width: min(parent.width - 16px, 480px);
                     }
                 }
