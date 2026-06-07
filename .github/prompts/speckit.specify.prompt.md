@@ -207,6 +207,7 @@ detail → view/add/delete/edit flashcards.
 6.2 `FlashcardLabel` width **must** stay smaller than its container — it currently overlaps the container border. (done)
 6.4 All though there are default Vocabulary data, but there is no lesson list in the page `Vocabulary`. (done)
 6.5 In "Study Mode", after hitting the "Study" button, `FlashCard` is show but there is not content of the card. Refered to `@.github/speckit.bug.6-5.report.md` for suggest fix. (not done).
+6.6 Console error `ICU4X data error: No segmentation model for language: ja` appears repeatedly when rendering Japanese text (e.g. opening `FlashcardManagerView`, clicking "Study"). Refer to `@.github/speckit.bug.6-6.report.md` for details. (not done).
 
 ## Theme redesign (high priority):
 - Backup or organized the current color sets to theme.
