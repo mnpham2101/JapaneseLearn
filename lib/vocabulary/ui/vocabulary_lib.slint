@@ -1,5 +1,6 @@
-import { FlashcardModel } from "@flashcard";
+import { FlashcardModel, FlashcardAppLogic } from "@flashcard";
 import { MatchingExerciseView } from "components/matching_exercise_view.slint";
+import { VocabularyAppLogic } from "vocabulary_app_logic.slint";
 
 export { TenseEntryModel, VocabularyWordModel, VocabularyLessonModel, VocabularyAppLogic } from "vocabulary_app_logic.slint";
 export { LessonList } from "components/lesson_list.slint";
@@ -14,6 +15,16 @@ export { FlashcardManagerView } from "components/flashcard_manager_view.slint";
 
 // Minimal component used only in tests to host VocabularyAppLogic as a global.
 export component VocabularyTestWindow inherits Window { }
+
+// Minimal component used only in tests to host both VocabularyAppLogic and
+// FlashcardAppLogic as globals — required by init_exercise_generator(), which
+// wires generate-exercises-clicked across both libraries.
+export component VocabularyExerciseTestWindow inherits Window {
+    // Referencing both globals makes Slint generate Global<'_, Self> for each,
+    // satisfying init_exercise_generator's trait bounds.
+    out property <int> lesson-count: VocabularyAppLogic.lesson-list.length;
+    out property <int> stack-count: FlashcardAppLogic.flashcard-list.length;
+}
 
 // Minimal component used only in tests to host MatchingExerciseView directly
 // (MatchingExerciseView inherits Rectangle and cannot be instantiated as a
