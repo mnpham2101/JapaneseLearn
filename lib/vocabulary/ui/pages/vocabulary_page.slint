@@ -116,11 +116,13 @@ export component VocabularyPage inherits Rectangle {
 
                     CommonBtn {
                         text: "Restore Defaults";
+                        width: 160px;
                         clicked => { VocabularyAppLogic.restore-defaults-clicked(); }
                     }
 
                     CommonBtn {
                         text: "＋ Add Lesson";
+                        width: 160px;
                         primary: true;
                         checkable: true;
                         checked <=> lesson-stack-list.show-create-form;
