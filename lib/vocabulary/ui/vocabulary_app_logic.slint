@@ -22,6 +22,12 @@ export global VocabularyAppLogic {
     in-out property <int> selected-lesson-index: -1;
     in-out property <int> selected-word-index: -1;
 
+    // Active VocabularyPage tab: 0=Lesson, 1=Exercise, 2=Flashcard.
+    // Hoisted from VocabularyPage so Rust can switch tabs (e.g. after generating exercises).
+    in-out property <int> active-view: 0;
+    // Message naming the flashcard stack(s) just generated; "" hides the notification banner.
+    in-out property <string> generation-notification: "";
+
     callback lesson-create-confirmed(name: string);
     callback lesson-delete-confirmed();
 
