@@ -20,6 +20,7 @@ lib/
     src/*.rs                      # Rust backend logic supporting UI manipulation
     ui/components                 # reusable widgets — one component per file 
     ui/model                      # reusable data models written in Slint
+    ui/data/                      # bundled read-only seed data (markdown + JSON); embedded at compile time via include_str!(); never written at runtime
     ui/main_lib.slint             # entry slint library file - export the library components and models                
     build.rs                      # entry point to build library
     Cargo.toml                    # define building codes as package
