@@ -3,46 +3,42 @@ import { LessonStackLabel } from "lesson_stack_label.slint";
 import { VocabularyAppLogic } from "../vocabulary_app_logic.slint";
 import { Tokens } from "@styles";
 
-// Scrollable list of vocabulary lessons rendered as LessonStackLabel rows,
-// with an inline create-lesson form and an "＋ Add Lesson" button at the bottom.
+// List of vocabulary lessons rendered as LessonStackLabel rows,
+// with an inline create-lesson form.
 export component LessonStackList inherits VerticalLayout {
-    // State for the create-lesson inline form.
-    property <bool> show-create-form: false;
+    // State for the create-lesson inline form. Exposed as in-out so a parent
+    // header button can bind its checked state via `<=>` (mirrors CommonList.add-stack).
+    in-out property <bool> show-create-form: false;
 
-    // Scrollable lesson rows.
-    Flickable {
-        vertical-stretch: 1;
-        viewport-height: lesson-rows.preferred-height;
+    // Lesson rows — plain layout, matching FlashcardList's proven pattern.
+    VerticalLayout {
+        spacing: Tokens.spacing-sm;
+        padding: Tokens.padding-sm;
 
-        lesson-rows := VerticalLayout {
+        for lesson[i] in VocabularyAppLogic.lesson-list: HorizontalLayout {
             spacing: Tokens.spacing-sm;
-            padding: Tokens.padding-sm;
 
-            for lesson[i] in VocabularyAppLogic.lesson-list: HorizontalLayout {
-                spacing: Tokens.spacing-sm;
-
-                // Lesson label — checkable, mirrors FlashcardLabel usage.
-                LessonStackLabel {
-                    horizontal-stretch: 1;
-                    height: 36px;
-                    lesson: lesson;
-                    checkable: true;
-                    checked: VocabularyAppLogic.selected-lesson-index == i;
-                    clicked => {
-                        VocabularyAppLogic.selected-lesson-index = i;
-                    }
+            // Lesson label — checkable, mirrors FlashcardLabel usage.
+            LessonStackLabel {
+                horizontal-stretch: 1;
+                height: 36px;
+                lesson: lesson;
+                checkable: true;
+                checked: VocabularyAppLogic.selected-lesson-index == i;
+                clicked => {
+                    VocabularyAppLogic.selected-lesson-index = i;
                 }
+            }
 
-                // Delete button for this lesson row.
-                CommonBtn {
-                    width: 36px;
-                    height: 36px;
-                    text: "✕";
-                    accessibilityLabel: "Delete lesson " + lesson.name;
-                    clicked => {
-                        VocabularyAppLogic.selected-lesson-index = i;
-                        VocabularyAppLogic.lesson-delete-confirmed();
-                    }
+            // Delete button for this lesson row.
+            CommonBtn {
+                width: 36px;
+                height: 36px;
+                text: "✕";
+                accessibilityLabel: "Delete lesson " + lesson.name;
+                clicked => {
+                    VocabularyAppLogic.selected-lesson-index = i;
+                    VocabularyAppLogic.lesson-delete-confirmed();
                 }
             }
         }
@@ -108,21 +104,6 @@ export component LessonStackList inherits VerticalLayout {
                     name-input.text = "";
                     root.show-create-form = false;
                 }
-            }
-        }
-    }
-
-    // "＋ Add Lesson" button — hidden while the form is open.
-    if !root.show-create-form: HorizontalLayout {
-        alignment: center;
-        CommonBtn {
-            width: min(parent.width, 200px);
-            height: 36px;
-            text: "＋ Add Lesson";
-            primary: true;
-            accessibilityLabel: "Open add lesson form";
-            clicked => {
-                root.show-create-form = true;
             }
         }
     }
