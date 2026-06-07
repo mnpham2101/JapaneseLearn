@@ -227,10 +227,10 @@ agent: speckit.tasks
 
 > Tasks 6.T1.1 → 6.T1.2 → 6.T1.3 are sequential (each modifies the same file chain). 6.T1.4 is manual verification by task-manager.
 
-- [ ] 6.T1.1 **[slint-developer]** Move `Tokens` global from `lib/styles/tokens.slint` into `lib/styles/themes/theme_default.slint` (verbatim contents); delete `tokens.slint`. — see [speckit.subtask.6-T1-1.prompt.md](.github/prompts/speckit.subtask.6-T1-1.prompt.md)
-- [ ] 6.T1.2 **[slint-developer]** Update `lib/styles/styles.slint` to re-export `Tokens` from `themes/theme_default.slint`. **Depends on 6.T1.1.** — see [speckit.subtask.6-T1-2.prompt.md](.github/prompts/speckit.subtask.6-T1-2.prompt.md)
-- [ ] 6.T1.3 **[slint-developer]** Author `lib/styles/themes/theme_solarized_light.slint` with the Solarized Light color mapping (not wired into `styles.slint` — default theme stays active). **Depends on 6.T1.2.** — see [speckit.subtask.6-T1-3.prompt.md](.github/prompts/speckit.subtask.6-T1-3.prompt.md)
-- [ ] 6.T1.4 Manual verification: `cargo run --bin japanese_learn` shows unchanged default palette; `cargo build` green; `cargo clippy --bin japanese_learn` zero warnings. No agent — task-manager runs this directly. **Depends on 6.T1.3.**
+- [x] 6.T1.1 **[slint-developer]** Move `Tokens` global from `lib/styles/tokens.slint` into `lib/styles/themes/theme_default.slint` (verbatim contents); delete `tokens.slint`. — see [speckit.subtask.6-T1-1.prompt.md](.github/prompts/speckit.subtask.6-T1-1.prompt.md)
+- [x] 6.T1.2 **[slint-developer]** Update `lib/styles/styles.slint` to re-export `Tokens` from `themes/theme_default.slint`. (Completed as part of 6.T1.1's commit — import path updated there to keep the build green; no separate commit needed.) **Depends on 6.T1.1.** — see [speckit.subtask.6-T1-2.prompt.md](.github/prompts/speckit.subtask.6-T1-2.prompt.md)
+- [x] 6.T1.3 **[slint-developer]** Author `lib/styles/themes/theme_solarized_light.slint` with the Solarized Light color mapping (not wired into `styles.slint` — default theme stays active). **Depends on 6.T1.2.** — see [speckit.subtask.6-T1-3.prompt.md](.github/prompts/speckit.subtask.6-T1-3.prompt.md)
+- [x] 6.T1.4 Manual verification: `cargo run --bin japanese_learn` shows unchanged default palette; `cargo build` green; `cargo clippy --bin japanese_learn` zero warnings. No agent — task-manager runs this directly. **Depends on 6.T1.3.**
 
 ## Phase 7: Future Backlog (Extensible)
 - [ ] 7.1 Add audio playback (Japanese text‑to‑speech integration).
