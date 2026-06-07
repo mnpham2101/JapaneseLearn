@@ -481,6 +481,14 @@ where
             let vocab_logic = ui.global::<VocabularyAppLogic>();
             let flashcard_logic = ui.global::<FlashcardAppLogic>();
 
+            // Snapshot stack names that exist before generation overwrites the list,
+            // so we can name only the newly created stacks in the notification below.
+            let existing_stack_names: std::collections::HashSet<String> = flashcard_logic
+                .get_flashcard_list()
+                .iter()
+                .map(|stack| stack.stackname.to_string())
+                .collect();
+
             // Convert Slint vocabulary models to libD input types.
             let lessons: Vec<VocabularyLesson> = vocab_logic
                 .get_lesson_list()
@@ -545,9 +553,31 @@ where
                         )),
                     })
                     .collect();
+
+                // Name only the stacks that did not exist before this generation.
+                let new_stack_names: Vec<String> = slint_stacks
+                    .iter()
+                    .map(|stack| stack.stackname.to_string())
+                    .filter(|name| !existing_stack_names.contains(name))
+                    .collect();
+
                 flashcard_logic
                     .set_flashcard_list(slint::ModelRc::new(slint::VecModel::from(slint_stacks)));
                 ::flashcard::save_current_list(&ui);
+
+                if !new_stack_names.is_empty() {
+                    let quoted: Vec<String> = new_stack_names
+                        .iter()
+                        .map(|name| format!("'{name}'"))
+                        .collect();
+                    let message = if quoted.len() == 1 {
+                        format!("Flashcard stack {} generated.", quoted[0])
+                    } else {
+                        format!("Flashcard stacks {} generated.", quoted.join(", "))
+                    };
+                    vocab_logic.set_generation_notification(message.into());
+                    vocab_logic.set_active_view(2);
+                }
             }
         });
     }
