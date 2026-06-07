@@ -166,7 +166,7 @@ detail → view/add/delete/edit flashcards.
 
 ## Style design
 - The application should have the following day mode colors: 
-  - #CCD5AE , #E9EDC9 , #FEFAE0, #FAEDCD, #D4A373 ,  #532f08 
+  - #863921 , #E9EDC9 , #FEFAE0, #FAEDCD, #D4A373 ,  #67431d 
   - Darker colors should be used for border, text. 
   - Easy to view for studying.
   - The tab buttons "Vocabulary", "Grammar", "Reading" should be distinguishable from lower buttons "Vocabulary" page such as "Lesson", "Exercise", "Flashcard", "Import Lesson".
@@ -202,11 +202,14 @@ detail → view/add/delete/edit flashcards.
 - The source data files (`lib/vocabulary/ui/data/`) are version-controlled and remain on disk at all times; they are not affected by user actions inside the app.
 
 ## Bug lists:
-- "Vocabulary" page should have show a list of lessons in the middle. It doesn't now.
-- "ReviewMode" Mode page should have buttons "Test Maching". Clicking on "TestMaching" opens a grid that displaces front (spelling or kanji) and back (meaning) of each flashcard. The buttons displaying the front is too wide, and the back are not show. Should have used a grid to nicely arrange then within application's viewport.
-- The grid should display around front and back of around 10 flashcards of each flashcard stack. It should have a next button to go to the next set of to study next set of words in the flashcard stack. 
-- Clicking on "Generate FlashCard" should have noted the user that flashcard [name] have been generated; If a list of flashcard is generated, only list the new ones. The Page should switch to flashcard page. 
+- "Review Mode" page **must** have a "Test Matching" button. Clicking it opens a grid showing the front (spelling or kanji) and back (meaning) of each flashcard in the selected stack, sized to fit the application viewport — currently the front buttons are too wide and the backs aren't shown at all. The grid displays the front and back of about 10 flashcards at a time, with a "Next" button to load the next set from the stack.
+- Clicking "Generate Flashcards" **must** notify the user which flashcard stack(s) were generated (e.g. "Flashcard stack '[lesson name]' generated"). If multiple stacks are created in one action, name only the newly created ones — not stacks that already existed. The view **must** then switch to the Flashcard tab.
+- `FlashcardLabel` width **must** stay smaller than its container — it currently overlaps the container border.
 
+## Theme redesign (high priority):
+- Backup or organized the current color sets to theme.
+- Create a new color theme that matches the Solarized Light by current VSCode. 
+- Theme should be re-usable, such that developer could replace theme as requested by simple search and replace. 
 
 **Milestone 3 should include the following development**
 - Milestone 3 delivers **Analytics** and **Grammar Study Mode** as defined in the Future Backlog below.
