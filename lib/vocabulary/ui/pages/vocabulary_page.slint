@@ -3,7 +3,7 @@ import { CommonBtn } from "@flashcard";
 import { VocabularyAppLogic } from "../vocabulary_app_logic.slint";
 import { LessonStackList } from "../components/lesson_stack_list.slint";
 import { LessonDetailView } from "../components/lesson_detail_view.slint";
-import { FlashcardManagerView } from "../components/flashcard_manager_view.slint";
+import { FlashcardManagerView } from "@flashcard";
 
 // Top-level vocabulary page with a three-tab action bar (Lesson/Exercise/Flashcard)
 // and an Import Lesson direct-action button.
@@ -39,7 +39,9 @@ export component VocabularyPage inherits Rectangle {
                     height: 28px;
                     text: "✕";
                     accessibilityLabel: "Dismiss notification";
-                    clicked => { VocabularyAppLogic.generation-notification = ""; }
+                    clicked => {
+                        VocabularyAppLogic.generation-notification = "";
+                    }
                 }
             }
         }
@@ -61,7 +63,9 @@ export component VocabularyPage inherits Rectangle {
                     checked: VocabularyAppLogic.active-view == 0;
                     checked-bg: Tokens.action-tab-btn-active-bg;
                     checked-text: Tokens.text-primary;
-                    clicked => { VocabularyAppLogic.active-view = 0; }
+                    clicked => {
+                        VocabularyAppLogic.active-view = 0;
+                    }
                 }
 
                 CommonBtn {
@@ -70,7 +74,9 @@ export component VocabularyPage inherits Rectangle {
                     checked: VocabularyAppLogic.active-view == 1;
                     checked-bg: Tokens.action-tab-btn-active-bg;
                     checked-text: Tokens.text-primary;
-                    clicked => { VocabularyAppLogic.active-view = 1; }
+                    clicked => {
+                        VocabularyAppLogic.active-view = 1;
+                    }
                 }
 
                 CommonBtn {
@@ -79,14 +85,18 @@ export component VocabularyPage inherits Rectangle {
                     checked: VocabularyAppLogic.active-view == 2;
                     checked-bg: Tokens.action-tab-btn-active-bg;
                     checked-text: Tokens.text-primary;
-                    clicked => { VocabularyAppLogic.active-view = 2; }
+                    clicked => {
+                        VocabularyAppLogic.active-view = 2;
+                    }
                 }
 
                 // Direct-action button — fires import and returns to current view.
                 CommonBtn {
                     width: 120px;
                     text: "Import Lesson";
-                    clicked => { VocabularyAppLogic.import-vocabulary-clicked(); }
+                    clicked => {
+                        VocabularyAppLogic.import-vocabulary-clicked();
+                    }
                 }
             }
         }
@@ -117,7 +127,9 @@ export component VocabularyPage inherits Rectangle {
                     CommonBtn {
                         text: "Restore Defaults";
                         width: 160px;
-                        clicked => { VocabularyAppLogic.restore-defaults-clicked(); }
+                        clicked => {
+                            VocabularyAppLogic.restore-defaults-clicked();
+                        }
                     }
 
                     CommonBtn {
@@ -152,12 +164,16 @@ export component VocabularyPage inherits Rectangle {
                 CommonBtn {
                     text: "Generate Flashcards";
                     primary: true;
-                    clicked => { VocabularyAppLogic.generate-exercises-clicked(); }
+                    clicked => {
+                        VocabularyAppLogic.generate-exercises-clicked();
+                    }
                 }
 
                 CommonBtn {
                     text: "Export Vocabulary";
-                    clicked => { VocabularyAppLogic.export-vocabulary-clicked(); }
+                    clicked => {
+                        VocabularyAppLogic.export-vocabulary-clicked();
+                    }
                 }
             }
         }

@@ -1,4 +1,8 @@
-import { FlashcardModel, FlashcardAppLogic } from "@flashcard";
+import {
+    FlashcardModel,
+    FlashcardAppLogic,
+    FlashcardManagerView,
+} from "@flashcard";
 import { MatchingExerciseView } from "components/matching_exercise_view.slint";
 import { VocabularyAppLogic } from "vocabulary_app_logic.slint";
 
@@ -11,7 +15,6 @@ export { MatchingExerciseView } from "components/matching_exercise_view.slint";
 export { LessonStackLabel } from "components/lesson_stack_label.slint";
 export { LessonDetailView } from "components/lesson_detail_view.slint";
 export { LessonStackList } from "components/lesson_stack_list.slint";
-export { FlashcardManagerView } from "components/flashcard_manager_view.slint";
 
 // Minimal component used only in tests to host VocabularyAppLogic as a global.
 export component VocabularyTestWindow inherits Window { }
