@@ -1,6 +1,6 @@
 import { Tokens } from "@styles";
-import { CommonBtn } from "common_button.slint";
-import { Flashcard } from "flashcard.slint";
+import { CommonBtn } from "../components/common_button.slint";
+import { Flashcard } from "../components/flashcard.slint";
 import { FlashcardAppLogic } from "../flashcard_app_logic.slint";
 
 // Study session view — shown when a study session is active.
@@ -35,8 +35,7 @@ export component StudySessionView {
                     FlashcardAppLogic.known-changed(
                         FlashcardAppLogic.selected-stack-index,
                         root.current-card-index,
-                        self.known
-                    );
+                        self.known);
                 }
             }
         }
@@ -69,11 +68,9 @@ export component StudySessionView {
             CommonBtn {
                 width: 100px;
                 text: "Next";
-                enabled: root.current-card-index <
-                    FlashcardAppLogic.flashcard-list[FlashcardAppLogic.selected-stack-index].flashcards.length - 1;
+                enabled: root.current-card-index < FlashcardAppLogic.flashcard-list[FlashcardAppLogic.selected-stack-index].flashcards.length - 1;
                 clicked => {
-                    if (root.current-card-index <
-                        FlashcardAppLogic.flashcard-list[FlashcardAppLogic.selected-stack-index].flashcards.length - 1) {
+                    if (root.current-card-index < FlashcardAppLogic.flashcard-list[FlashcardAppLogic.selected-stack-index].flashcards.length - 1) {
                         root.current-card-index = root.current-card-index + 1;
                     }
                     session-card.show-back = false;
