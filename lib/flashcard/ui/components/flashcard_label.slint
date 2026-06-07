@@ -8,4 +8,7 @@ import { FlashcardStackModel } from "../model/flashcard_model.slint";
 export component FlashcardLabel inherits CommonBtn {
     in property<FlashcardStackModel> stack: { stackname: "", flashcards: [] };
     text: stack.stackname;
+    // Cap width so the label fits within its container instead of overlapping the border
+    // (CommonBtn defaults to width: 100%, which overflows unconstrained centering layouts).
+    max-width: 320px;
 }
