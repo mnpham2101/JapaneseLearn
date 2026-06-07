@@ -50,12 +50,18 @@ export component FlashcardManagerView inherits Rectangle {
 
             CommonBtn {
                 text: "Import";
-                clicked => { FlashcardAppLogic.import-stack-clicked(); }
+                width: 90px;
+                clicked => {
+                    FlashcardAppLogic.import-stack-clicked();
+                }
             }
 
             CommonBtn {
                 text: "Export";
-                clicked => { FlashcardAppLogic.export-stack-clicked(); }
+                width: 90px;
+                clicked => {
+                    FlashcardAppLogic.export-stack-clicked();
+                }
             }
         }
 
@@ -152,6 +158,7 @@ export component FlashcardManagerView inherits Rectangle {
                         stacks: FlashcardAppLogic.flashcard-list;
                         selected-index <=> FlashcardAppLogic.selected-stack-index;
                     }
+
                     addButtonText: "Add Stack";
                 }
             }
