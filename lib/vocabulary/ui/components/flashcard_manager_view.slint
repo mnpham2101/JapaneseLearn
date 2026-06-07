@@ -149,17 +149,18 @@ export component FlashcardManagerView inherits Rectangle {
 
             if !FlashcardAppLogic.study-session-active && FlashcardAppLogic.selected-stack-index == -1: HorizontalLayout {
                 alignment: center;
+                Rectangle {
+                    max-width: 330px;
+                    CommonList {
+                        title: "Flashcard Stacks";
+                        add-stack <=> root.show-create-form;
+                        flashcard-list := FlashcardList {
+                            stacks: FlashcardAppLogic.flashcard-list;
+                            selected-index <=> FlashcardAppLogic.selected-stack-index;
+                        }
 
-                CommonList {
-                    width: 400px;
-                    title: "Flashcard Stacks";
-                    add-stack <=> root.show-create-form;
-                    flashcard-list := FlashcardList {
-                        stacks: FlashcardAppLogic.flashcard-list;
-                        selected-index <=> FlashcardAppLogic.selected-stack-index;
+                        addButtonText: "Add Stack";
                     }
-
-                    addButtonText: "Add Stack";
                 }
             }
         }
