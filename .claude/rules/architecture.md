@@ -19,6 +19,7 @@ lib/
     src/lib.rs                    # entry point to init function
     src/*.rs                      # Rust backend logic supporting UI manipulation
     ui/components                 # reusable widgets — one component per file 
+    ui/page/                      # page-level view components composed from ui/components — exported via main_lib.slint for use by other libraries
     ui/model                      # reusable data models written in Slint
     ui/data/                      # bundled read-only seed data (markdown + JSON); embedded at compile time via include_str!(); never written at runtime
     ui/main_lib.slint             # entry slint library file - export the library components and models                
