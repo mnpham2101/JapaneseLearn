@@ -12,14 +12,14 @@ export component MatchingExerciseView inherits Rectangle {
     callback exercise-completed();
 
     // Number of card pairs shown per page.
-    property <int> page-size: 10;
+    out property <int> page-size: 10;
     // Index of the first card shown on the current page.
-    property <int> page-offset: 0;
+    out property <int> page-offset: 0;
 
     // Index (within the current page) of the currently selected front tile (-1 = none selected).
-    property <int> selected-front-index: -1;
+    out property <int> selected-front-index: -1;
     // Number of confirmed matches across the whole stack so far.
-    property <int> matched-count: 0;
+    out property <int> matched-count: 0;
 
     // Per-tile matched flags, indexed by absolute card index (up to 200 cards supported).
     // true means this positional pair has been matched and tiles are locked.

@@ -1,3 +1,6 @@
+import { FlashcardModel } from "@flashcard";
+import { MatchingExerciseView } from "components/matching_exercise_view.slint";
+
 export { TenseEntryModel, VocabularyWordModel, VocabularyLessonModel, VocabularyAppLogic } from "vocabulary_app_logic.slint";
 export { LessonList } from "components/lesson_list.slint";
 export { WordForm } from "components/word_form.slint";
@@ -11,3 +14,17 @@ export { FlashcardManagerView } from "components/flashcard_manager_view.slint";
 
 // Minimal component used only in tests to host VocabularyAppLogic as a global.
 export component VocabularyTestWindow inherits Window { }
+
+// Minimal component used only in tests to host MatchingExerciseView directly
+// (MatchingExerciseView inherits Rectangle and cannot be instantiated as a
+// top-level test window on its own).
+export component MatchingExerciseTestWindow inherits Window {
+    in property <[FlashcardModel]> cards <=> view.cards;
+    callback exercise-completed <=> view.exercise-completed;
+    out property <int> matched-count <=> view.matched-count;
+    out property <int> page-offset <=> view.page-offset;
+    out property <int> page-size <=> view.page-size;
+    out property <int> selected-front-index <=> view.selected-front-index;
+
+    view := MatchingExerciseView { }
+}
