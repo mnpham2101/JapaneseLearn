@@ -348,6 +348,27 @@ export { Tokens }     from "tokens.slint";
 export { Animations } from "animations.slint";
 ```
 
+### Swappable theme files — color sets behind one import line
+
+When the design tokens must support more than one color theme (e.g., day/night, or matching an external palette), do **not** branch on a runtime property inside `tokens.slint`. Instead, give every theme its own file that exports a `Tokens` global with **identical property names and types** but different color values, and let the entry file re-export exactly one of them:
+
+```
+lib/my_lib/
+  themes/
+    theme_default.slint          # export global Tokens { ... current values ... }
+    theme_solarized_light.slint  # export global Tokens { ... same properties, new values ... }
+  tokens.slint                   # superseded by themes/* — kept only if non-color tokens live here
+  my_lib.slint                   # entry file — re-exports the ACTIVE theme
+```
+
+```slint
+// lib/my_lib/my_lib.slint
+export { Tokens } from "themes/theme_default.slint";
+// To switch themes: replace "theme_default" with "theme_solarized_light" — one string, one file.
+```
+
+Because every theme file implements the same `Tokens` interface, swapping the active theme is a single search-and-replace on the import path — no consuming `.slint` file changes, and no risk of a missing or renamed property breaking the build. Keep typography, spacing, and border-radius tokens (non-color values) out of the theme files — only color sets need duplicating per theme.
+
 ### Client `build.rs`
 
 Each client (libA crate or the root app) registers the library path in its `build.rs`:

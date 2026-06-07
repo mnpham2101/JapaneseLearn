@@ -72,9 +72,9 @@ See `.claude/rules/architecture.md` for the full libA / libB / libC definitions.
 **Goal**: Extract all design tokens into a standalone `lib/styles` folder (libC) so every component in every library imports from `@styles` — no hardcoded colors, sizes, or durations anywhere.
 
 - **Library type**: libC — pure Slint folder, **not a Rust crate** (no `Cargo.toml`, no `src/`).
-- `lib/styles/tokens.slint`: color palette, typography scale, spacing constants, border tokens.
+- `lib/styles/themes/`: one `theme_*.slint` file per color theme, each exporting an identical `Tokens` interface (e.g. `theme_default.slint`, `theme_solarized_light.slint`) — see `slint-code-style.md` § *Swappable theme files*. The active theme is selected by a single re-export line in `styles.slint`; switching themes is a one-line search-and-replace.
 - `lib/styles/animations.slint`: easing-curve constants and duration tokens.
-- `lib/styles/styles.slint`: entry file — re-exports tokens and animations.
+- `lib/styles/styles.slint`: entry file — re-exports the active theme's `Tokens` and `Animations`.
 - Each client library and the root app registers the path in its `build.rs` via `with_library_paths`; see `slint-code-style.md` § *Use purely Slint reusable library*.
 - Migrate all `.slint` files in `lib/flashcard/` and root `ui/` to import from `@styles`.
 
