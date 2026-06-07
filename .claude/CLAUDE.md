@@ -31,7 +31,7 @@ test/                  # automated tests
 
 ## Implementation
 
-Pick the next open task from `.github/prompts/speckit.tasks.prompt.md`. For multi-task work, use the **task-manager** agent; follow the [implement-tasks skill](.claude/skill/implement-tasks/SKILL.md).
+Pick the next open task from `.github/prompts/speckit.tasks.prompt.md`. **project-owner** authors the detailed task/subtask plan (it reads the codebase once and writes down the technical approach — see `.claude/rules/task-planning.md`); **task-manager** confirms that plan with the user and dispatches it — follow the [implement-tasks skill](.claude/skill/implement-tasks/SKILL.md). Neither re-investigates what the other has already written down.
 
 ## Rules & Standards
 

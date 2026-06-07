@@ -2,12 +2,14 @@
 paths:
   - .github/prompts/speckit.tasks.prompt.md
   - .github/prompts/speckit.subtask.*.prompt.md
+  - .github/prompts/speckit.task.*.architecture.prompt.md
 ---
 
 # Task Planning Rules
 
-**Format reference for task-manager.** Owns: task/subtask ID scheme, writing locations, format templates, subtask file template.  
-For execution procedure (phases, gates, agent dispatch): see `task-manager.md`.  
+**Format reference — authored by project-owner, executed by task-manager.** project-owner reads the codebase and writes task/subtask files (and task-scoped architecture prompt files) to this spec *once*, with full technical context, so task-manager and the executing agents never re-derive it from the source tree. Owns: task/subtask ID scheme, writing locations, format templates, subtask file template, architecture-prompt-file template.  
+For project-owner's planning procedure (when/how these get authored): see `project-owner.md` § "On planning a task for implementation".  
+For task-manager's execution procedure (phases, gates, agent dispatch): see `task-manager.md`.  
 For commit workflow: see `implement-tasks/SKILL.md`.
 
 ---
@@ -59,12 +61,15 @@ Tasks within a phase must be ordered and grouped according to this dependency ch
 
 ## Writing Locations
 
-| What | File |
-|---|---|
-| All tasks (`M.N`) and subtask references (`M.N.X`) | `speckit.tasks.prompt.md` |
-| Subtask detail (goals + technical approach) | `speckit.subtask.M-N-X.prompt.md` (one file per subtask) |
+| What | File | Authored by |
+|---|---|---|
+| All tasks (`M.N`) and subtask references (`M.N.X`) | `speckit.tasks.prompt.md` | project-owner |
+| Subtask detail (goals + technical approach) | `speckit.subtask.M-N-X.prompt.md` (one file per subtask) | project-owner |
+| Task-scoped architecture plan (only when a task spans ≥2 libraries/modules) | `speckit.task.[taskId].architecture.prompt.md` (e.g. `speckit.task.6-9.architecture.prompt.md`) | project-owner |
 
 **Never** write subtask implementation detail inline in `speckit.tasks.prompt.md` — keep the tasks file scannable. A subtask entry in the tasks file is one line plus a file reference.
+
+**Authorship note**: project-owner writes all three artifact types above in a single investigation pass — it has already read the codebase to design the implementation, so the file lists, component names, and function/callback names land directly in these files. task-manager reads them to confirm the plan with the user and delegate; it does not re-investigate the codebase to reconstruct what's already written down.
 
 ---
 
@@ -171,8 +176,55 @@ Optional. Include only if there is a non-obvious design decision, an existing pa
 
 ---
 
+## Task-Scoped Architecture Prompt File Format
+
+Required **only** when a task's subtasks change code across **two or more libraries or modules** (e.g., a `lib/vocabulary` change that also touches `lib/exercise_generator`). Authored by project-owner — either while planning the task, or on task-manager's request if the cross-library impact surfaces later.
+
+File name: `speckit.task.[taskId].architecture.prompt.md` (dashes for the task ID, e.g. `speckit.task.6-9.architecture.prompt.md` for Task 6.9)
+Location: `.github/prompts/`
+
+```markdown
+# Task M.N — Architecture Plan
+
+**Modules involved**: `lib/vocabulary`, `lib/exercise_generator`
+**Why cross-module**: [one sentence — what data or control flow crosses the boundary]
+
+---
+
+## Roles & Responsibilities
+
+- `lib/vocabulary` (libA) — owns `VocabularyLesson` data and CRUD UI; calls the transformer to request exercise generation.
+- `lib/exercise_generator` (libD) — pure transformer; converts `VocabularyLesson` into `FlashcardStackData` on demand.
+
+## Interaction Diagram
+
+\`\`\`plantuml
+@startuml
+actor User
+participant "VocabularyAppLogic\n(lib/vocabulary)" as Vocab
+participant "ExerciseGeneratorService\n(lib/exercise_generator)" as Gen
+
+User -> Vocab : generate-exercise-clicked(lesson_idx)
+Vocab -> Gen : generate(ExerciseRequest::Flashcard(lesson))
+Gen --> Vocab : ExerciseOutput::FlashcardStackData
+Vocab -> User : push stack to flashcard-list
+@enduml
+\`\`\`
+
+## Notes
+- [Any invariant or constraint the implementing agents must preserve across the boundary.]
+```
+
+Rules:
+- Show **only** the modules, roles, and interactions this task touches — never redraw the whole-project component diagram (that lives in `architecture_diagram.puml`, owned separately).
+- Keep the diagram to the actors and calls relevant to this task's data/control flow — not full class or sequence detail.
+- Commit this file together with the task/subtask files it supports, in one planning-docs commit, before any developer agent is invoked.
+
+---
+
 ## Format Rules
 
 1. **Tasks are scannable; subtasks are actionable.** `speckit.tasks.prompt.md` is the map; subtask files are the briefs.
 2. **No implementation detail in `speckit.tasks.prompt.md`.** Keep entries to: checkbox, ID, agent label, one-line goal, dependency, subtask file reference.
 3. **One subtask = one logical change = one commit.** Enforced by `atomic-commit-rule.md`.
+4. **Architecture prompt files are task-scoped, not project-scoped.** One file per cross-library task, showing only that task's modules and interactions.

@@ -6,12 +6,14 @@ description: Implement the next open task from the task list. Picks the task, de
 
 When this skill is invoked, execute the following workflow in order.
 
+**Authorship split**: project-owner has already read the codebase and authored the task/subtask files (and, for cross-library tasks, the architecture prompt file) per `task-planning.md` — including agent labels, file lists, and technical approach. This skill governs how task-manager *consumes* that plan and dispatches it; task-manager does not rediscover or redesign it.
+
 ## Responsibilities by agent
 
 | Step | Responsible agent | What they do |
 |---|---|---|
-| 1 — Pick task | **task-manager** | Read task list, identify next open task |
-| 2 — Delegate | **task-manager** | Brief the implementing or testing agent and invoke it |
+| 1 — Pick task | **task-manager** | Read the task entry + its already-authored subtask file(s); identify the next open task |
+| 2 — Delegate | **task-manager** | Brief the implementing or testing agent by pointing to the authored subtask file, and invoke it |
 | 3 — Build/test verification | **slint-developer**, **rust-developer**, or **slint-tester** | Run `cargo build` or test suite; report result before returning |
 | 4a — Suggest commit | **slint-developer** or **rust-developer** | Suggest commit message per `commit-msg-format.md`; stop there |
 | 4b — Review gate, commit, mark done | **task-manager** | Prompt for review, commit after approval, mark task `[x]` |
@@ -22,18 +24,19 @@ Implementing agents (slint-developer, rust-developer) handle Steps 3 and 4a. **s
 
 ## Step 1 — Pick the task  `[task-manager]`
 
-Read `@.github/prompts/speckit.tasks.prompt.md`. Find the first unchecked task (`- [ ]`) in the current phase. If the user specified a task ID, use that instead.
+Read `@.github/prompts/speckit.tasks.prompt.md`. Find the first unchecked task (`- [ ]`) in the current phase, and open its `speckit.subtask.M-N-X.prompt.md` file(s) — project-owner has already written the technical approach, file list, and agent label there. If the user specified a task ID, use that instead.
 
-State the task ID and description before doing anything else. If anything is ambiguous, ask before proceeding.
+State the task ID and description before doing anything else. If the authored plan is missing or looks incomplete for this task, send it back to **project-owner** to author rather than filling the gap yourself — do not improvise a plan task-manager wasn't meant to design.
 
 ## Step 2 — Determine the agent and delegate  `[task-manager]`
 
+The agent label is already on the task/subtask — read it, don't re-derive it:
 - Task labelled `**[slint-developer]**` → invoke the **slint-developer** agent.
 - Task labelled `**[rust-developer]**` → invoke the **rust-developer** agent.
 - Task labelled `**[slint-tester]**` → invoke the **slint-tester** agent.
 - No label, or a verification/manual task → handle directly without delegating.
 
-Brief the agent with: Goal (one sentence), files to modify (absolute paths + what to change), files to read for context (absolute paths), ordered steps, and any constraints the agent might not already know. Do not copy file contents into the brief.
+Brief the agent with: the goal (one sentence, from the subtask file), a pointer to its `speckit.subtask.M-N-X.prompt.md` (the technical approach — files to change, components, functions/callbacks, patterns — is already written there), and any constraint the agent might not already know. Do not copy file contents, and do not restate the technical approach the subtask file already contains — point to it.
 
 ## Step 3 — Build verification  `[slint-developer / rust-developer]`
 
