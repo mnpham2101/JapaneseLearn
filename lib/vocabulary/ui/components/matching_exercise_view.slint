@@ -1,27 +1,58 @@
 import { Tokens } from "@styles";
 import { CommonBtn, FlashcardModel } from "@flashcard";
 
-// MatchingExerciseView — positional card-matching exercise.
+// MatchingExerciseView — positional card-matching exercise, paginated.
 // The user selects a front tile (jap-obj) then clicks the matching back tile (explanation).
-// front[i] pairs with back[i] — pairing is positional.
-// Fires exercise-completed() when all pairs are matched.
+// front[i] pairs with back[i] — pairing is positional, scoped to the current page slice.
+// Shows up to `page-size` pairs at a time; "Next" advances to the following set,
+// wrapping back to the first page once the end of the stack is reached.
+// Fires exercise-completed() when all pairs in the stack have been matched.
 export component MatchingExerciseView inherits Rectangle {
     in property <[FlashcardModel]> cards;
     callback exercise-completed();
 
-    // Index of the currently selected front tile (-1 = none selected).
+    // Number of card pairs shown per page.
+    property <int> page-size: 10;
+    // Index of the first card shown on the current page.
+    property <int> page-offset: 0;
+
+    // Index (within the current page) of the currently selected front tile (-1 = none selected).
     property <int> selected-front-index: -1;
-    // Number of confirmed matches so far.
+    // Number of confirmed matches across the whole stack so far.
     property <int> matched-count: 0;
 
-    // Per-tile matched flags (up to 20 cards supported via fixed slots).
+    // Per-tile matched flags, indexed by absolute card index (up to 200 cards supported).
     // true means this positional pair has been matched and tiles are locked.
     property <[bool]> matched-flags: [
-        false, false, false, false, false,
-        false, false, false, false, false,
-        false, false, false, false, false,
-        false, false, false, false, false,
+        false, false, false, false, false, false, false, false, false, false,
+        false, false, false, false, false, false, false, false, false, false,
+        false, false, false, false, false, false, false, false, false, false,
+        false, false, false, false, false, false, false, false, false, false,
+        false, false, false, false, false, false, false, false, false, false,
+        false, false, false, false, false, false, false, false, false, false,
+        false, false, false, false, false, false, false, false, false, false,
+        false, false, false, false, false, false, false, false, false, false,
+        false, false, false, false, false, false, false, false, false, false,
+        false, false, false, false, false, false, false, false, false, false,
+        false, false, false, false, false, false, false, false, false, false,
+        false, false, false, false, false, false, false, false, false, false,
+        false, false, false, false, false, false, false, false, false, false,
+        false, false, false, false, false, false, false, false, false, false,
+        false, false, false, false, false, false, false, false, false, false,
+        false, false, false, false, false, false, false, false, false, false,
+        false, false, false, false, false, false, false, false, false, false,
+        false, false, false, false, false, false, false, false, false, false,
+        false, false, false, false, false, false, false, false, false, false,
+        false, false, false, false, false, false, false, false, false, false,
     ];
+
+    // Number of cards visible on the current page (last page may be shorter than page-size).
+    property <int> visible-count: min(page-size, cards.length - page-offset);
+
+    function go-to-next-page() {
+        selected-front-index = -1;
+        page-offset = (page-offset + page-size >= cards.length) ? 0 : page-offset + page-size;
+    }
 
     VerticalLayout {
         padding: Tokens.padding-lg;
@@ -47,15 +78,17 @@ export component MatchingExerciseView inherits Rectangle {
             }
         }
 
-        // Two-column tile grid
+        // Two-column tile grid — equal-width columns so both front and back fit the viewport.
         HorizontalLayout {
             spacing: Tokens.spacing-md;
 
             // Left column — front tiles (jap-obj)
             VerticalLayout {
+                horizontal-stretch: 1;
                 spacing: Tokens.spacing-sm;
 
                 for card[i] in cards: CommonBtn {
+                    visible: i >= page-offset && i < page-offset + visible-count;
                     text: card.jap-obj;
                     enabled: !matched-flags[i];
                     checked: (selected-front-index == i) && !matched-flags[i];
@@ -71,9 +104,11 @@ export component MatchingExerciseView inherits Rectangle {
 
             // Right column — back tiles (explanation)
             VerticalLayout {
+                horizontal-stretch: 1;
                 spacing: Tokens.spacing-sm;
 
                 for card[i] in cards: CommonBtn {
+                    visible: i >= page-offset && i < page-offset + visible-count;
                     text: card.explanation;
                     enabled: !matched-flags[i];
                     primary: matched-flags[i];
@@ -92,6 +127,20 @@ export component MatchingExerciseView inherits Rectangle {
                             selected-front-index = -1;
                         }
                     }
+                }
+            }
+        }
+
+        // Pagination control — only shown when the stack spans more than one page.
+        if cards.length > page-size: HorizontalLayout {
+            alignment: center;
+
+            CommonBtn {
+                width: min(parent.width, 160px);
+                text: "Next";
+                accessibilityLabel: "Show next set of cards";
+                clicked => {
+                    root.go-to-next-page();
                 }
             }
         }
