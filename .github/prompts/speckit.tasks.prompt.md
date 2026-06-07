@@ -222,6 +222,29 @@ agent: speckit.tasks
   - [x] 6.D.3.1 **[slint-developer]** Add `callback restore-defaults-clicked()` to `VocabularyAppLogic`; add `CommonBtn { text: "Restore Defaults"; }` above `LessonStackList` in the Lesson view (active-view == 0) of `vocabulary_page.slint`. **Depends on 6.D.1.** — see [speckit.subtask.6-D-3-1.prompt.md](.github/prompts/speckit.subtask.6-D-3-1.prompt.md)
   - [x] 6.D.3.2 **[rust-developer]** Wire `on_restore_defaults_clicked` in `lib/vocabulary/src/lib.rs`: clear lesson list, reload from embedded JSON defaults via `include_str!()`, push to logic, save to `vocabulary.json`. **Depends on 6.D.3.1.** — see [speckit.subtask.6-D-3-2.prompt.md](.github/prompts/speckit.subtask.6-D-3-2.prompt.md)
 
+## Phase 6.B: Bug Fixes
+**Goal**: Fix the Test Matching grid layout/pagination, notify the user which flashcard stacks were generated and switch to the Flashcard tab, and fix the FlashcardLabel width-overlap bug.
+
+> 6.B.1 and 6.B.3 touch different files than the 6.B.2 chain and may run in parallel with it. 6.B.2.1 → 6.B.2.2 → 6.B.2.T are sequential (UI plumbing, then wiring, then test).
+
+- [ ] 6.B.1 **[slint-developer]** Fix `MatchingExerciseView` grid: cap front/back tile widths so both columns fit the viewport, and paginate to ~10 card pairs per page with a "Next" button. — see [speckit.subtask.6-B-1.prompt.md](.github/prompts/speckit.subtask.6-B-1.prompt.md)
+- [ ] 6.B.1.T **[slint-tester]** Test `MatchingExerciseView` pagination and matching on the visible page slice.
+  - Callbacks/state to invoke: construct with a `cards` list of >10 entries; click front/back tiles; click "Next"
+  - Properties to assert: visible tile count caps at page size (~10); `matched-count` and `exercise-completed` operate on the current page slice; advancing pages resets selection/matched state for the new page
+  - Behaviors: matching two tiles on the same page locks them; "Next" loads the following set of cards
+  - Covers: Task 6.B.1
+  **Depends on 6.B.1.**
+- [ ] 6.B.2 **[slint-developer + rust-developer]** Generate Flashcards notification — name newly created stacks and switch to the Flashcard tab.
+  - [ ] 6.B.2.1 **[slint-developer]** Add `generation-notification` and `active-view` properties to `VocabularyAppLogic`; bind `VocabularyPage` tabs to `active-view` and add a dismissible notification banner. — see [speckit.subtask.6-B-2-1.prompt.md](.github/prompts/speckit.subtask.6-B-2-1.prompt.md)
+  - [ ] 6.B.2.2 **[rust-developer]** In `on_generate_exercises_clicked`, diff pre-existing vs. generated stack names, set `generation_notification` naming only the new stacks, and set `active_view = 2`. **Depends on 6.B.2.1.** — see [speckit.subtask.6-B-2-2.prompt.md](.github/prompts/speckit.subtask.6-B-2-2.prompt.md)
+- [ ] 6.B.2.T **[slint-tester]** Test Generate Flashcards notification and tab switch.
+  - Callbacks to invoke: `invoke_generate_exercises_clicked()` with a lesson list containing both new and pre-existing stack names
+  - Properties to assert: `get_generation_notification()` names only newly created stacks (not pre-existing ones); `get_active_view() == 2` after generation; notification stays empty and `active_view` unchanged when no new stacks are created
+  - Behaviors: regenerating with no new lessons produces no notification and no tab switch
+  - Covers: Task 6.B.2
+  **Depends on 6.B.2.2.**
+- [ ] 6.B.3 **[slint-developer]** Fix `FlashcardLabel` width overlap: cap width with `min(parent.width, ...)` so it no longer overflows its container border. — see [speckit.subtask.6-B-3.prompt.md](.github/prompts/speckit.subtask.6-B-3.prompt.md)
+
 ## Phase 6.T: Theme Redesign
 **Goal**: Make the color palette swappable via `lib/styles/themes/theme_*.slint` files, each containing the full `Tokens` global, with `styles.slint` re-exporting the active theme via a single line.
 
