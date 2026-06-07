@@ -137,6 +137,17 @@ See `.claude/rules/architecture.md` for the full libA / libB / libC definitions.
 
 **Milestone completion check**: create a vocabulary lesson → add words with and without kanji → click Generate Exercises → confirm flashcard stacks appear with kanji duplication → manually edit a flashcard stack → click Re-create → confirm stacks reset to vocabulary-derived data with vocabulary lesson unchanged → open Review Page → select a stack → complete the matching exercise → confirm all pairs resolve correctly.
 
+## Phase 6.D: Default Vocabulary Data
+**Goal**: Bundle N5 vocabulary datasets with the app so users can study immediately without manual data entry. Three datasets ship as embedded source files; they are never overwritten at runtime.
+
+- **Data authoring**: Create and version-control six files in `lib/vocabulary/ui/data/` — `n5_verbs.md`, `n5_adjectives.md`, `n5_vocabulary.md`, and one JSON equivalent for each. Each file is a complete, valid vocabulary lesson with full word entries (spelling, kanji where applicable, meaning, type, at least one tense, at least one example sentence where grammatically relevant).
+
+- **Auto-load on first launch**: In `lib/vocabulary/src/lib.rs`, at `init()` startup detect whether `vocabulary.json` is absent. If absent, parse the three embedded datasets using `include_str!()` and save them to `vocabulary.json`. If `vocabulary.json` already exists, skip auto-load (user may have previously removed defaults intentionally).
+
+- **Restore Defaults UI + handler**: Add `callback restore-defaults-clicked()` to `VocabularyAppLogic`. Add a `CommonBtn "Restore Defaults"` above `LessonStackList` in the Lesson view of `VocabularyPage`. The Rust handler clears all current lessons from memory and disk, then reloads and saves the three embedded datasets.
+
+- No new libraries or crates. Uses `include_str!()` (Rust built-in) for embedding and existing `serde_json` for parsing. Data folder convention (`lib/[library]/ui/data/`) is documented in `architecture.md`.
+
 ## Phase 7: Mobile Support (Android + Swipe Gestures)
 **Goal**: Deploy on Android; add swipe navigation. Placed here so all subsequent feature phases are built mobile-ready from the start.
 

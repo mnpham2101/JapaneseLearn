@@ -186,6 +186,21 @@ detail → view/add/delete/edit flashcards.
 - "Add Lesson" is too wide. Keep an appropriate maximum width and same height for buttons.
 - There is a bug, when "Add Lession" is clicked, the "Confirm" and "Cancel" button overlaps with another container. Fix it!
 
+## Default Vocabulary Data
+
+- Default vocabulary datasets are bundled into the application binary using `include_str!()` — no runtime file-path dependency; works on Windows desktop and WebAssembly.
+- Source files live in `lib/vocabulary/ui/data/`:
+  - `n5_verbs.md` + `n5_verbs.json`
+  - `n5_adjectives.md` + `n5_adjectives.json`
+  - `n5_vocabulary.md` + `n5_vocabulary.json`
+
+  Each pair is the same dataset in two formats; both are version-controlled and never deleted by user actions.
+- Each word entry **must** include: `spelling`, `kanji` (where applicable), `meaning`, `type`, and at least one `tense` entry and one `example` sentence where grammatically relevant.
+- **Auto-load on first launch**: if `vocabulary.json` does not exist when the application starts, the three default lessons are pre-loaded and saved automatically.
+- **Restore Defaults** button: a `CommonBtn` labeled "Restore Defaults" is placed in the Lesson view of `VocabularyPage`, above the lesson list and clearly visible. Clicking it removes all current lessons (user-created and default alike) and reloads all three default datasets from the embedded files. This action is destructive — all user-edited lessons are lost.
+- Default lessons participate in flashcard generation via the existing "Generate Flashcards" button without additional steps.
+- The source data files (`lib/vocabulary/ui/data/`) are version-controlled and remain on disk at all times; they are not affected by user actions inside the app.
+
 **Milestone 3 should include the following development**
 - Milestone 3 delivers **Analytics** and **Grammar Study Mode** as defined in the Future Backlog below.
 

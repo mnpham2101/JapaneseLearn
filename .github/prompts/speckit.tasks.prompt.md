@@ -213,6 +213,15 @@ agent: speckit.tasks
 
 - [x] 6.S.5 **[slint-developer]** Fix layout bugs and responsiveness: (a) fix Confirm/Cancel overlap by removing intermediate VerticalLayout wrapper in VocabularyPage Lesson view and giving LessonStackList `height: parent.height`; (b) cap "Add Lesson" button to `min(parent.width, 200px)` inside a centering HorizontalLayout; (c) replace fixed 360px Flashcard width in StudySessionView with `min(parent.width - 32px, 480px)`. **Depends on 6.S.1.** — see [speckit.subtask.6-S-5.prompt.md](.github/prompts/speckit.subtask.6-S-5.prompt.md)
 
+## Phase 6.D: Default Vocabulary Data
+**Goal**: Ship three N5 vocabulary datasets as embedded data files; auto-load them on first launch; add a Restore Defaults button so users can reset to the bundled content.
+
+- [x] 6.D.1 Create default vocabulary data files in `lib/vocabulary/ui/data/`: `n5_verbs.json`, `n5_adjectives.json`, `n5_vocabulary.json` (and matching `.md` files). Schema matches `LessonData` / `WordData` structs in `lib/vocabulary/src/lib.rs`. Content: ~30 N5 verbs, ~20 N5 adjectives, ~30 N5 nouns. No agent — data authored inline.
+- [x] 6.D.2 **[rust-developer]** Auto-load defaults on first launch: at the start of `init()` in `lib/vocabulary/src/lib.rs`, if `vocabulary.json` does not exist, call a new `load_and_save_defaults()` function that uses `include_str!()` to embed the three JSON files and parse+save them. Gated `#[cfg(not(target_arch = "wasm32"))]`. **Depends on 6.D.1.** — see [speckit.subtask.6-D-2.prompt.md](.github/prompts/speckit.subtask.6-D-2.prompt.md)
+- [x] 6.D.3 **[slint-developer + rust-developer]** Restore Defaults feature.
+  - [x] 6.D.3.1 **[slint-developer]** Add `callback restore-defaults-clicked()` to `VocabularyAppLogic`; add `CommonBtn { text: "Restore Defaults"; }` above `LessonStackList` in the Lesson view (active-view == 0) of `vocabulary_page.slint`. **Depends on 6.D.1.** — see [speckit.subtask.6-D-3-1.prompt.md](.github/prompts/speckit.subtask.6-D-3-1.prompt.md)
+  - [x] 6.D.3.2 **[rust-developer]** Wire `on_restore_defaults_clicked` in `lib/vocabulary/src/lib.rs`: clear lesson list, reload from embedded JSON defaults via `include_str!()`, push to logic, save to `vocabulary.json`. **Depends on 6.D.3.1.** — see [speckit.subtask.6-D-3-2.prompt.md](.github/prompts/speckit.subtask.6-D-3-2.prompt.md)
+
 ## Phase 7: Future Backlog (Extensible)
 - [ ] 7.1 Add audio playback (Japanese text‑to‑speech integration).
 - [ ] 7.2 Implement spaced repetition algorithms for study scheduling.
