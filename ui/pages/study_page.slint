@@ -17,34 +17,42 @@ export component StudyPage {
 
             // ── Topic tab row ────────────────────────────────────────────────
             Rectangle {
-                height: 44px;
+                height: Tokens.tab-bar-height;
                 background: Tokens.topic-tab-bar-bg;
+                VerticalLayout {
+                    padding: Tokens.bar-padding-vertical;
+                    HorizontalLayout {
+                        padding-left: Tokens.bar-padding-horizontal;
+                        padding-right: Tokens.bar-padding-horizontal;
+                        spacing: Tokens.spacing-sm;
+                        alignment: start;
 
-                HorizontalLayout {
-                    padding-left: 12px;
-                    padding-right: 12px;
-                    spacing: 8px;
-                    alignment: start;
+                        CommonBtn {
+                            width: 110px;
+                            text: "Vocabulary";
+                            checked: root.active-topic == 0;
+                            clicked => {
+                                root.active-topic = 0;
+                            }
+                        }
 
-                    CommonBtn {
-                        width: 110px;
-                        text: "Vocabulary";
-                        checked: root.active-topic == 0;
-                        clicked => { root.active-topic = 0; }
-                    }
+                        CommonBtn {
+                            width: 110px;
+                            text: "Grammar";
+                            checked: root.active-topic == 1;
+                            clicked => {
+                                root.active-topic = 1;
+                            }
+                        }
 
-                    CommonBtn {
-                        width: 110px;
-                        text: "Grammar";
-                        checked: root.active-topic == 1;
-                        clicked => { root.active-topic = 1; }
-                    }
-
-                    CommonBtn {
-                        width: 110px;
-                        text: "Reading";
-                        checked: root.active-topic == 2;
-                        clicked => { root.active-topic = 2; }
+                        CommonBtn {
+                            width: 110px;
+                            text: "Reading";
+                            checked: root.active-topic == 2;
+                            clicked => {
+                                root.active-topic = 2;
+                            }
+                        }
                     }
                 }
             }
