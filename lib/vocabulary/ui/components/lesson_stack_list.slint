@@ -2,107 +2,119 @@ import { CommonBtn } from "@flashcard";
 import { LessonStackLabel } from "lesson_stack_label.slint";
 import { VocabularyAppLogic } from "../vocabulary_app_logic.slint";
 import { Tokens } from "@styles";
+import { Tokens } from "../../../styles/themes/theme_solarized_light.slint";
 
 // List of vocabulary lessons rendered as LessonStackLabel rows,
 // with an inline create-lesson form.
-export component LessonStackList inherits VerticalLayout {
+export component LessonStackList inherits Rectangle {
     // State for the create-lesson inline form. Exposed as in-out so a parent
     // header button can bind its checked state via `<=>` (mirrors CommonList.add-stack).
     in-out property <bool> show-create-form: false;
 
     // Lesson rows — plain layout, matching FlashcardList's proven pattern.
     VerticalLayout {
-        spacing: Tokens.spacing-sm;
-        padding: Tokens.padding-sm;
+        alignment: LayoutAlignment.end;
+        padding: Tokens.bar-padding-vertical;
+        // Create-lesson form — slides up from the bottom when show-create-form is true.
+        if root.show-create-form: Rectangle {
+            background: Tokens.input-form-background;
+            border-radius: Tokens.border-radius;
+            height: self.visible ? 64px : 0px;
 
-        for lesson[i] in VocabularyAppLogic.lesson-list: HorizontalLayout {
-            spacing: Tokens.spacing-sm;
+            HorizontalLayout {
+                padding: Tokens.padding-sm;
+                spacing: Tokens.spacing-sm;
+                alignment: center;
 
-            // Lesson label — checkable, mirrors FlashcardLabel usage.
-            LessonStackLabel {
-                horizontal-stretch: 1;
-                height: 36px;
-                lesson: lesson;
-                checkable: true;
-                checked: VocabularyAppLogic.selected-lesson-index == i;
-                clicked => {
-                    VocabularyAppLogic.selected-lesson-index = i;
+                // Lesson name input field.
+                name-field := Rectangle {
+                    horizontal-stretch: 1;
+                    height: 36px;
+                    border-width: Tokens.border-width;
+                    border-color: Tokens.border-color;
+                    border-radius: Tokens.border-radius;
+                    background: Tokens.card-field-background;
+
+                    name-input := TextInput {
+                        font-size: Tokens.font-size-body;
+                        color: Tokens.text-primary;
+                        vertical-alignment: center;
+                        width: parent.width - 12px;
+                        x: Tokens.spacing-xs;
+                    }
+
+                    Text {
+                        visible: name-input.text == "";
+                        text: "Lesson name...";
+                        font-size: Tokens.font-size-body;
+                        color: Tokens.text-placeholder;
+                        vertical-alignment: center;
+                        x: Tokens.spacing-xs;
+                    }
                 }
-            }
 
-            // Delete button for this lesson row.
-            CommonBtn {
-                width: 36px;
-                height: 36px;
-                text: "✕";
-                accessibilityLabel: "Delete lesson " + lesson.name;
-                clicked => {
-                    VocabularyAppLogic.selected-lesson-index = i;
-                    VocabularyAppLogic.lesson-delete-confirmed();
+                CommonBtn {
+                    width: 90px;
+                    height: 36px;
+                    text: "Confirm";
+                    primary: true;
+                    accessibilityLabel: "Confirm add lesson";
+                    clicked => {
+                        VocabularyAppLogic.lesson-create-confirmed(name-input.text);
+                        name-input.text = "";
+                        root.show-create-form = false;
+                    }
+                }
+
+                CommonBtn {
+                    width: 80px;
+                    height: 36px;
+                    text: "Cancel";
+                    accessibilityLabel: "Cancel add lesson";
+                    clicked => {
+                        name-input.text = "";
+                        root.show-create-form = false;
+                    }
                 }
             }
         }
-    }
-
-    // Create-lesson form — slides up from the bottom when show-create-form is true.
-    if root.show-create-form: Rectangle {
-        background: Tokens.input-form-background;
-        border-radius: Tokens.border-radius;
-        height: self.visible ? 64px : 0px;
 
         HorizontalLayout {
-            padding: Tokens.padding-sm;
-            spacing: Tokens.spacing-sm;
-            alignment: center;
-
-            // Lesson name input field.
-            name-field := Rectangle {
-                horizontal-stretch: 1;
-                height: 36px;
-                border-width: Tokens.border-width;
+            Rectangle {
                 border-color: Tokens.border-color;
                 border-radius: Tokens.border-radius;
-                background: Tokens.card-field-background;
+                border-width: Tokens.border-width;
+                VerticalLayout {
+                    spacing: Tokens.spacing-sm;
+                    padding: Tokens.padding-sm;
 
-                name-input := TextInput {
-                    font-size: Tokens.font-size-body;
-                    color: Tokens.text-primary;
-                    vertical-alignment: center;
-                    width: parent.width - 12px;
-                    x: Tokens.spacing-xs;
-                }
+                    for lesson[i] in VocabularyAppLogic.lesson-list: HorizontalLayout {
+                        spacing: Tokens.spacing-sm;
 
-                Text {
-                    visible: name-input.text == "";
-                    text: "Lesson name...";
-                    font-size: Tokens.font-size-body;
-                    color: Tokens.text-placeholder;
-                    vertical-alignment: center;
-                    x: Tokens.spacing-xs;
-                }
-            }
+                        // Lesson label — checkable, mirrors FlashcardLabel usage.
+                        LessonStackLabel {
+                            horizontal-stretch: 1;
+                            height: 36px;
+                            lesson: lesson;
+                            checkable: true;
+                            checked: VocabularyAppLogic.selected-lesson-index == i;
+                            clicked => {
+                                VocabularyAppLogic.selected-lesson-index = i;
+                            }
+                        }
 
-            CommonBtn {
-                width: 90px;
-                height: 36px;
-                text: "Confirm";
-                primary: true;
-                accessibilityLabel: "Confirm add lesson";
-                clicked => {
-                    VocabularyAppLogic.lesson-create-confirmed(name-input.text);
-                    name-input.text = "";
-                    root.show-create-form = false;
-                }
-            }
-
-            CommonBtn {
-                width: 80px;
-                height: 36px;
-                text: "Cancel";
-                accessibilityLabel: "Cancel add lesson";
-                clicked => {
-                    name-input.text = "";
-                    root.show-create-form = false;
+                        // Delete button for this lesson row.
+                        CommonBtn {
+                            width: 36px;
+                            height: 36px;
+                            text: "✕";
+                            accessibilityLabel: "Delete lesson " + lesson.name;
+                            clicked => {
+                                VocabularyAppLogic.selected-lesson-index = i;
+                                VocabularyAppLogic.lesson-delete-confirmed();
+                            }
+                        }
+                    }
                 }
             }
         }
