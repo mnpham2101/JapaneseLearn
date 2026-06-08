@@ -107,7 +107,7 @@ fn lessons_to_slint(data: &[LessonData]) -> slint::ModelRc<vocabulary::Vocabular
 
 // ── Persistence ───────────────────────────────────────────────────────────────
 
-const VOCABULARY_FILE: &str = "vocabulary.json";
+const VOCABULARY_FILE: &str = "data/vocabulary.json";
 
 #[cfg(not(target_arch = "wasm32"))]
 fn load_vocabulary() -> Vec<LessonData> {
@@ -125,6 +125,9 @@ fn load_vocabulary() -> Vec<LessonData> {
 #[cfg(not(target_arch = "wasm32"))]
 fn save_vocabulary(lessons: &[LessonData]) {
     if let Ok(json) = serde_json::to_string_pretty(lessons) {
+        if let Some(parent) = std::path::Path::new(VOCABULARY_FILE).parent() {
+            let _ = std::fs::create_dir_all(parent);
+        }
         let _ = std::fs::write(VOCABULARY_FILE, json);
     }
 }
