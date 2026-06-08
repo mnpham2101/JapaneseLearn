@@ -6,7 +6,8 @@ import { FlashcardStackModel } from "../model/flashcard_model.slint";
 // selected-index tracks which label is active; -1 means none selected.
 export component FlashcardList {
     in property <[FlashcardStackModel]> stacks;
-    in-out property <int> selected-index: -1;
+    in property <int> selected-index: -1;
+    callback label-selected(index: int);
 
     HorizontalLayout {
         alignment: LayoutAlignment.center;
@@ -18,7 +19,7 @@ export component FlashcardList {
                 // Mutually exclusive selection logic: only one label can be checked at a time.
                 checked: root.selected-index == i;
                 clicked => {
-                    root.selected-index = i;
+                    root.label-selected(i);
                 }
             }
         }

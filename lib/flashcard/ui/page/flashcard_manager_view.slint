@@ -26,7 +26,10 @@ export component FlashcardManagerView inherits Rectangle {
     // Captures clicks on empty areas to close the stack detail.
     TouchArea {
         clicked => {
-            FlashcardAppLogic.selected-stack-index = -1;
+            if (!FlashcardAppLogic.study-session-active) {
+                FlashcardAppLogic.selected-stack-index = -1;
+            }
+            debug("TouchArea clicked");
         }
     }
 
@@ -123,6 +126,7 @@ export component FlashcardManagerView inherits Rectangle {
             if !FlashcardAppLogic.study-session-active && root.show-stack: FlashcardStack {
                 stack: FlashcardAppLogic.flashcard-list[FlashcardAppLogic.selected-stack-index];
                 study-clicked => {
+                    debug("study-clicked");
                     FlashcardAppLogic.study-session-active = true;
                 }
                 close-clicked => {
@@ -154,7 +158,11 @@ export component FlashcardManagerView inherits Rectangle {
                         add-stack <=> root.show-create-form;
                         flashcard-list := FlashcardList {
                             stacks: FlashcardAppLogic.flashcard-list;
-                            selected-index <=> FlashcardAppLogic.selected-stack-index;
+                            selected-index: FlashcardAppLogic.selected-stack-index;
+                            label-selected(index) => {
+                                FlashcardAppLogic.selected-stack-index = index;
+                                debug("[Bug6.5] flashcardlist label-selected(index), stack-idx=", FlashcardAppLogic.selected-stack-index);
+                            }
                         }
 
                         addButtonText: "Add Stack";
