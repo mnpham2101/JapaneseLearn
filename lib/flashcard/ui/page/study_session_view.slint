@@ -5,80 +5,94 @@ import { FlashcardAppLogic } from "../flashcard_app_logic.slint";
 
 // Study session view — shown when a study session is active.
 // Owns current-card-index so all session navigation state is self-contained.
-export component StudySessionView {
+export component StudySessionView inherits Rectangle {
     // current-card-index resets to 0 automatically each time the session starts
     // because the `if FlashcardAppLogic.study-session-active` in StudyPage destroys
     // and recreates this component on every new session.
     property <int> current-card-index: 0;
-
-    VerticalLayout {
-        spacing: Tokens.spacing-md;
+    HorizontalLayout {
         alignment: LayoutAlignment.center;
+        Rectangle {
+            // width: 100%;   no effect on layout
+            VerticalLayout {
+                // width: 100%;
+                spacing: Tokens.spacing-md;
+                alignment: LayoutAlignment.center;
 
-        // Progress counter
-        Text {
-            text: FlashcardAppLogic.known-count + " / " + FlashcardAppLogic.total-count + " known";
-            font-size: Tokens.font-size-body;
-            color: Tokens.text-secondary;
-            horizontal-alignment: center;
-        }
-
-        // Flashcard bound to the current card in the active stack.
-        HorizontalLayout {
-            alignment: center;
-            session-card := Flashcard {
-                width: min(parent.width - 32px, 480px);
-                data: FlashcardAppLogic.flashcard-list[FlashcardAppLogic.selected-stack-index].flashcards[root.current-card-index];
-
-                // TEMP — Bug 6.5 verification: print front/back text whenever the bound card changes.
-                changed data => {
-                    debug("[Bug6.5] front='", self.data.jap-obj, "' back='", self.data.explanation, "' stack-idx=", FlashcardAppLogic.selected-stack-index, " card-idx=", root.current-card-index);
+                // Progress counter
+                Text {
+                    text: "Known: " + FlashcardAppLogic.known-count + " / " + "Total: " + FlashcardAppLogic.total-count;
+                    font-size: Tokens.font-size-body;
+                    color: Tokens.text-secondary;
+                    horizontal-alignment: center;
                 }
 
-                // Notify Rust whenever the known status changes so it can persist and update counts.
-                changed known => {
-                    FlashcardAppLogic.known-changed(
-                        FlashcardAppLogic.selected-stack-index,
-                        root.current-card-index,
-                        self.known);
-                }
-            }
-        }
+                // Flashcard bound to the current card in the active stack.
+                Rectangle {
+                    // width: 100%;
+                    // preferred-height: 200px;      // no effect on layout
+                    HorizontalLayout {
+                        alignment: center;
+                        session-card := Flashcard {
+                            width: min(root.width - 32px, 480px);
+                            data: FlashcardAppLogic.flashcard-list[FlashcardAppLogic.selected-stack-index].flashcards[root.current-card-index];
 
-        // Navigation row: Prev / Next + Close
-        HorizontalLayout {
-            spacing: Tokens.spacing-sm;
-            alignment: center;
-
-            CommonBtn {
-                width: 100px;
-                text: "Previous";
-                enabled: root.current-card-index > 0;
-                clicked => {
-                    if (root.current-card-index > 0) {
-                        root.current-card-index = root.current-card-index - 1;
+                            // Whenever the known status changes, update model data.
+                        changed known => {
+                                FlashcardAppLogic.known-changed(
+                                    FlashcardAppLogic.selected-stack-index,
+                                    root.current-card-index,
+                                    self.known);
+                            }
+                        }
                     }
-                    session-card.show-back = false;
                 }
-            }
+                    // Navigation row: Prev / Next + Close
+                Rectangle {
+                    width: 100%;
+                    // height: 50px;
+                    VerticalLayout {
+                        spacing: Tokens.spacing-sm;
+                        alignment: center;
+                        HorizontalLayout {
+                            spacing: Tokens.spacing-sm;
+                            alignment: center;
+                            CommonBtn {
+                                // width is calculated from preferred-width of CommBtn
+                                // it will wraps around the Text size.
+                                // Together with HorizontalLayout, the proper width 
+                                // makes the 3 CommonBtn align at center. 
+                                // height is already set in CommonBtn, so fixed height below is not good
+                                // height: 40px;
+                                text: "Previous";
+                                enabled: root.current-card-index > 0;
+                                clicked => {
+                                    if (root.current-card-index > 0) {
+                                        root.current-card-index = root.current-card-index - 1;
+                                    }
+                                    session-card.show-back = false;
+                                }
+                            }
 
-            CommonBtn {
-                width: 80px;
-                text: "Close";
-                clicked => {
-                    FlashcardAppLogic.study-session-active = false;
-                }
-            }
+                            CommonBtn {
+                                text: "Close";
+                                clicked => {
+                                    FlashcardAppLogic.study-session-active = false;
+                                }
+                            }
 
-            CommonBtn {
-                width: 100px;
-                text: "Next";
-                enabled: root.current-card-index < FlashcardAppLogic.flashcard-list[FlashcardAppLogic.selected-stack-index].flashcards.length - 1;
-                clicked => {
-                    if (root.current-card-index < FlashcardAppLogic.flashcard-list[FlashcardAppLogic.selected-stack-index].flashcards.length - 1) {
-                        root.current-card-index = root.current-card-index + 1;
+                            CommonBtn {
+                                text: "Next";
+                                enabled: root.current-card-index < FlashcardAppLogic.flashcard-list[FlashcardAppLogic.selected-stack-index].flashcards.length - 1;
+                                clicked => {
+                                    if (root.current-card-index < FlashcardAppLogic.flashcard-list[FlashcardAppLogic.selected-stack-index].flashcards.length - 1) {
+                                        root.current-card-index = root.current-card-index + 1;
+                                    }
+                                    session-card.show-back = false;
+                                }
+                            }
+                        }
                     }
-                    session-card.show-back = false;
                 }
             }
         }
