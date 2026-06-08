@@ -21,7 +21,7 @@ lib/
     ui/components                 # reusable widgets — one component per file 
     ui/page/                      # page-level view components composed from ui/components — exported via main_lib.slint for use by other libraries
     ui/model                      # reusable data models written in Slint
-    ui/data/                      # bundled read-only seed data (markdown + JSON); embedded at compile time via include_str!(); never written at runtime
+    ui/data/                      # bundled compile-time default data (markdown + JSON), embedded via include_str!(); the bundled asset is immutable, but its loaded copy becomes ordinary mutable app state (see top-level data/ for where that state is persisted)
     ui/main_lib.slint             # entry slint library file - export the library components and models                
     build.rs                      # entry point to build library
     Cargo.toml                    # define building codes as package
@@ -43,6 +43,7 @@ lib/
     ui/main_lib.slint             # re-exports all design tokens for @libC imports
     build.rs                      # compiles ui/main_lib.slint as a library
     Cargo.toml                    # name = "libC", links key, slint-build only (no slint dep)
+data/                             # persisted runtime state (JSON), written by save_*/read by load_* — e.g. stacks.json, vocabulary.json; git-ignored, created on first save; kept out of lib/ source trees so runtime-mutable state never mixes with source/build-time assets
 test/
   [library_name]/                 # one workspace-member crate per library under test
     tests/
