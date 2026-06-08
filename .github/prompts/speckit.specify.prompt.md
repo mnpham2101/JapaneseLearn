@@ -208,7 +208,8 @@ detail → view/add/delete/edit flashcards.
 6.4 All though there are default Vocabulary data, but there is no lesson list in the page `Vocabulary`. Refer to `@.github/speckit.bub.6-4.report.md` (done)
 6.5 In "Study Mode", after hitting the "Study" button, `FlashCard` is show but there is not content of the card. Refered to `@.github/speckit.bug.6-5.report.md` for suggest fix. (done).
 6.6 Console error `ICU4X data error: No segmentation model for language: ja` appears repeatedly when rendering Japanese text (e.g. opening `FlashcardManagerView`, clicking "Study"). Refer to `@.github/speckit.bug.6-6.report.md` for details. (not done).
-6.7 The `Flashcard's back should only show the meaning of the word without the remaining data. Referred to `@.github/speckit.bug.6-5.report.md` for details. (done)
+6.7 The `Flashcard's back should only show the meaning of the word without the remaining data. Referred to `@.github/speckit.bug.6-7.report.md` for details. (done)
+6.8 The `stack.json`, storing data for `Flashcard` library should stay in `@lib/Flashcard/ui/data`. The `Vocabulary.json`, storing data for `Vocabulary` should stay in `lib/Vocabulary/ui/data`. Referred to `@.github/speckit.bug.6-8.report.md` for details. (done)
 
 ## Theme redesign (high priority):
 - Backup or organized the current color sets to theme.
