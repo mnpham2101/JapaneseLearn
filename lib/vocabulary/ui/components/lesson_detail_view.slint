@@ -1,6 +1,7 @@
 import { CommonBtn } from "@flashcard";
 import { LessonDetailPane } from "lesson_detail_pane.slint";
 import { VocabularyAppLogic } from "../vocabulary_app_logic.slint";
+import { WordForm } from "word_form.slint";
 import { Tokens } from "@styles";
 
 // Full-page component that shows a selected lesson's content.
@@ -8,22 +9,22 @@ import { Tokens } from "@styles";
 // Below header: LessonDetailPane (takes remaining height).
 export component LessonDetailView inherits Rectangle {
     background: Tokens.page-background;
+    // Show/hide state for the add-word form.
+    property <bool> show-add-form: false;
 
     callback close-clicked;
-
+    init => {
+        debug(" init LessonDetailView ", VocabularyAppLogic.selected-lesson-index);
+    }
     VerticalLayout {
         spacing: Tokens.spacing-sm;
         padding: Tokens.padding-sm;
-
         // Header row
         HorizontalLayout {
             spacing: Tokens.spacing-sm;
             height: 36px;
-
             Text {
-                text: VocabularyAppLogic.selected-lesson-index >= 0
-                    ? VocabularyAppLogic.lesson-list[VocabularyAppLogic.selected-lesson-index].name
-                    : "";
+                text: VocabularyAppLogic.selected-lesson-index >= 0 ? VocabularyAppLogic.lesson-list[VocabularyAppLogic.selected-lesson-index].name : "";
                 font-size: Tokens.font-size-title;
                 font-weight: 700;
                 color: Tokens.text-primary;
@@ -32,19 +33,52 @@ export component LessonDetailView inherits Rectangle {
             }
 
             CommonBtn {
-                width: 36px;
+                width: 50px;
                 height: 36px;
-                text: "✕";
+                text: "Close";
                 accessibilityLabel: "Close lesson detail";
                 clicked => {
                     root.close-clicked();
                 }
             }
+            // "Add Word" button — hidden while the form is open.
+            if !root.show-add-form: CommonBtn {
+                width: 160px;
+                height: 36px;
+                text: " Add Word";
+                primary: true;
+                accessibilityLabel: "Open add word form";
+                clicked => {
+                    root.show-add-form = true;
+                }
+            }
         }
 
-        // Detail pane — takes remaining height
-        LessonDetailPane {
-            vertical-stretch: 1;
+        VerticalLayout {
+            spacing: Tokens.spacing-sm;
+            padding: Tokens.padding-sm;
+            alignment: LayoutAlignment.end;
+            // Add-word form — slides up from the bottom when show-add-form is true.
+            if root.show-add-form: Rectangle {
+                background: Tokens.input-form-background;
+                border-radius: Tokens.border-radius;
+                height: self.visible ? 160px : 0px;
+
+                WordForm {
+                    lesson-idx: VocabularyAppLogic.selected-lesson-index;
+                    word-add-confirmed(lesson-idx, spelling, kanji, meaning, word-type) => {
+                        VocabularyAppLogic.word-add-confirmed(lesson-idx, spelling, kanji, meaning, word-type);
+                        root.show-add-form = false;
+                    }
+                    word-cancel => {
+                        root.show-add-form = false;
+                    }
+                }
+            }
+            // Detail pane — takes remaining height
+            LessonDetailPane {
+                vertical-stretch: 1;
+            }
         }
     }
 }
