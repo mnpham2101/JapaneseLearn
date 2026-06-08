@@ -1,0 +1,101 @@
+@startuml Bug 6.7 — Call-flow diagrams (Flashcard generation, load, manual add)
+!theme plain
+skinparam defaultFontSize 12
+skinparam sequenceMessageAlign center
+skinparam maxMessageSize 160
+
+' ════════════════════════════════════════════════════════════════════════
+' Use case 1 — Exercise Generation request
+' (user clicks "Generate Flashcards" on the Vocabulary page)
+' ════════════════════════════════════════════════════════════════════════
+== Use Case 1: Exercise Generation request ==
+
+actor User
+participant "VocabularyPage\n(Slint UI)" as VocabUI
+participant "vocabulary::init_exercise_generator\non_generate_exercises_clicked\n(lib/vocabulary/src/lib.rs ~L480)" as VocabHandler
+participant "ExerciseGeneratorService\n[libD]\n(lib/exercise_generator)" as GenService
+participant "FlashcardExerciseTransformer\n::transform → make_cards\n(flashcard_transformer.rs)" as Transformer
+participant "FlashcardAppLogic\n(global, lib/flashcard)" as FlashcardLogic
+participant "flashcard::save_current_list\n(lib/flashcard/src/lib.rs)" as SaveList
+
+User -> VocabUI : click "Generate Flashcards"
+VocabUI -> VocabHandler : on_generate_exercises_clicked()
+
+VocabHandler -> VocabHandler : snapshot existing stack names\n(flashcard_logic.get_flashcard_list())
+VocabHandler -> VocabHandler : convert Slint VocabularyLessonModel\n→ VocabularyLesson / VocabularyWord\n(libD plain-Rust input types)
+
+VocabHandler -> GenService : generate(\n  ExerciseRequest::Flashcard,\n  &lessons)
+GenService -> Transformer : transform(&lessons)
+Transformer -> Transformer : make_cards(word)\nback = word.meaning.clone()\n(kanji duplication rule — Bug 6.7 fix)
+Transformer --> GenService : Vec<FlashcardStackData>\n(FlashcardCardData { front, back, ... })
+GenService --> VocabHandler : ExerciseOutput::Flashcard(stacks)
+
+VocabHandler -> VocabHandler : convert FlashcardStackData/FlashcardCardData\n→ Slint FlashcardStackModel/FlashcardModel\n(explanation = card.back.clone())
+
+VocabHandler -> FlashcardLogic : set_flashcard_list(slint_stacks)
+VocabHandler -> SaveList : save_current_list(&ui)
+SaveList -> SaveList : write stacks.json\n(std::fs, desktop only)
+
+VocabHandler -> VocabHandler : compute new_stack_names\n(stacks not present before generation)
+VocabHandler -> VocabUI : set_generation_notification(message)\nset_active_view(2)
+VocabUI --> User : show "Flashcard stack '...' generated."
+
+' ════════════════════════════════════════════════════════════════════════
+' Use case 2 — App start-up / default data load
+' ════════════════════════════════════════════════════════════════════════
+== Use Case 2: App start-up / default data load ==
+
+participant "main()\n(src/main.rs)" as Main
+participant "flashcard::init\n(lib/flashcard/src/lib.rs ~L125)" as FlashcardInit
+participant "load_stacks()\n(lib/flashcard/src/lib.rs ~L91)\n#cfg desktop: std::fs::read_to_string\n#cfg wasm32: no-op stub → None" as LoadStacks
+participant "FlashcardAppLogic\n(global, lib/flashcard)" as FlashcardLogic2
+
+Main -> FlashcardInit : flashcard::init(&window)
+FlashcardInit -> LoadStacks : load_stacks()
+
+alt desktop (#cfg not(target_arch = "wasm32"))
+    LoadStacks -> LoadStacks : std::fs::read_to_string(STACKS_FILE)\n→ serde_json::from_str::<Vec<StackData>>\n→ from_stack_data(data)
+    LoadStacks --> FlashcardInit : Some(Vec<FlashcardStackModel>)\n(loaded as-is — NOT routed through\nexercise_generator transformer)
+else wasm32
+    LoadStacks --> FlashcardInit : None (stub)
+end
+
+FlashcardInit -> FlashcardLogic2 : set_flashcard_list(loaded_stacks)
+note right of FlashcardInit
+  Persisted stacks.json content is restored verbatim;
+  the FlashcardCardData → FlashcardModel conversion
+  performed during generation (Use Case 1) is not
+  re-applied here — whatever was last saved is shown.
+end note
+
+FlashcardInit -> FlashcardInit : wire CRUD callbacks\n(on_stack_create_confirmed,\non_flashcard_add_confirmed, ...)
+
+' ════════════════════════════════════════════════════════════════════════
+' Use case 3 — New Flashcard is added manually
+' ════════════════════════════════════════════════════════════════════════
+== Use Case 3: New Flashcard is added (manual entry) ==
+
+actor User2 as User
+participant "FlashcardPage\n(Slint UI, add-card form)" as FlashcardUI
+participant "flashcard::init\non_flashcard_add_confirmed\n(lib/flashcard/src/lib.rs ~L155)" as AddHandler
+participant "FlashcardAppLogic\n(global, lib/flashcard)" as FlashcardLogic3
+participant "save_stacks()\n(lib/flashcard/src/lib.rs)\n#cfg desktop: std::fs::write\n#cfg wasm32: no-op stub" as SaveStacks
+
+User -> FlashcardUI : type 日本語 + meaning,\nclick "Add"
+FlashcardUI -> AddHandler : on_flashcard_add_confirmed(jap, meaning)
+
+AddHandler -> AddHandler : guard: selected_stack_index >= 0
+AddHandler -> AddHandler : build FlashcardModel directly\nfrom user input —\njap_obj = jap, explanation = meaning,\nknown = false, is_kanji = false\n(no transformer involved)
+
+AddHandler -> FlashcardLogic3 : get_flashcard_list()\n→ append card to selected stack
+AddHandler -> FlashcardLogic3 : set_flashcard_list(updated_stacks)
+AddHandler -> SaveStacks : save_stacks(&stacks)
+SaveStacks -> SaveStacks : write stacks.json
+
+note right of AddHandler
+  Contrast with Use Case 1: here `explanation`
+  is the raw typed meaning, not card.back produced
+  by FlashcardExerciseTransformer::make_cards.
+end note
+
+@enduml
