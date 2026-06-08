@@ -1,0 +1,57 @@
+@startuml Bug 6.4 — Call-flow diagram (Vocabulary lesson list load & render)
+!theme plain
+skinparam defaultFontSize 12
+skinparam sequenceMessageAlign center
+skinparam maxMessageSize 160
+
+' ════════════════════════════════════════════════════════════════════════
+' Use case — App start-up: lesson data loaded and rendered in LessonStackList
+' ════════════════════════════════════════════════════════════════════════
+== Use Case: App start-up — lesson list loaded and reactively rendered ==
+
+participant "main()\n(src/main.rs)" as Main
+participant "vocabulary::init\n(lib/vocabulary/src/lib.rs ~L160)" as VocabInit
+participant "load_vocabulary() /\nload_and_save_defaults()\n(lib/vocabulary/src/lib.rs ~L113, ~L142)\n#cfg desktop: std::fs::read_to_string\n#cfg wasm32: include_str! seed JSON only" as Loader
+participant "lessons_to_slint()\n(lib/vocabulary/src/lib.rs ~L71)" as Convert
+participant "VocabularyAppLogic\n(global, lib/vocabulary)\nlesson-list: [VocabularyLessonModel]" as VocabLogic
+participant "LessonStackList\n(Slint UI,\nlib/vocabulary/ui/components)" as LessonUI
+
+Main -> VocabInit : vocabulary::init(&window)
+
+alt vocabulary.json does not exist (first run)
+    VocabInit -> Loader : load_and_save_defaults()
+    Loader -> Loader : include_str!(n5_verbs.json,\nn5_adjectives.json, n5_vocabulary.json)\n→ parse → save_vocabulary() writes vocabulary.json
+    Loader --> VocabInit : Vec<LessonData> (defaults, ~18 lessons)
+else vocabulary.json exists
+    VocabInit -> Loader : load_vocabulary()
+    Loader -> Loader : std::fs::read_to_string(VOCABULARY_FILE)\n→ serde_json::from_str::<Vec<LessonData>>
+    Loader --> VocabInit : Vec<LessonData> (persisted lessons)
+end
+
+VocabInit -> Convert : lessons_to_slint(&lessons)
+Convert --> VocabInit : ModelRc<VocabularyLessonModel>
+
+VocabInit -> VocabLogic : set_lesson_list(model)
+
+note right of VocabLogic
+  ROOT CAUSE (Bug 6.4): the global property was declared
+  without an explicit binding —
+    in-out property <[VocabularyLessonModel]> lesson-list;
+  — so the Slint compiler const-folded it to an empty
+  array and never wired it into the reactive dependency
+  graph. set_lesson_list() updated the Rust-side value,
+  but the `for` loop in LessonStackList kept observing
+  the compiled-in empty default (length == 0).
+
+  FIX: give the property an explicit (even trivial)
+  binding so the compiler allocates a real reactive slot:
+    in-out property <[VocabularyLessonModel]> lesson-list: [];
+  This mirrors flashcard-list in FlashcardAppLogic, which
+  already has an explicit binding and renders correctly.
+end note
+
+VocabLogic -> LessonUI : reactive notification\n(lesson-list changed)
+LessonUI -> LessonUI : for lesson[i] in\nVocabularyAppLogic.lesson-list:\n  render LessonStackLabel row
+LessonUI --> Main : lesson rows visible\n("N5 Verbs — Eating...", "N5 Verbs — M...", ...)
+
+@enduml
