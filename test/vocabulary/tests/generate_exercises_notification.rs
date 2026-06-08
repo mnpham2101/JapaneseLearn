@@ -27,8 +27,8 @@ fn init_backend() {
 /// Removes any persisted artifacts written by save_current_list / save_vocabulary
 /// during the test so runs stay isolated and repeatable.
 fn cleanup_artifacts() {
-    let _ = std::fs::remove_file("stacks.json");
-    let _ = std::fs::remove_file("vocabulary.json");
+    let _ = std::fs::remove_file("data/stacks.json");
+    let _ = std::fs::remove_file("data/vocabulary.json");
 }
 
 fn setup() -> VocabularyExerciseTestWindow {

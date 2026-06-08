@@ -181,5 +181,5 @@ fn vocabulary_page_persistence_round_trip() {
     }
 
     // Clean up test artifact.
-    let _ = std::fs::remove_file("vocabulary.json");
+    let _ = std::fs::remove_file("data/vocabulary.json");
 }

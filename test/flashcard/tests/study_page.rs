@@ -197,5 +197,5 @@ fn study_page_persistence_round_trip() {
     }
 
     // Clean up test artifact
-    let _ = std::fs::remove_file("stacks.json");
+    let _ = std::fs::remove_file("data/stacks.json");
 }
