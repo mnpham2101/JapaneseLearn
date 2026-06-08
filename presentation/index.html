@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Engineering an AI Dev Team — Japanese Learn</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/white.css" id="reveal-base-theme" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/highlight/monokai.css" />
+  <link rel="stylesheet" href="theme.css" />
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+      <!-- Slide content is fetched from slides.md and split on `---` (horizontal) by RevealMarkdown -->
+      <section data-markdown="slides.md"
+               data-separator="^\r?\n---\r?\n$"
+               data-separator-vertical="^\r?\n--\r?\n$"
+               data-separator-notes="^Note:"></section>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/markdown/markdown.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/highlight/highlight.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/notes/notes.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({ startOnLoad: false, theme: "neutral" });
+
+    const deck = new Reveal({
+      hash: true,
+      slideNumber: "c/t",
+      transition: "slide",
+      width: 1280,
+      height: 720,
+      margin: 0.06,
+      plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ],
+    });
+
+    deck.initialize().then(() => {
+      // Markdown fences (```mermaid) come out of RevealMarkdown/highlight.js as
+      // <pre><code class="language-mermaid">...</code></pre>. Swap each one for a
+      // plain <div class="mermaid"> holding the raw diagram text, then let Mermaid
+      // render it — this avoids the markdown parser mangling raw HTML diagram markup.
+      const MERMAID_DIAGRAM_RE = /^\s*(graph|flowchart|sequenceDiagram|classDiagram|stateDiagram|erDiagram|gantt|pie|journey)\b/;
+
+      // RevealMarkdown fetches slides.md once and builds every <section> up front,
+      // so we can convert and render all Mermaid fences in one pass — no need to
+      // wait for slide-change events (which can race with the initial hash navigation).
+      const renderAllMermaidDiagrams = async () => {
+        const codeBlocks = document.querySelectorAll(".reveal .slides pre code");
+        const diagrams = [];
+        codeBlocks.forEach((code) => {
+          const text = code.textContent;
+          const looksLikeMermaid =
+            /language-mermaid|lang-mermaid/.test(code.className) || MERMAID_DIAGRAM_RE.test(text);
+          if (!looksLikeMermaid) return;
+          const pre = code.closest("pre");
+          const div = document.createElement("div");
+          div.className = "mermaid";
+          pre.replaceWith(div);
+          diagrams.push({ div, text });
+        });
+
+        // Use the low-level render API (returns SVG markup directly) instead of
+        // mermaid.run — run() scans the whole document for `.mermaid` elements on
+        // every invocation and was rendering each diagram's output into every slot.
+        let i = 0;
+        for (const { div, text } of diagrams) {
+          const id = "mermaid-diagram-" + (i++);
+          try {
+            const { svg } = await mermaid.render(id, text);
+            div.innerHTML = svg;
+          } catch (err) {
+            div.style.color = "crimson";
+            div.style.whiteSpace = "pre-wrap";
+            div.textContent = "Mermaid render error: " + (err && err.message ? err.message : err);
+          }
+        }
+      };
+
+      renderAllMermaidDiagrams();
+    });
+  </script>
+</body>
+</html>
