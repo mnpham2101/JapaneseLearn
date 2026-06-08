@@ -28,7 +28,8 @@ export component CommonBtn inherits Rectangle {
     visible: enabled;
     // set preferred size so that SLint calculate size from child component.
     preferred-width: 100px;
-    preferred-height: 40px;
+    // Button doesn't need resized its height
+    height: 40px;
     border-radius: 8px;
     accessible-role: button;
     accessible-label: accessibilityLabel != "" ? accessibilityLabel : text;
