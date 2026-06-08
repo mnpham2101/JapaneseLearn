@@ -8,7 +8,7 @@ use flashcard::FlashcardAppLogic;
 
 // ── Persistence ──────────────────────────────────────────────────────────────
 
-const STACKS_FILE: &str = "stacks.json";
+const STACKS_FILE: &str = "data/stacks.json";
 
 #[derive(serde::Serialize, serde::Deserialize)]
 struct CardData {
@@ -66,6 +66,9 @@ fn from_stack_data(data: Vec<StackData>) -> Vec<flashcard::FlashcardStackModel> 
 #[cfg(not(target_arch = "wasm32"))]
 fn save_stacks(stacks: &[flashcard::FlashcardStackModel]) {
     if let Ok(json) = serde_json::to_string_pretty(&to_stack_data(stacks)) {
+        if let Some(parent) = std::path::Path::new(STACKS_FILE).parent() {
+            let _ = std::fs::create_dir_all(parent);
+        }
         let _ = std::fs::write(STACKS_FILE, json);
     }
 }
