@@ -93,3 +93,26 @@ from a `VocabularyWord` — confirmed via `grep` for `FlashcardCardData` /
 ## Confirmed by user
 User confirmed root cause and scope on 2026-06-08.
 
+# Fix plan
+
+Reduce `back` to `meaning` only:
+- In `lib/exercise_generator/src/flashcard_transformer.rs`, replace the call
+  to `format_explanation(word)` with `word.meaning.clone()` directly inside
+  `make_cards`, and remove `format_explanation` (a one-line passthrough does
+  not need a helper — `general-programming-practice.md`).
+- Update the `FlashcardCardData::back` doc comment in
+  `lib/exercise_generator/src/models.rs:45` (and the matching template in
+  `.claude/rules/libD-code-style.md`) to read "meaning only".
+- Update `kanji_word_produces_two_cards_sharing_same_back` (and add a new
+  assertion if useful) in the same file's `#[cfg(test)]` module to assert
+  `back == word.meaning` instead of relying on the old formatted string.
+
+All changes are confined to `lib/exercise_generator` (libD) — assigned
+exclusively to **rust-developer** per `libD-code-style.md`. One atomic commit:
+`bugfix: Bug 6.7 reduce flashcard back to meaning only`.
+
+## Follow-on (separate from this bug's close)
+Call-flow diagrams for the three use cases above will be requested from
+**project-owner** as a follow-on documentation task once this fix lands —
+tracked separately, not part of this bug's closing commit.
+
