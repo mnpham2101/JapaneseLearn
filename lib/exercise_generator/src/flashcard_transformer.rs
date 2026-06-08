@@ -21,7 +21,7 @@ impl Transformer<VocabularyLesson, FlashcardStackData> for FlashcardExerciseTran
 }
 
 fn make_cards(word: &VocabularyWord) -> Vec<FlashcardCardData> {
-    let back = format_explanation(word);
+    let back = word.meaning.clone();
     let mut cards = vec![FlashcardCardData {
         front: word.spelling.clone(),
         back: back.clone(),
@@ -39,33 +39,22 @@ fn make_cards(word: &VocabularyWord) -> Vec<FlashcardCardData> {
     cards
 }
 
-fn format_explanation(word: &VocabularyWord) -> String {
-    let mut parts = vec![word.meaning.clone()];
-    if let Some(word_type) = &word.word_type {
-        parts.push(format!("[{}]", word_type));
-    }
-    for tense in &word.tenses {
-        parts.push(format!("{}: {}", tense.name, tense.conjugation));
-    }
-    for example in &word.examples {
-        parts.push(format!("e.g. {}", example));
-    }
-    parts.join(" | ")
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::models::{VocabularyLesson, VocabularyWord};
+    use crate::models::{TenseEntry, VocabularyLesson, VocabularyWord};
 
     fn word(spelling: &str, kanji: Option<&str>, meaning: &str) -> VocabularyWord {
         VocabularyWord {
             spelling: spelling.into(),
             kanji: kanji.map(Into::into),
             meaning: meaning.into(),
-            word_type: None,
-            tenses: vec![],
-            examples: vec![],
+            word_type: Some("noun".into()),
+            tenses: vec![TenseEntry {
+                name: "past".into(),
+                conjugation: "食べました".into(),
+            }],
+            examples: vec!["犬が好きです".into()],
         }
     }
 
@@ -78,6 +67,7 @@ mod tests {
         let stacks = FlashcardExerciseTransformer.transform(&lessons);
         assert_eq!(stacks[0].cards.len(), 1);
         assert_eq!(stacks[0].cards[0].front, "inu");
+        assert_eq!(stacks[0].cards[0].back, "dog");
         assert!(!stacks[0].cards[0].is_kanji);
     }
 
@@ -91,7 +81,11 @@ mod tests {
         assert_eq!(stacks[0].cards.len(), 2);
         assert_eq!(stacks[0].cards[0].front, "いぬ");
         assert_eq!(stacks[0].cards[1].front, "犬");
+        assert_eq!(stacks[0].cards[0].back, "dog");
+        assert_eq!(stacks[0].cards[1].back, "dog");
         assert_eq!(stacks[0].cards[0].back, stacks[0].cards[1].back);
+        assert!(!stacks[0].cards[0].back.contains('['));
+        assert!(!stacks[0].cards[0].back.contains("e.g."));
         assert!(!stacks[0].cards[0].is_kanji); // spelling card
         assert!(stacks[0].cards[1].is_kanji); // kanji card
     }

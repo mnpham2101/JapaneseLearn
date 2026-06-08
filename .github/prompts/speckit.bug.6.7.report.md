@@ -116,3 +116,21 @@ Call-flow diagrams for the three use cases above will be requested from
 **project-owner** as a follow-on documentation task once this fix lands —
 tracked separately, not part of this bug's closing commit.
 
+# Verification
+
+Initial re-test by the user appeared to fail: `Flashcard`'s debug log still
+showed the old concatenated string for `あげる`
+(`"to give (to someone else) | [verb (ru-verb)] | present: ... | e.g. ..."`).
+Investigation showed this string was byte-for-byte identical to the entry
+already persisted in the project-root `stacks.json` (an untracked local
+runtime artifact, written by a *prior* "Generate Flashcards" run before this
+fix existed) — `flashcard::init()` loads that file directly into the
+Flashcard page at start-up without re-running the transformer on it. The fix
+only changes how **new** `back` values are built; it cannot retroactively
+rewrite already-persisted data.
+
+The user clicked **"Generate Flashcards"** again, which rebuilds the stack
+through the fixed `FlashcardExerciseTransformer` and overwrites `stacks.json`
+with fresh `back == meaning` values. Confirmed working — user is satisfied
+with the fix. **Bug 6.7 closed.**
+

@@ -87,7 +87,7 @@ See `.claude/rules/architecture.md` for the full libA / libB / libC definitions.
 - Add a progress indicator showing known-count / total-count, updated live from Rust.
 - Manual verification on Windows before phase close.
 
-## Phase 5: Persistent Data Management
+## Phase 5: Persistent Data Management ✓
 **Goal**: Import flashcard stacks from markdown files and export all stacks back, using native file dialogs on desktop.
 
 - Define the markdown file format: `## Stack Name` headings + GFM pipe table per stack; document in `docs/markdown-format.md`.

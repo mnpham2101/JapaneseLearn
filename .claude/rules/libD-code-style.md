@@ -115,7 +115,7 @@ pub struct FlashcardStackData {
 #[derive(Debug, Clone)]
 pub struct FlashcardCardData {
     pub front: String,    // kanji OR spelling — one card per form
-    pub back: String,     // formatted explanation
+    pub back: String,     // the word's meaning only
     pub known: bool,      // always false on generation
 }
 
@@ -251,7 +251,7 @@ impl Transformer<VocabularyLesson, FlashcardStackData> for FlashcardExerciseTran
 }
 
 fn make_cards(word: &VocabularyWord) -> Vec<FlashcardCardData> {
-    let back = format_explanation(word);
+    let back = word.meaning.clone();
     let mut cards = vec![FlashcardCardData {
         front: word.spelling.clone(),
         back: back.clone(),
@@ -265,20 +265,6 @@ fn make_cards(word: &VocabularyWord) -> Vec<FlashcardCardData> {
         });
     }
     cards
-}
-
-fn format_explanation(word: &VocabularyWord) -> String {
-    let mut parts = vec![word.meaning.clone()];
-    if let Some(word_type) = &word.word_type {
-        parts.push(format!("[{}]", word_type));
-    }
-    for tense in &word.tenses {
-        parts.push(format!("{}: {}", tense.name, tense.conjugation));
-    }
-    for example in &word.examples {
-        parts.push(format!("e.g. {}", example));
-    }
-    parts.join(" | ")
 }
 
 #[cfg(test)]

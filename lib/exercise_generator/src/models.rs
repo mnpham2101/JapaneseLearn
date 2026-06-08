@@ -42,7 +42,7 @@ pub struct FlashcardStackData {
 #[derive(Debug, Clone)]
 pub struct FlashcardCardData {
     pub front: String,  // kanji OR spelling — one card per form
-    pub back: String,   // formatted explanation
+    pub back: String,   // the word's meaning only
     pub known: bool,    // always false on generation
     pub is_kanji: bool, // true when front is kanji form — triggers calligraphic rendering
 }
