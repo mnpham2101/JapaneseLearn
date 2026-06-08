@@ -34,9 +34,10 @@ Read the "## Bug lists" section of `@.github/prompts/speckit.specify.prompt.md`.
 2. Read the relevant code; assess any suggested fix for feasibility and refine it.
 3. **UI bugs**: run the app, capture a screenshot, and compare it against the reported symptom before concluding your analysis.
 4. **Backend bugs**: compare the bug description against the expected behavior; read the code that is supposed to produce that behavior and analyze where it diverges.
-5. Present your findings — confirmed symptom, root cause, evidence (screenshot or code excerpt) — to the user and get confirmation that this is the right bug and root cause.
-6. **Write these findings into `@.github/speckit.bug.[BugID].report.md`** (create the file if it doesn't exist): bug description, confirmed symptom, root cause, and supporting evidence. This file is the source of truth the rest of the workflow builds on.
-7. Commit the report file with message `Confirm bug [BugID]`.
+5. **Slint reactivity/codegen bugs** (a property or binding silently doesn't update the UI): when source-level inspection of the `.slint`/`.rs` is inconclusive, compare the *generated* Rust for the broken component against a similar *working* one. Build, locate the emitted file (`target/debug/build/<crate>-*/out/*.rs`), and diff the two for the property/binding in question — e.g. whether the compiler emitted `set_property_binding(...)` (a real reactive `Property` cell) or constant-folded the read away entirely (`ModelRc::new(VecModel::from(vec![]))` with no reference to the global). To capture both states for the same crate: copy the current generated file aside, edit the source, `touch` it to force regeneration, rebuild, diff, then restore the source and rebuild again. This pinpoints the exact codegen divergence — and thus the root cause — far faster than testing theories about timing, caching, or duplicate globals (see Bug 6.4: a property declared without an explicit binding was const-folded to `[]` at every read site, while the working analogue's explicit binding produced a genuine reactive property read).
+6. Present your findings — confirmed symptom, root cause, evidence (screenshot or code excerpt) — to the user and get confirmation that this is the right bug and root cause.
+7. **Write these findings into `@.github/speckit.bug.[BugID].report.md`** (create the file if it doesn't exist): bug description, confirmed symptom, root cause, and supporting evidence. This file is the source of truth the rest of the workflow builds on.
+8. Commit the report file with message `Confirm bug [BugID]`.
 
 ### Variant — CRITICAL bug, dependency issue, or version conflict `[task-manager]`
 
