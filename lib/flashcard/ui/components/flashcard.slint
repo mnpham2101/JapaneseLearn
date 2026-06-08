@@ -1,122 +1,130 @@
 import { Tokens, Animations } from "@styles";
 import { CommonBtn } from "common_button.slint";
-import { FlashcardModel, FlashcardStackModel } from "../model/flashcard_model.slint";
-
+import {
+    FlashcardModel,
+    FlashcardStackModel,
+} from "../model/flashcard_model.slint";
 export { FlashcardModel, FlashcardStackModel }
 
-export component Flashcard {
-    in property<FlashcardModel> data: { jap-obj: "", explanation: "", known: true, is-kanji: false };
-    in-out property<bool> show-back: false;
-    in-out property<bool> known: data.known;
+export component Flashcard inherits Rectangle {
+    in property <FlashcardModel> data: { jap-obj: "", explanation: "", known: true, is-kanji: false };
+    in-out property <bool> show-back: false;
+    in-out property <bool> known: data.known;
 
     callback flipped;
 
-    min-width: 200px;
+    min-width: 380px;
+    width: 80%;
+    preferred-height: 200px;  // allow calculating from child component
+    min-height: 200px;        // set min because, event content is small we want universal flashcard
+    max-height: 500px;
+    background: known ? Tokens.known-bg : Tokens.unknown-bg;
+    border-radius: 16px;
+    border-width: 2px;
+    border-color: known ? Tokens.known-border : Tokens.unknown-border;
+    clip: true;
 
-    Rectangle {
-        width: 100%;
-        height: 180px;
-        background: known ? Tokens.known-bg : Tokens.unknown-bg;
-        border-radius: 16px;
-        border-width: 2px;
-        border-color: known ? Tokens.known-border : Tokens.unknown-border;
-        clip: true;
-
-        // Front face — collapses edge-on when show-back becomes true.
+    // Front face — collapses edge-on when show-back becomes true.
         front-face := Rectangle {
-            clip: true;
-            width: show-back ? 0px : parent.width;
-            height: parent.height;
-            animate width { duration: Animations.flip-duration; easing: ease-in; }
+        clip: true;
+        width: show-back ? 0px : parent.width;
+        // preferred-height: 200px;     // no real effect on layout
+        animate width {
+            duration: Animations.flip-duration;
+            easing: ease-in;
+        }
 
-            VerticalLayout {
-                alignment: center;
-                padding: 20px;
-                spacing: 6px;
+        VerticalLayout {
+            alignment: center;
+            padding: 20px;
+            spacing: 6px;
 
-                Text {
-                    text: data.jap-obj;
-                    font-size: data.is-kanji ? Tokens.font-size-kanji : Tokens.font-size-large;
-                    font-family: data.is-kanji ? "MS Mincho" : "";
-                    font-weight: 400;
-                    color: Tokens.text-primary;
-                    horizontal-alignment: center;
-                    vertical-alignment: center;
-                }
-
-                Text {
-                    text: "Tap to reveal";
-                    font-size: Tokens.font-size-small;
-                    color: Tokens.text-secondary;
-                    horizontal-alignment: center;
-                }
+            Text {
+                text: data.jap-obj;
+                font-size: data.is-kanji ? Tokens.font-size-kanji : Tokens.font-size-large;
+                font-family: data.is-kanji ? "MS Mincho" : "";
+                font-weight: 400;
+                color: Tokens.text-primary;
+                horizontal-alignment: center;
+                vertical-alignment: center;
             }
 
-            // Full-card touch for flip — inside front face so known button stays above.
-            TouchArea {
-                clicked => {
-                    show-back = true;
-                    flipped();
-                }
+            Text {
+                text: "Tap to reveal";
+                font-size: Tokens.font-size-small;
+                color: Tokens.text-secondary;
+                horizontal-alignment: center;
             }
         }
 
-        // Back face — expands from zero after front collapses.
+        // Full-card touch for flip — inside front face so known button stays above.
+            TouchArea {
+            clicked => {
+                show-back = true;
+                flipped();
+            }
+        }
+    }
+
+    // Back face — expands from zero after front collapses.
         back-face := Rectangle {
-            clip: true;
-            width: show-back ? parent.width : 0px;
-            height: parent.height;
-            animate width { duration: Animations.flip-duration; easing: ease-out; delay: Animations.flip-delay; }
+        clip: true;
+        width: show-back ? parent.width : 0px;
+        // preferred-height: 200px;
+        animate width {
+            duration: Animations.flip-duration;
+            easing: ease-out;
+            delay: Animations.flip-delay;
+        }
 
-            VerticalLayout {
-                alignment: center;
-                padding: 20px;
-                spacing: 6px;
+        VerticalLayout {
+            alignment: center;
+            padding: 20px;
+            spacing: 6px;
 
-                Text {
-                    text: data.jap-obj;
-                    font-size: Tokens.font-size-body;
-                    color: Tokens.text-secondary;
-                    horizontal-alignment: center;
-                }
-
-                Text {
-                    text: data.explanation;
-                    font-size: Tokens.font-size-explanation;
-                    color: Tokens.text-primary;
-                    horizontal-alignment: center;
-                    vertical-alignment: center;
-                    wrap: word-wrap;
-                }
-
-                Text {
-                    text: "Tap to hide";
-                    font-size: Tokens.font-size-small;
-                    color: Tokens.text-secondary;
-                    horizontal-alignment: center;
-                }
+            Text {
+                text: data.jap-obj;
+                font-size: Tokens.font-size-body;
+                color: Tokens.text-secondary;
+                horizontal-alignment: center;
             }
 
-            // Touch area for back face to flip back.
-            TouchArea {
-                clicked => {
-                    show-back = false;
-                    flipped();
-                }
+            Text {
+                text: data.explanation;
+                font-size: Tokens.font-size-explanation;
+                color: Tokens.text-primary;
+                horizontal-alignment: center;
+                vertical-alignment: center;
+                wrap: word-wrap;
+            }
+
+            Text {
+                text: "Tap to hide";
+                font-size: Tokens.font-size-small;
+                color: Tokens.text-secondary;
+                horizontal-alignment: center;
             }
         }
 
-        // Known toggle — absolutely positioned above both face Rectangles.
+        // Touch area for back face to flip back.
+            TouchArea {
+            clicked => {
+                show-back = false;
+                flipped();
+            }
+        }
+    }
+
+    // Known toggle — absolutely positioned above both face Rectangles.
         // checkable + two-way binding replaces the clicked callback entirely.
         CommonBtn {
-            checkable: true;
-            checked <=> known;
-            x: parent.width - self.width - 8px;
-            y: 8px;
-            width: 32px;
-            height: 32px;
-            text: known ? "✓" : "✗";
-            accessibilityLabel: known ? "Mark as unknown" : "Mark as known";
-        }
+        checkable: true;
+        checked <=> known;
+        x: parent.width - self.width - 8px;
+        y: 8px;
+        width: 32px;
+        height: 32px;
+        text: known ? "✓" : "✗";
+        accessibilityLabel: known ? "Mark as unknown" : "Mark as known";
     }
 }

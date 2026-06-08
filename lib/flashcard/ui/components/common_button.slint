@@ -1,34 +1,34 @@
 import { Tokens } from "@styles";
 
 export component CommonBtn inherits Rectangle {
-    in property<string> text: "";
-    in property<bool> primary: false;
+    in property <string> text: "";
+    in property <bool> primary: false;
 
     // button could be disable. Callback can only be invoked when enabled is true.
-    in-out property<bool> enabled: true;
+    in-out property <bool> enabled: true;
     // if the button is clicked, button state changes. Useful for toggle button, in flashcard
-    in-out property<bool> checked: false;
+    in-out property <bool> checked: false;
     // if the button is checkable, it can be checked or unchecked when clicked. Otherwise, it behaves like a normal button without checked state. Useful for mutual exclusive button group, in flashcard stack list.
-    in property<bool> checkable: false;
+    in property <bool> checkable: false;
     // if the button is pressed, it is being clicked. Useful for visual feedback when user clicks and holds the button.
-    out property<bool> pressed <=> ta.pressed;
+    out property <bool> pressed <=> ta.pressed;
     // Color used for the button background when checked == true.
     // Override at usage site for action-bar tabs (distinct from topic tabs).
-    in property<color> checked-bg: Tokens.nav-background;
+    in property <color> checked-bg: Tokens.nav-background;
     // Text color when checked == true. Override at usage site if checked-bg is a light color.
-    in property<color> checked-text: Tokens.text-on-dark;
+    in property <color> checked-text: Tokens.text-on-dark;
 
-    in property<string> accessibilityLabel: "";
-    in property<string> accessibilityDescription: "";
-    in property<string> accessibilityId: "";
+    in property <string> accessibilityLabel: "";
+    in property <string> accessibilityDescription: "";
+    in property <string> accessibilityId: "";
 
     callback clicked;
 
     // Hide disabled buttons from layout flow entirely.
     visible: enabled;
-
-    width: 100%;
-    height: 40px;
+    // set preferred size so that SLint calculate size from child component.
+    preferred-width: 100px;
+    preferred-height: 40px;
     border-radius: 8px;
     accessible-role: button;
     accessible-label: accessibilityLabel != "" ? accessibilityLabel : text;
@@ -37,11 +37,7 @@ export component CommonBtn inherits Rectangle {
     accessible-enabled: enabled;
     accessible-checkable: checkable;
     accessible-checked: checked;
-    background: !enabled ? Tokens.btn-disabled-bg
-        : (ta.pressed ? Tokens.btn-pressed-bg
-        : (checked ? checked-bg
-        : (primary ? Tokens.btn-primary-bg
-        : Tokens.btn-default-bg)));
+    background: !enabled ? Tokens.btn-disabled-bg : (ta.pressed ? Tokens.btn-pressed-bg : (checked ? checked-bg : (primary ? Tokens.btn-primary-bg : Tokens.btn-default-bg)));
     opacity: 1.0;
 
     HorizontalLayout {
@@ -50,16 +46,14 @@ export component CommonBtn inherits Rectangle {
 
         Text {
             text: text;
-            color: !enabled ? Tokens.btn-disabled-text
-                : (checked ? checked-text
-                : Tokens.text-primary);
+            color: !enabled ? Tokens.btn-disabled-text : (checked ? checked-text : Tokens.text-primary);
             horizontal-alignment: center;
             vertical-alignment: center;
             font-size: Tokens.font-size-input;
         }
     }
 
-    ta:=TouchArea {
+    ta := TouchArea {
         enabled: enabled;
         clicked => {
             if (checkable) {
