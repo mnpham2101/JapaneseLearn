@@ -1,0 +1,33 @@
+import { Tokens } from "@styles";
+import { CommonBtn } from "common_button.slint";
+
+export struct GridItem {
+    text: string,
+    enabled: bool,
+    active: bool,  // true = use primary styling (colored button)
+}
+
+export component CommonGrid inherits Rectangle {
+    // Up to 16 configurable grid items.
+    // Items with enabled=false are hidden (CommonBtn.visible = enabled).
+    in property <[GridItem]> items: [];
+
+    // Fired when a grid cell is clicked; passes the item index.
+    callback item-clicked(index: int);
+
+    GridLayout {
+        spacing: Tokens.spacing-sm;
+        padding: Tokens.padding-sm;
+
+        for item[i] in items: CommonBtn {
+            col: mod(i, 4);
+            row: i / 4;
+            text: item.text;
+            enabled: item.enabled;
+            primary: item.active;
+            clicked => {
+                item-clicked(i);
+            }
+        }
+    }
+}
