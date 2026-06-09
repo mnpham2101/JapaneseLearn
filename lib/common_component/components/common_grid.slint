@@ -22,6 +22,7 @@ export component CommonGrid inherits Rectangle {
         for item[i] in items: CommonBtn {
             col: mod(i, 4);
             row: i / 4;
+            preferred-width: Tokens.size-grid-cell;
             text: item.text;
             enabled: item.enabled;
             primary: item.active;

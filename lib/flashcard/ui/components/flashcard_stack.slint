@@ -61,7 +61,7 @@ export component FlashcardStack {
                 }
 
                 CommonBtn {
-                    width: 80px;
+                    width: Tokens.size-btn-sm;
                     height: 32px;
                     text: "Study";
                     primary: true;
@@ -78,8 +78,8 @@ export component FlashcardStack {
                 }
 
                 CommonBtn {
-                    width: 32px;
-                    height: 32px;
+                    width: Tokens.size-btn-icon;
+                    height: Tokens.size-btn-icon;
                     text: "✕";
                     accessibilityLabel: "Close stack";
                     clicked => root.close-clicked();
@@ -174,8 +174,8 @@ export component FlashcardStack {
                     }
 
                     CommonBtn {
-                        width: 32px;
-                        height: 32px;
+                        width: Tokens.size-btn-icon;
+                        height: Tokens.size-btn-icon;
                         text: "✕";
                         accessibilityLabel: "Delete card";
                         clicked => {
@@ -253,7 +253,7 @@ export component FlashcardStack {
                     }
 
                     CommonBtn {
-                        width: 90px;
+                        width: Tokens.size-btn-tab;
                         text: "Confirm";
                         primary: true;
                         clicked => {
@@ -265,7 +265,7 @@ export component FlashcardStack {
                     }
 
                     CommonBtn {
-                        width: 80px;
+                        width: Tokens.size-btn-sm;
                         text: "Cancel";
                         clicked => {
                             jap-input.text = "";
@@ -278,7 +278,7 @@ export component FlashcardStack {
 
             // "Add Flashcard" button — hidden while the form is open.
             if !root.show-add-form: CommonBtn {
-                width: 160px;
+                width: Tokens.size-btn-wide;
                 text: "Add Flashcard";
                 primary: true;
                 height: self.visible ? 36px : 0px;

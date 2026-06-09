@@ -122,8 +122,8 @@ export component Flashcard inherits Rectangle {
         checked <=> known;
         x: parent.width - self.width - 8px;
         y: 8px;
-        width: 32px;
-        height: 32px;
+        width: Tokens.size-btn-icon;
+        height: Tokens.size-btn-icon;
         text: known ? "✓" : "✗";
         accessibilityLabel: known ? "Mark as unknown" : "Mark as known";
     }
