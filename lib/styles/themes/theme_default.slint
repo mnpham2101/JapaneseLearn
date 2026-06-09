@@ -99,6 +99,22 @@ export global Tokens {
     // ── Drop-target highlight ─────────────────────────────────────────────────
     out property <color> drag-target-highlight: #CCD5AE;
 
+    // ── Component size tokens ────────────────────────────────────────────────
+    // Icon-only square button (known/unknown toggle, row delete ✕)
+    out property <length> size-btn-icon: 32px;
+    // Small text button (Cancel, Back)
+    out property <length> size-btn-sm: 80px;
+    // Standard button — matches CommonBtn preferred-width
+    out property <length> size-btn-normal: 100px;
+    // Tab / action-bar button (Lesson, Exercise, topic tabs)
+    out property <length> size-btn-tab: 90px;
+    // Wide action button (Restore Defaults, Add Lesson, Import Lesson)
+    out property <length> size-btn-wide: 160px;
+    // CommonGrid cell preferred width
+    out property <length> size-grid-cell: 120px;
+    // Max flashcard width in full study-session view
+    out property <length> size-flashcard-full-view: 480px;
+
     // ── Bar-level distinction ─────────────────────────────────────────────────
     // StudyPage topic tab row (top-level navigation: Vocabulary / Grammar / Reading)
     out property <color> topic-tab-bar-bg: #D4A373;
