@@ -3,7 +3,7 @@
 //
 // # [Task 6.B.2]:
 // - Generating flashcards names only newly created stacks (not pre-existing ones) in
-//   generation-notification, and switches active-view to the Flashcard tab (2)
+//   generation-notification, and switches active-view to the Exercise tab (1)
 // - Regenerating with no new lessons produces no notification and does not change active-view
 
 use std::cell::Cell;
@@ -63,7 +63,7 @@ fn seed_lesson(logic: &VocabularyAppLogic, name: &str) {
     );
 }
 
-/// Covers: Task 6.B.2 — first generation names the new stack and switches to Flashcard tab
+/// Covers: Task 6.B.2 — first generation names the new stack and switches to Exercise tab
 #[test]
 fn generate_exercises_notifies_new_stack_and_switches_tab() {
     let window = setup();
@@ -77,7 +77,7 @@ fn generate_exercises_notifies_new_stack_and_switches_tab() {
         notification.contains("N5 Verbs"),
         "notification should name the new stack 'N5 Verbs', got: {notification}"
     );
-    assert_eq!(vocab_logic.get_active_view(), 2);
+    assert_eq!(vocab_logic.get_active_view(), 1);
 
     cleanup_artifacts();
 }
@@ -129,7 +129,7 @@ fn generate_exercises_names_only_new_stack_among_existing() {
         !notification.contains("Existing Lesson"),
         "notification should not re-name the pre-existing stack 'Existing Lesson', got: {notification}"
     );
-    assert_eq!(vocab_logic.get_active_view(), 2);
+    assert_eq!(vocab_logic.get_active_view(), 1);
 
     cleanup_artifacts();
 }
