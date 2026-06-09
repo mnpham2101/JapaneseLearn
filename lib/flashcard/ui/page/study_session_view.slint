@@ -34,7 +34,7 @@ export component StudySessionView inherits Rectangle {
                     HorizontalLayout {
                         alignment: center;
                         session-card := Flashcard {
-                            width: min(root.width - 32px, 480px);
+                            width: min(root.width - 32px, Tokens.size-flashcard-full-view);
                             data: FlashcardAppLogic.flashcard-list[FlashcardAppLogic.selected-stack-index].flashcards[root.current-card-index];
 
                             // Whenever the known status changes, update model data.
