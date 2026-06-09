@@ -1,0 +1,54 @@
+import { Tokens } from "@styles";
+import { CommonBtn } from "@common_component";
+import { CommonGrid, GridItem } from "@common_component";
+import { FlashcardModel } from "@flashcard";
+import { MatchingExerciseView } from "matching_exercise_view.slint";
+
+// TestView — test type selector for a vocabulary lesson.
+// Shows a CommonGrid with available test types.
+// Selecting "Matching Test" opens MatchingExerciseView.
+// Fires close-clicked when the user closes the result view in MatchingExerciseView.
+export component TestView inherits Rectangle {
+    background: Tokens.page-background;
+
+    // Flashcard cards to pass to MatchingExerciseView.
+    in property <[FlashcardModel]> cards;
+
+    // Fired when the user closes the result view (Close button in MatchingExerciseView).
+    callback close-clicked;
+
+    property <bool> show-matching: false;
+
+    VerticalLayout {
+        spacing: Tokens.spacing-md;
+        padding: Tokens.padding-lg;
+
+        // Back button — returns to test grid from matching exercise.
+        if show-matching: HorizontalLayout {
+            alignment: start;
+            CommonBtn {
+                width: 100px;
+                text: "← Back";
+                accessibilityLabel: "Back to test selection";
+                clicked => { show-matching = false; }
+            }
+        }
+
+        // Test type grid — shown when no test is active.
+        if !show-matching: CommonGrid {
+            items: [{ text: "Matching Test", enabled: true, active: true }];
+            item-clicked(index) => {
+                if (index == 0) { show-matching = true; }
+            }
+        }
+
+        // Matching exercise — shown when Matching Test is selected.
+        if show-matching: MatchingExerciseView {
+            cards: cards;
+            closed => {
+                show-matching = false;
+                close-clicked();
+            }
+        }
+    }
+}
