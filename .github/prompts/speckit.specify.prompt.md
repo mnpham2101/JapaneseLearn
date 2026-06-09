@@ -211,6 +211,10 @@ detail → view/add/delete/edit flashcards.
 6.7 The `Flashcard's back should only show the meaning of the word without the remaining data. Referred to `@.github/speckit.bug.6-7.report.md` for details. (done)
 6.8 The `stack.json`, storing data for `Flashcard` library should stay in `@lib/Flashcard/ui/data`. The `Vocabulary.json`, storing data for `Vocabulary` should stay in `lib/Vocabulary/ui/data`. Referred to `@.github/speckit.bug.6-8.report.md` for details. (done)
 
+# Redesign request
+1.0 Refactor `CommonBtn`, `CommonList` to `CommonComponent` library. Redesign "Exercise" page. Redesign "ReviewPage" should have similar layout as "Exercise" page. Referred to `@.github/speckit.redesign.1-0.report.md` for details.
+
+
 ## Theme redesign (high priority):
 - Backup or organized the current color sets to theme.
 - Create a new color theme that matches the Solarized Light by current VSCode. 
