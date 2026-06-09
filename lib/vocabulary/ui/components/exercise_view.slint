@@ -1,0 +1,51 @@
+import { Tokens } from "@styles";
+import { CommonBtn } from "@common_component";
+import { VocabularyAppLogic } from "../vocabulary_app_logic.slint";
+import { FlashcardManagerView } from "@flashcard";
+import { ExerciseGrid } from "exercise_grid.slint";
+
+export component ExerciseView inherits Rectangle {
+    background: Tokens.page-background;
+
+    // When true, FlashcardManagerView overlays the grid.
+    property <bool> show-flashcard-manager: false;
+
+    VerticalLayout {
+        spacing: Tokens.spacing-md;
+        padding: Tokens.padding-lg;
+
+        // Action row — generate and export
+        HorizontalLayout {
+            alignment: center;
+            spacing: Tokens.spacing-md;
+
+            CommonBtn {
+                text: "Generate Exercises";
+                primary: true;
+                clicked => {
+                    VocabularyAppLogic.generate-exercises-clicked();
+                }
+            }
+
+            CommonBtn {
+                text: "Export Vocabulary";
+                clicked => {
+                    VocabularyAppLogic.export-vocabulary-clicked();
+                }
+            }
+        }
+
+        // Exercise type grid
+        ExerciseGrid {
+            flashcard-clicked => {
+                show-flashcard-manager = true;
+            }
+        }
+    }
+
+    // Flashcard manager overlay — shown when a grid cell is activated
+    if show-flashcard-manager: FlashcardManagerView {
+        width: 100%;
+        height: 100%;
+    }
+}

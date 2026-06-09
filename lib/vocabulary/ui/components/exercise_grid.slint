@@ -1,0 +1,16 @@
+import { CommonGrid, GridItem } from "@common_component";
+
+export component ExerciseGrid inherits Rectangle {
+    callback flashcard-clicked;
+
+    CommonGrid {
+        items: [
+            { text: "Flashcard", enabled: true, active: true },
+        ];
+        item-clicked(index) => {
+            if (index == 0) {
+                flashcard-clicked();
+            }
+        }
+    }
+}
