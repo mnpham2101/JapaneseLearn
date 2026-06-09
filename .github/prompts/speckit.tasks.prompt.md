@@ -262,8 +262,8 @@ agent: speckit.tasks
 
 - [x] R1.1 **[slint-developer]** Create `lib/common_component` libC scaffold; register `@common_component` in root, flashcard, and vocabulary `build.rs` files. — see [speckit.subtask.R1-1.prompt.md](.github/prompts/speckit.subtask.R1-1.prompt.md)
 - [x] R1.2 **[slint-developer]** Move `CommonBtn` from `lib/flashcard` to `lib/common_component`; update every import site in flashcard, vocabulary, and root UI. **Depends on R1.1.** — see [speckit.subtask.R1-2.prompt.md](.github/prompts/speckit.subtask.R1-2.prompt.md)
-- [ ] R1.3 **[slint-developer]** Move `CommonList` from `lib/flashcard` to `lib/common_component`; update every import site. **Depends on R1.2.** — see [speckit.subtask.R1-3.prompt.md](.github/prompts/speckit.subtask.R1-3.prompt.md)
-- [ ] R1.4 **[slint-developer]** Create `CommonGrid` in `lib/common_component` (4-column grid of configurable `CommonBtn` items). **Depends on R1.3.** — see [speckit.subtask.R1-4.prompt.md](.github/prompts/speckit.subtask.R1-4.prompt.md)
+- [x] R1.3 **[slint-developer]** Move `CommonList` from `lib/flashcard` to `lib/common_component`; update every import site. **Depends on R1.2.** — see [speckit.subtask.R1-3.prompt.md](.github/prompts/speckit.subtask.R1-3.prompt.md)
+- [x] R1.4 **[slint-developer]** Create `CommonGrid` in `lib/common_component` (4-column grid of configurable `CommonBtn` items). **Depends on R1.3.** — see [speckit.subtask.R1-4.prompt.md](.github/prompts/speckit.subtask.R1-4.prompt.md)
 
 > After R1.3: R1.5 and R1.8 may run in parallel (different files). After R1.4: R1.6 may proceed.
 

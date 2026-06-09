@@ -5,7 +5,7 @@ import { VocabularyLessonModel } from "../vocabulary_app_logic.slint";
 // Inherits CommonBtn so it shares all visual states (checked, primary, enabled).
 // The `checked` property is set externally by the parent (one-way binding) to reflect
 // whether this lesson is currently selected — no checkable toggle needed here.
-export component LessonStackLabel inherits CommonBtn {
+export component LessonLabel inherits CommonBtn {
     in property <VocabularyLessonModel> lesson: { name: "", words: [] };
     text: lesson.name;
 }

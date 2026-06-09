@@ -1,10 +1,10 @@
 import { CommonBtn } from "@common_component";
-import { LessonStackLabel } from "lesson_stack_label.slint";
+import { LessonLabel } from "lesson_label.slint";
 import { VocabularyAppLogic } from "../vocabulary_app_logic.slint";
 import { Tokens } from "@styles";
 import { Tokens } from "../../../styles/themes/theme_solarized_light.slint";
 
-// List of vocabulary lessons rendered as LessonStackLabel rows,
+// List of vocabulary lessons rendered as LessonLabel rows,
 // with an inline create-lesson form.
 export component LessonStackList inherits Rectangle {
     // State for the create-lesson inline form. Exposed as in-out so a parent
@@ -92,7 +92,7 @@ export component LessonStackList inherits Rectangle {
                         spacing: Tokens.spacing-sm;
 
                         // Lesson label — checkable, mirrors FlashcardLabel usage.
-                        LessonStackLabel {
+                        LessonLabel {
                             horizontal-stretch: 1;
                             height: 36px;
                             lesson: lesson;
