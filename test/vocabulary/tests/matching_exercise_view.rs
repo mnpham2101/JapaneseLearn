@@ -2,10 +2,14 @@
 // Component: MatchingExerciseView
 //
 // # [Task 6.B.1]:
-// - page-size defaults to ~10 cards per page
+// - page-size defaults to 5 cards per page (reduced from 10 in Task R1.8)
 // - page-offset starts at 0 and stays within [0, cards.length)
 // - A stack larger than page-size exposes more cards than fit on one page
 //   (the "Next" button only renders, and pagination only matters, in that case)
+//
+// # [Task R1.8]:
+// - page-size reduced to 5
+// - result-view property added; defaults to false
 //
 // Note: the front/back tile click handlers are internal TouchAreas inside
 // `for` loops with no exposed callbacks (matching MatchingExerciseView's public
@@ -56,13 +60,12 @@ fn setup(card_count: usize) -> MatchingExerciseTestWindow {
     window
 }
 
-/// Covers: Task 6.B.1 — page-size defaults to ~10 cards, matching the "about 10
-/// flashcards per page" requirement
+/// Covers: Task R1.8 — page-size reduced to 5 cards per page
 #[test]
 fn matching_exercise_view_default_page_size() {
     let window = setup(5);
 
-    assert_eq!(window.get_page_size(), 10);
+    assert_eq!(window.get_page_size(), 5);
 }
 
 /// Covers: Task 6.B.1 — pagination starts at the first page
@@ -91,11 +94,11 @@ fn matching_exercise_view_large_stack_spans_multiple_pages() {
     );
 }
 
-/// Covers: Task 6.B.1 — a stack no larger than page-size fits on a single page
+/// Covers: Task R1.8 — a stack no larger than page-size (5) fits on a single page
 /// (the "Next" button must not appear / pagination is a no-op)
 #[test]
 fn matching_exercise_view_small_stack_fits_one_page() {
-    let window = setup(7);
+    let window = setup(4);
 
     let total = window.get_cards().row_count() as i32;
     let page_size = window.get_page_size();

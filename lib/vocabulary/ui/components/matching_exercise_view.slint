@@ -8,12 +8,15 @@ import { FlashcardModel } from "@flashcard";
 // Shows up to `page-size` pairs at a time; "Next" advances to the following set,
 // wrapping back to the first page once the end of the stack is reached.
 // Fires exercise-completed() when all pairs in the stack have been matched.
+// When result-view is true, shows correct/incorrect tile coloring and a Close button.
 export component MatchingExerciseView inherits Rectangle {
     in property <[FlashcardModel]> cards;
     callback exercise-completed();
+    // Fired by the Close button when the user exits the result view.
+    callback closed();
 
     // Number of card pairs shown per page.
-    out property <int> page-size: 10;
+    out property <int> page-size: 5;
     // Index of the first card shown on the current page.
     out property <int> page-offset: 0;
 
@@ -21,6 +24,10 @@ export component MatchingExerciseView inherits Rectangle {
     out property <int> selected-front-index: -1;
     // Number of confirmed matches across the whole stack so far.
     out property <int> matched-count: 0;
+
+    // When true, shows the result view (correct/incorrect coloring, Close button).
+    // Set to true by the Submit button; reset to false by the Close button.
+    in-out property <bool> result-view: false;
 
     // Per-tile matched flags, indexed by absolute card index (up to 200 cards supported).
     // true means this positional pair has been matched and tiles are locked.
@@ -59,7 +66,7 @@ export component MatchingExerciseView inherits Rectangle {
         padding: Tokens.padding-lg;
         spacing: Tokens.spacing-md;
 
-        // Header row
+        // Header row — title only (matched-count moved to result view)
         HorizontalLayout {
             alignment: center;
             spacing: Tokens.spacing-md;
@@ -68,13 +75,6 @@ export component MatchingExerciseView inherits Rectangle {
                 text: "Match the cards";
                 font-size: Tokens.font-size-title;
                 color: Tokens.text-primary;
-                vertical-alignment: center;
-            }
-
-            Text {
-                text: matched-count + " / " + cards.length;
-                font-size: Tokens.font-size-caption;
-                color: Tokens.text-secondary;
                 vertical-alignment: center;
             }
         }
@@ -91,12 +91,16 @@ export component MatchingExerciseView inherits Rectangle {
                 for card[i] in cards: CommonBtn {
                     visible: i >= page-offset && i < page-offset + visible-count;
                     text: card.jap-obj;
-                    enabled: !matched-flags[i];
+                    enabled: !result-view && !matched-flags[i];
                     checked: (selected-front-index == i) && !matched-flags[i];
                     checkable: false;
-                    primary: matched-flags[i];
+                    primary: matched-flags[i] && !result-view;
+                    border-color: result-view
+                        ? (matched-flags[i] ? #a8d8a8 : #f4a0a0)
+                        : Tokens.border-color;
+                    border-width: result-view ? 2px : 0px;
                     clicked => {
-                        if (!matched-flags[i]) {
+                        if (!result-view && !matched-flags[i]) {
                             selected-front-index = (selected-front-index == i) ? -1 : i;
                         }
                     }
@@ -111,29 +115,35 @@ export component MatchingExerciseView inherits Rectangle {
                 for card[i] in cards: CommonBtn {
                     visible: i >= page-offset && i < page-offset + visible-count;
                     text: card.explanation;
-                    enabled: !matched-flags[i];
-                    primary: matched-flags[i];
+                    enabled: !result-view && !matched-flags[i];
+                    primary: matched-flags[i] && !result-view;
                     checkable: false;
+                    border-color: result-view
+                        ? (matched-flags[i] ? #a8d8a8 : #f4a0a0)
+                        : Tokens.border-color;
+                    border-width: result-view ? 2px : 0px;
                     clicked => {
-                        if (!matched-flags[i] && selected-front-index == i) {
-                            // Correct match — mark pair as matched
-                            matched-flags[i] = true;
-                            matched-count += 1;
-                            selected-front-index = -1;
-                            if (matched-count >= cards.length && cards.length > 0) {
-                                exercise-completed();
+                        if (!result-view) {
+                            if (!matched-flags[i] && selected-front-index == i) {
+                                // Correct match — mark pair as matched
+                                matched-flags[i] = true;
+                                matched-count += 1;
+                                selected-front-index = -1;
+                                if (matched-count >= cards.length && cards.length > 0) {
+                                    exercise-completed();
+                                }
+                            } else if (!matched-flags[i] && selected-front-index != -1) {
+                                // Wrong match — deselect front
+                                selected-front-index = -1;
                             }
-                        } else if (!matched-flags[i] && selected-front-index != -1) {
-                            // Wrong match — deselect front
-                            selected-front-index = -1;
                         }
                     }
                 }
             }
         }
 
-        // Pagination control — only shown when the stack spans more than one page.
-        if cards.length > page-size: HorizontalLayout {
+        // Pagination control — only shown when the stack spans more than one page and not in result view.
+        if cards.length > page-size && !result-view: HorizontalLayout {
             alignment: center;
 
             CommonBtn {
@@ -142,6 +152,71 @@ export component MatchingExerciseView inherits Rectangle {
                 accessibilityLabel: "Show next set of cards";
                 clicked => {
                     root.go-to-next-page();
+                }
+            }
+        }
+
+        // Submit button — shown in main view only (not in result view).
+        if !result-view: HorizontalLayout {
+            alignment: center;
+            spacing: Tokens.spacing-md;
+
+            CommonBtn {
+                width: min(parent.width, 160px);
+                text: "Submit";
+                primary: true;
+                accessibilityLabel: "Submit matching exercise";
+                clicked => {
+                    root.result-view = true;
+                }
+            }
+        }
+
+        // Result view — shown when result-view == true.
+        // Displays matched-count/total and a Close button to reset state.
+        if result-view: HorizontalLayout {
+            alignment: center;
+            spacing: Tokens.spacing-md;
+
+            Text {
+                text: matched-count + " / " + cards.length;
+                font-size: Tokens.font-size-caption;
+                color: Tokens.text-secondary;
+                vertical-alignment: center;
+            }
+
+            CommonBtn {
+                width: min(parent.width, 120px);
+                text: "Close";
+                accessibilityLabel: "Close result view";
+                clicked => {
+                    result-view = false;
+                    matched-count = 0;
+                    selected-front-index = -1;
+                    page-offset = 0;
+                    matched-flags = [
+                        false, false, false, false, false, false, false, false, false, false,
+                        false, false, false, false, false, false, false, false, false, false,
+                        false, false, false, false, false, false, false, false, false, false,
+                        false, false, false, false, false, false, false, false, false, false,
+                        false, false, false, false, false, false, false, false, false, false,
+                        false, false, false, false, false, false, false, false, false, false,
+                        false, false, false, false, false, false, false, false, false, false,
+                        false, false, false, false, false, false, false, false, false, false,
+                        false, false, false, false, false, false, false, false, false, false,
+                        false, false, false, false, false, false, false, false, false, false,
+                        false, false, false, false, false, false, false, false, false, false,
+                        false, false, false, false, false, false, false, false, false, false,
+                        false, false, false, false, false, false, false, false, false, false,
+                        false, false, false, false, false, false, false, false, false, false,
+                        false, false, false, false, false, false, false, false, false, false,
+                        false, false, false, false, false, false, false, false, false, false,
+                        false, false, false, false, false, false, false, false, false, false,
+                        false, false, false, false, false, false, false, false, false, false,
+                        false, false, false, false, false, false, false, false, false, false,
+                        false, false, false, false, false, false, false, false, false, false,
+                    ];
+                    root.closed();
                 }
             }
         }

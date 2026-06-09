@@ -35,10 +35,12 @@ export component VocabularyExerciseTestWindow inherits Window {
 export component MatchingExerciseTestWindow inherits Window {
     in property <[FlashcardModel]> cards <=> view.cards;
     callback exercise-completed <=> view.exercise-completed;
+    callback closed <=> view.closed;
     out property <int> matched-count <=> view.matched-count;
     out property <int> page-offset <=> view.page-offset;
     out property <int> page-size <=> view.page-size;
     out property <int> selected-front-index <=> view.selected-front-index;
+    in-out property <bool> result-view <=> view.result-view;
 
     view := MatchingExerciseView {
         width: 800px;
