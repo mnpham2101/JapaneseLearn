@@ -579,7 +579,7 @@ where
                         format!("Flashcard stacks {} generated.", quoted.join(", "))
                     };
                     vocab_logic.set_generation_notification(message.into());
-                    vocab_logic.set_active_view(2);
+                    vocab_logic.set_active_view(1);
                 }
             }
         });

@@ -3,13 +3,12 @@ import { CommonBtn } from "@common_component";
 import { VocabularyAppLogic } from "../vocabulary_app_logic.slint";
 import { LessonStackList } from "../components/lesson_stack_list.slint";
 import { LessonDetailView } from "../components/lesson_detail_view.slint";
-import { FlashcardManagerView } from "@flashcard";
+import { ExerciseView } from "../components/exercise_view.slint";
 
-// Top-level vocabulary page with a three-tab action bar (Lesson/Exercise/Flashcard)
+// Top-level vocabulary page with a two-tab action bar (Lesson/Exercise)
 // and an Import Lesson direct-action button.
 // View 0 — Lesson: LessonStackList or LessonDetailView (vertically stacked pattern).
-// View 1 — Exercise: Generate Flashcards and Export Vocabulary buttons.
-// View 2 — Flashcard: FlashcardManagerView.
+// View 1 — Exercise: ExerciseView (Generate, Export, and ExerciseGrid).
 export component VocabularyPage inherits Rectangle {
     background: Tokens.page-background;
 
@@ -80,17 +79,6 @@ export component VocabularyPage inherits Rectangle {
                         }
                     }
 
-                    CommonBtn {
-                        width: 90px;
-                        text: "Flashcard";
-                        checked: VocabularyAppLogic.active-view == 2;
-                        checked-bg: Tokens.action-tab-btn-active-bg;
-                        checked-text: Tokens.text-primary;
-                        clicked => {
-                            VocabularyAppLogic.active-view = 2;
-                        }
-                    }
-
                     // Direct-action button — fires import and returns to current view.
                 CommonBtn {
                         width: 120px;
@@ -155,33 +143,7 @@ export component VocabularyPage inherits Rectangle {
         }
 
         // ── View 1: Exercise ──────────────────────────────────────────────────
-        if VocabularyAppLogic.active-view == 1: Rectangle {
-            vertical-stretch: 1;
-            background: Tokens.page-background;
-
-            HorizontalLayout {
-                alignment: center;
-                spacing: 12px;
-
-                CommonBtn {
-                    text: "Generate Flashcards";
-                    primary: true;
-                    clicked => {
-                        VocabularyAppLogic.generate-exercises-clicked();
-                    }
-                }
-
-                CommonBtn {
-                    text: "Export Vocabulary";
-                    clicked => {
-                        VocabularyAppLogic.export-vocabulary-clicked();
-                    }
-                }
-            }
-        }
-
-        // ── View 2: Flashcard ─────────────────────────────────────────────────
-        if VocabularyAppLogic.active-view == 2: FlashcardManagerView {
+        if VocabularyAppLogic.active-view == 1: ExerciseView {
             vertical-stretch: 1;
         }
     }
