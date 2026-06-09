@@ -255,6 +255,25 @@ agent: speckit.tasks
 - [x] 6.T1.3 **[slint-developer]** Author `lib/styles/themes/theme_solarized_light.slint` with the Solarized Light color mapping (not wired into `styles.slint` — default theme stays active). **Depends on 6.T1.2.** — see [speckit.subtask.6-T1-3.prompt.md](.github/prompts/speckit.subtask.6-T1-3.prompt.md)
 - [x] 6.T1.4 Manual verification: `cargo run --bin japanese_learn` shows unchanged default palette; `cargo build` green; `cargo clippy --bin japanese_learn` zero warnings. No agent — task-manager runs this directly. **Depends on 6.T1.3.**
 
+## Phase R1: Redesign 1.0
+**Goal**: Create `lib/common_component` library; redesign Exercise view with `ExerciseGrid`; rename `LessonStackLabel` → `LessonLabel`; create `TestView`; redesign `ReviewPage` as lesson-centric; redesign `MatchingExerciseView` with submit/result flow.
+
+> R1.1 is independent. R1.1 → R1.2 → R1.3 → R1.4 are strictly sequential (each modifies overlapping Slint import paths).
+
+- [x] R1.1 **[slint-developer]** Create `lib/common_component` libC scaffold; register `@common_component` in root, flashcard, and vocabulary `build.rs` files. — see [speckit.subtask.R1-1.prompt.md](.github/prompts/speckit.subtask.R1-1.prompt.md)
+- [ ] R1.2 **[slint-developer]** Move `CommonBtn` from `lib/flashcard` to `lib/common_component`; update every import site in flashcard, vocabulary, and root UI. **Depends on R1.1.** — see [speckit.subtask.R1-2.prompt.md](.github/prompts/speckit.subtask.R1-2.prompt.md)
+- [ ] R1.3 **[slint-developer]** Move `CommonList` from `lib/flashcard` to `lib/common_component`; update every import site. **Depends on R1.2.** — see [speckit.subtask.R1-3.prompt.md](.github/prompts/speckit.subtask.R1-3.prompt.md)
+- [ ] R1.4 **[slint-developer]** Create `CommonGrid` in `lib/common_component` (4-column grid of configurable `CommonBtn` items). **Depends on R1.3.** — see [speckit.subtask.R1-4.prompt.md](.github/prompts/speckit.subtask.R1-4.prompt.md)
+
+> After R1.3: R1.5 and R1.8 may run in parallel (different files). After R1.4: R1.6 may proceed.
+
+- [ ] R1.5 **[slint-developer]** Rename `LessonStackLabel` → `LessonLabel` (file rename, component name, all exports and usages). **Depends on R1.3.** — see [speckit.subtask.R1-5.prompt.md](.github/prompts/speckit.subtask.R1-5.prompt.md)
+- [ ] R1.6 **[slint-developer]** Create `ExerciseView` and `ExerciseGrid` in `lib/vocabulary/ui/components/`; export from `vocabulary_lib.slint`. **Depends on R1.4.** — see [speckit.subtask.R1-6.prompt.md](.github/prompts/speckit.subtask.R1-6.prompt.md)
+- [ ] R1.7 **[slint-developer]** Update `VocabularyPage`: use `ExerciseView` + `ExerciseGrid` in Exercise tab; remove Flashcard action-bar tab. **Depends on R1.6.** — see [speckit.subtask.R1-7.prompt.md](.github/prompts/speckit.subtask.R1-7.prompt.md)
+- [ ] R1.8 **[slint-developer]** Redesign `MatchingExerciseView`: 5-row pagination, Submit button, `result-view` flag with correct/incorrect coloring, Close button. **Depends on R1.3.** — see [speckit.subtask.R1-8.prompt.md](.github/prompts/speckit.subtask.R1-8.prompt.md)
+- [ ] R1.9 **[slint-developer]** Create `TestView` in `lib/vocabulary/ui/components/` (CommonGrid with Matching Test → MatchingExerciseView). **Depends on R1.4, R1.8.** — see [speckit.subtask.R1-9.prompt.md](.github/prompts/speckit.subtask.R1-9.prompt.md)
+- [ ] R1.10 **[slint-developer]** Redesign `ReviewPage`: lesson selection list (read-only), `TestView` for selected lesson, heading shows lesson name. **Depends on R1.5, R1.9.** — see [speckit.subtask.R1-10.prompt.md](.github/prompts/speckit.subtask.R1-10.prompt.md)
+
 ## Phase 7: Future Backlog (Extensible)
 - [ ] 7.1 Add audio playback (Japanese text‑to‑speech integration).
 - [ ] 7.2 Implement spaced repetition algorithms for study scheduling.

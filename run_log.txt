@@ -1,0 +1,87 @@
+warning: C:\Users\DELL\Documents\Work\SlintRust_JapaneseLearn\japanese-learn\Cargo.toml: file `C:\Users\DELL\Documents\Work\SlintRust_JapaneseLearn\japanese-learn\src\main.rs` found to be present in multiple build targets:
+  * `lib` target `japanese_learn`
+  * `bin` target `japanese_learn`
+warning: flashcard@0.1.0: warning: Exported component 'CommonBtn' doesn't inherit Window. No code will be generated for it
+warning: flashcard@0.1.0:   --> C:\Users\DELL\Documents\Work\SlintRust_JapaneseLearn\japanese-learn\lib\flashcard\ui\flashcard_lib.slint:1:10
+warning: flashcard@0.1.0:    |
+warning: flashcard@0.1.0:  1 | export { CommonBtn } from "components/common_button.slint";
+warning: flashcard@0.1.0:    |          ^^^^^^^^^
+warning: flashcard@0.1.0:    |
+warning: flashcard@0.1.0: warning: Exported component 'CommonList' doesn't inherit Window. No code will be generated for it
+warning: flashcard@0.1.0:   --> C:\Users\DELL\Documents\Work\SlintRust_JapaneseLearn\japanese-learn\lib\flashcard\ui\flashcard_lib.slint:2:10
+warning: flashcard@0.1.0:    |
+warning: flashcard@0.1.0:  2 | export { CommonList } from "components/common_list.slint";
+warning: flashcard@0.1.0:    |          ^^^^^^^^^^
+warning: flashcard@0.1.0: warning: Exported component 'Flashcard' doesn't inherit Window. No code will be generated for it
+warning: flashcard@0.1.0:   --> C:\Users\DELL\Documents\Work\SlintRust_JapaneseLearn\japanese-learn\lib\flashcard\ui\flashcard_lib.slint:4:10
+warning: flashcard@0.1.0:    |
+warning: flashcard@0.1.0:  4 | export { Flashcard } from "components/flashcard.slint";
+warning: flashcard@0.1.0:    |          ^^^^^^^^^
+warning: flashcard@0.1.0: warning: Exported component 'FlashcardLabel' doesn't inherit Window. No code will be generated for it
+warning: flashcard@0.1.0:   --> C:\Users\DELL\Documents\Work\SlintRust_JapaneseLearn\japanese-learn\lib\flashcard\ui\flashcard_lib.slint:5:10
+warning: flashcard@0.1.0:    |
+warning: flashcard@0.1.0:  5 | export { FlashcardLabel } from "components/flashcard_label.slint";
+warning: flashcard@0.1.0:    |          ^^^^^^^^^^^^^^
+warning: flashcard@0.1.0: warning: Exported component 'FlashcardList' doesn't inherit Window. No code will be generated for it
+warning: flashcard@0.1.0:   --> C:\Users\DELL\Documents\Work\SlintRust_JapaneseLearn\japanese-learn\lib\flashcard\ui\flashcard_lib.slint:7:10
+warning: flashcard@0.1.0:    |
+warning: flashcard@0.1.0:  7 | export { FlashcardList } from "components/flashcard_list.slint";
+warning: flashcard@0.1.0:    |          ^^^^^^^^^^^^^
+warning: flashcard@0.1.0: warning: Exported component 'FlashcardManagerView' doesn't inherit Window. No code will be generated for it
+warning: flashcard@0.1.0:   --> C:\Users\DELL\Documents\Work\SlintRust_JapaneseLearn\japanese-learn\lib\flashcard\ui\flashcard_lib.slint:10:10
+warning: flashcard@0.1.0:    |
+warning: flashcard@0.1.0: 10 | export { FlashcardManagerView } from "page/flashcard_manager_view.slint";
+warning: flashcard@0.1.0:    |          ^^^^^^^^^^^^^^^^^^^^
+warning: flashcard@0.1.0: warning: Exported component 'FlashcardStack' doesn't inherit Window. No code will be generated for it
+warning: flashcard@0.1.0:   --> C:\Users\DELL\Documents\Work\SlintRust_JapaneseLearn\japanese-learn\lib\flashcard\ui\flashcard_lib.slint:6:10
+warning: flashcard@0.1.0:    |
+warning: flashcard@0.1.0:  6 | export { FlashcardStack } from "components/flashcard_stack.slint";
+warning: flashcard@0.1.0:    |          ^^^^^^^^^^^^^^
+warning: flashcard@0.1.0: warning: Exported component 'StudySessionView' doesn't inherit Window. No code will be generated for it
+warning: flashcard@0.1.0:   --> C:\Users\DELL\Documents\Work\SlintRust_JapaneseLearn\japanese-learn\lib\flashcard\ui\flashcard_lib.slint:9:10
+warning: flashcard@0.1.0:    |
+warning: flashcard@0.1.0:  9 | export { StudySessionView } from "page/study_session_view.slint";
+warning: flashcard@0.1.0:    |          ^^^^^^^^^^^^^^^^
+warning: vocabulary@0.1.0: warning: Exported component 'LessonDetailPane' doesn't inherit Window. No code will be generated for it
+warning: vocabulary@0.1.0:   --> C:\Users\DELL\Documents\Work\SlintRust_JapaneseLearn\japanese-learn\lib\vocabulary\ui\vocabulary_lib.slint:12:10
+warning: vocabulary@0.1.0:    |
+warning: vocabulary@0.1.0: 12 | export { LessonDetailPane } from "components/lesson_detail_pane.slint";
+warning: vocabulary@0.1.0:    |          ^^^^^^^^^^^^^^^^
+warning: vocabulary@0.1.0:    |
+warning: vocabulary@0.1.0: warning: Exported component 'LessonDetailView' doesn't inherit Window. No code will be generated for it
+warning: vocabulary@0.1.0:   --> C:\Users\DELL\Documents\Work\SlintRust_JapaneseLearn\japanese-learn\lib\vocabulary\ui\vocabulary_lib.slint:16:10
+warning: vocabulary@0.1.0:    |
+warning: vocabulary@0.1.0: 16 | export { LessonDetailView } from "components/lesson_detail_view.slint";
+warning: vocabulary@0.1.0:    |          ^^^^^^^^^^^^^^^^
+warning: vocabulary@0.1.0: warning: Exported component 'LessonList' doesn't inherit Window. No code will be generated for it
+warning: vocabulary@0.1.0:   --> C:\Users\DELL\Documents\Work\SlintRust_JapaneseLearn\japanese-learn\lib\vocabulary\ui\vocabulary_lib.slint:10:10
+warning: vocabulary@0.1.0:    |
+warning: vocabulary@0.1.0: 10 | export { LessonList } from "components/lesson_list.slint";
+warning: vocabulary@0.1.0:    |          ^^^^^^^^^^
+warning: vocabulary@0.1.0: warning: Exported component 'LessonStackLabel' doesn't inherit Window. No code will be generated for it
+warning: vocabulary@0.1.0:   --> C:\Users\DELL\Documents\Work\SlintRust_JapaneseLearn\japanese-learn\lib\vocabulary\ui\vocabulary_lib.slint:15:10
+warning: vocabulary@0.1.0:    |
+warning: vocabulary@0.1.0: 15 | export { LessonStackLabel } from "components/lesson_stack_label.slint";
+warning: vocabulary@0.1.0:    |          ^^^^^^^^^^^^^^^^
+warning: vocabulary@0.1.0: warning: Exported component 'LessonStackList' doesn't inherit Window. No code will be generated for it
+warning: vocabulary@0.1.0:   --> C:\Users\DELL\Documents\Work\SlintRust_JapaneseLearn\japanese-learn\lib\vocabulary\ui\vocabulary_lib.slint:17:10
+warning: vocabulary@0.1.0:    |
+warning: vocabulary@0.1.0: 17 | export { LessonStackList } from "components/lesson_stack_list.slint";
+warning: vocabulary@0.1.0:    |          ^^^^^^^^^^^^^^^
+warning: vocabulary@0.1.0: warning: Exported component 'MatchingExerciseView' doesn't inherit Window. No code will be generated for it
+warning: vocabulary@0.1.0:   --> C:\Users\DELL\Documents\Work\SlintRust_JapaneseLearn\japanese-learn\lib\vocabulary\ui\vocabulary_lib.slint:14:10
+warning: vocabulary@0.1.0:    |
+warning: vocabulary@0.1.0: 14 | export { MatchingExerciseView } from "components/matching_exercise_view.slint";
+warning: vocabulary@0.1.0:    |          ^^^^^^^^^^^^^^^^^^^^
+warning: vocabulary@0.1.0: warning: Exported component 'VocabularyPage' doesn't inherit Window. No code will be generated for it
+warning: vocabulary@0.1.0:   --> C:\Users\DELL\Documents\Work\SlintRust_JapaneseLearn\japanese-learn\lib\vocabulary\ui\vocabulary_lib.slint:13:10
+warning: vocabulary@0.1.0:    |
+warning: vocabulary@0.1.0: 13 | export { VocabularyPage } from "pages/vocabulary_page.slint";
+warning: vocabulary@0.1.0:    |          ^^^^^^^^^^^^^^
+warning: vocabulary@0.1.0: warning: Exported component 'WordForm' doesn't inherit Window. No code will be generated for it
+warning: vocabulary@0.1.0:   --> C:\Users\DELL\Documents\Work\SlintRust_JapaneseLearn\japanese-learn\lib\vocabulary\ui\vocabulary_lib.slint:11:10
+warning: vocabulary@0.1.0:    |
+warning: vocabulary@0.1.0: 11 | export { WordForm } from "components/word_form.slint";
+warning: vocabulary@0.1.0:    |          ^^^^^^^^
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.66s
+     Running `target\debug\japanese_learn.exe`
