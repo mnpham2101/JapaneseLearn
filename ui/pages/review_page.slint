@@ -1,16 +1,16 @@
 import { Tokens } from "@styles";
 import { CommonBtn } from "@common_component";
 import { FlashcardAppLogic } from "@flashcard";
-import { MatchingExerciseView } from "@vocabulary";
+import { VocabularyAppLogic, LessonLabel, TestView } from "@vocabulary";
 
 export component ReviewPage {
     width: 100%;
     height: 100%;
 
-    // Local state — which stack is selected for review (-1 = none).
-    property <int> selected-review-index: -1;
-    // Whether the matching exercise is currently visible.
-    property <bool> show-exercise: false;
+    // Index of the selected lesson (-1 = none).
+    property <int> selected-lesson-index: -1;
+    // Whether TestView is visible.
+    property <bool> show-test-view: false;
 
     Rectangle {
         width: 100%;
@@ -21,56 +21,59 @@ export component ReviewPage {
             padding: Tokens.padding-lg;
             spacing: Tokens.spacing-md;
 
-            // Page heading
+            // Page heading — shows lesson name when test is open, else "Review Mode".
             Text {
-                text: show-exercise
-                    ? FlashcardAppLogic.flashcard-list[selected-review-index].stackname
+                text: show-test-view && selected-lesson-index >= 0
+                    ? VocabularyAppLogic.lesson-list[selected-lesson-index].name
                     : "Review Mode";
                 font-size: Tokens.font-size-heading;
                 color: Tokens.text-primary;
                 horizontal-alignment: center;
             }
 
-            // Stack selection list — shown when no exercise is active
-            if !show-exercise: VerticalLayout {
+            // Lesson selection list — shown when no test is open.
+            if !show-test-view: VerticalLayout {
                 spacing: Tokens.spacing-sm;
 
                 Text {
-                    text: "Select a stack to practice:";
+                    text: "Select a lesson to practice:";
                     font-size: Tokens.font-size-caption;
                     color: Tokens.text-secondary;
                     horizontal-alignment: center;
                 }
 
-                for stack[i] in FlashcardAppLogic.flashcard-list: CommonBtn {
-                    text: stack.stackname;
-                    checkable: false;
-                    clicked => {
-                        selected-review-index = i;
-                        show-exercise = true;
+                Rectangle {
+                    border-color: Tokens.border-color;
+                    border-radius: Tokens.border-radius;
+                    border-width: Tokens.border-width;
+
+                    VerticalLayout {
+                        spacing: Tokens.spacing-sm;
+                        padding: Tokens.padding-sm;
+
+                        for lesson[i] in VocabularyAppLogic.lesson-list: LessonLabel {
+                            horizontal-stretch: 1;
+                            height: 36px;
+                            lesson: lesson;
+                            checkable: false;
+                            clicked => {
+                                selected-lesson-index = i;
+                                show-test-view = true;
+                            }
+                        }
                     }
                 }
             }
 
-            // Matching exercise — shown when a stack is selected
-            if show-exercise: VerticalLayout {
-                spacing: Tokens.spacing-sm;
-
-                CommonBtn {
-                    width: 120px;
-                    text: "Back";
-                    clicked => {
-                        show-exercise = false;
-                        selected-review-index = -1;
-                    }
-                }
-
-                MatchingExerciseView {
-                    cards: FlashcardAppLogic.flashcard-list[selected-review-index].flashcards;
-                    exercise-completed => {
-                        show-exercise = false;
-                        selected-review-index = -1;
-                    }
+            // TestView — shown when a lesson is selected.
+            if show-test-view: TestView {
+                cards: selected-lesson-index >= 0
+                    && selected-lesson-index < FlashcardAppLogic.flashcard-list.length
+                    ? FlashcardAppLogic.flashcard-list[selected-lesson-index].flashcards
+                    : [];
+                close-clicked => {
+                    show-test-view = false;
+                    selected-lesson-index = -1;
                 }
             }
         }
