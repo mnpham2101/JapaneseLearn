@@ -2,7 +2,6 @@ import { CommonBtn } from "@common_component";
 import { LessonLabel } from "lesson_label.slint";
 import { VocabularyAppLogic } from "../vocabulary_app_logic.slint";
 import { Tokens } from "@styles";
-import { Tokens } from "../../../styles/themes/theme_solarized_light.slint";
 
 // List of vocabulary lessons rendered as LessonLabel rows,
 // with an inline create-lesson form.
@@ -10,108 +9,111 @@ export component LessonStackList inherits Rectangle {
     // State for the create-lesson inline form. Exposed as in-out so a parent
     // header button can bind its checked state via `<=>` (mirrors CommonList.add-stack).
     in-out property <bool> show-create-form: false;
+    Flickable {
+        vertical-stretch: 1;
+        viewport-height: lesson-rows.preferred-height;
+        // Lesson rows — plain layout, matching FlashcardList's proven pattern.
+        lesson-rows := VerticalLayout {
+            alignment: LayoutAlignment.end;
+            padding: Tokens.bar-padding-vertical;
+            // Create-lesson form — slides up from the bottom when show-create-form is true.
+            if root.show-create-form: Rectangle {
+                background: Tokens.input-form-background;
+                border-radius: Tokens.border-radius;
+                height: self.visible ? 64px : 0px;
 
-    // Lesson rows — plain layout, matching FlashcardList's proven pattern.
-    VerticalLayout {
-        alignment: LayoutAlignment.end;
-        padding: Tokens.bar-padding-vertical;
-        // Create-lesson form — slides up from the bottom when show-create-form is true.
-        if root.show-create-form: Rectangle {
-            background: Tokens.input-form-background;
-            border-radius: Tokens.border-radius;
-            height: self.visible ? 64px : 0px;
+                HorizontalLayout {
+                    padding: Tokens.padding-sm;
+                    spacing: Tokens.spacing-sm;
+                    alignment: center;
 
-            HorizontalLayout {
-                padding: Tokens.padding-sm;
-                spacing: Tokens.spacing-sm;
-                alignment: center;
-
-                // Lesson name input field.
+                    // Lesson name input field.
                 name-field := Rectangle {
-                    horizontal-stretch: 1;
-                    height: 36px;
-                    border-width: Tokens.border-width;
-                    border-color: Tokens.border-color;
-                    border-radius: Tokens.border-radius;
-                    background: Tokens.card-field-background;
+                        horizontal-stretch: 1;
+                        height: 36px;
+                        border-width: Tokens.border-width;
+                        border-color: Tokens.border-color;
+                        border-radius: Tokens.border-radius;
+                        background: Tokens.card-field-background;
 
-                    name-input := TextInput {
-                        font-size: Tokens.font-size-body;
-                        color: Tokens.text-primary;
-                        vertical-alignment: center;
-                        width: parent.width - 12px;
-                        x: Tokens.spacing-xs;
+                        name-input := TextInput {
+                            font-size: Tokens.font-size-body;
+                            color: Tokens.text-primary;
+                            vertical-alignment: center;
+                            width: parent.width - 12px;
+                            x: Tokens.spacing-xs;
+                        }
+
+                        Text {
+                            visible: name-input.text == "";
+                            text: "Lesson name...";
+                            font-size: Tokens.font-size-body;
+                            color: Tokens.text-placeholder;
+                            vertical-alignment: center;
+                            x: Tokens.spacing-xs;
+                        }
                     }
 
-                    Text {
-                        visible: name-input.text == "";
-                        text: "Lesson name...";
-                        font-size: Tokens.font-size-body;
-                        color: Tokens.text-placeholder;
-                        vertical-alignment: center;
-                        x: Tokens.spacing-xs;
+                    CommonBtn {
+                        width: 90px;
+                        height: 36px;
+                        text: "Confirm";
+                        primary: true;
+                        accessibilityLabel: "Confirm add lesson";
+                        clicked => {
+                            VocabularyAppLogic.lesson-create-confirmed(name-input.text);
+                            name-input.text = "";
+                            root.show-create-form = false;
+                        }
                     }
-                }
 
-                CommonBtn {
-                    width: 90px;
-                    height: 36px;
-                    text: "Confirm";
-                    primary: true;
-                    accessibilityLabel: "Confirm add lesson";
-                    clicked => {
-                        VocabularyAppLogic.lesson-create-confirmed(name-input.text);
-                        name-input.text = "";
-                        root.show-create-form = false;
-                    }
-                }
-
-                CommonBtn {
-                    width: 80px;
-                    height: 36px;
-                    text: "Cancel";
-                    accessibilityLabel: "Cancel add lesson";
-                    clicked => {
-                        name-input.text = "";
-                        root.show-create-form = false;
+                    CommonBtn {
+                        width: 80px;
+                        height: 36px;
+                        text: "Cancel";
+                        accessibilityLabel: "Cancel add lesson";
+                        clicked => {
+                            name-input.text = "";
+                            root.show-create-form = false;
+                        }
                     }
                 }
             }
-        }
 
-        HorizontalLayout {
-            Rectangle {
-                border-color: Tokens.border-color;
-                border-radius: Tokens.border-radius;
-                border-width: Tokens.border-width;
-                VerticalLayout {
-                    spacing: Tokens.spacing-sm;
-                    padding: Tokens.padding-sm;
-
-                    for lesson[i] in VocabularyAppLogic.lesson-list: HorizontalLayout {
+            HorizontalLayout {
+                Rectangle {
+                    border-color: Tokens.border-color;
+                    border-radius: Tokens.border-radius;
+                    border-width: Tokens.border-width;
+                    VerticalLayout {
                         spacing: Tokens.spacing-sm;
+                        padding: Tokens.padding-sm;
 
-                        // Lesson label — checkable, mirrors FlashcardLabel usage.
+                        for lesson[i] in VocabularyAppLogic.lesson-list: HorizontalLayout {
+                            spacing: Tokens.spacing-sm;
+
+                            // Lesson label — checkable, mirrors FlashcardLabel usage.
                         LessonLabel {
-                            horizontal-stretch: 1;
-                            height: 36px;
-                            lesson: lesson;
-                            checkable: true;
-                            checked: VocabularyAppLogic.selected-lesson-index == i;
-                            clicked => {
-                                VocabularyAppLogic.selected-lesson-index = i;
+                                horizontal-stretch: 1;
+                                height: 36px;
+                                lesson: lesson;
+                                checkable: true;
+                                checked: VocabularyAppLogic.selected-lesson-index == i;
+                                clicked => {
+                                    VocabularyAppLogic.selected-lesson-index = i;
+                                }
                             }
-                        }
 
-                        // Delete button for this lesson row.
+                            // Delete button for this lesson row.
                         CommonBtn {
-                            width: 36px;
-                            height: 36px;
-                            text: "✕";
-                            accessibilityLabel: "Delete lesson " + lesson.name;
-                            clicked => {
-                                VocabularyAppLogic.selected-lesson-index = i;
-                                VocabularyAppLogic.lesson-delete-confirmed();
+                                width: 36px;
+                                height: 36px;
+                                text: "✕";
+                                accessibilityLabel: "Delete lesson " + lesson.name;
+                                clicked => {
+                                    VocabularyAppLogic.selected-lesson-index = i;
+                                    VocabularyAppLogic.lesson-delete-confirmed();
+                                }
                             }
                         }
                     }
