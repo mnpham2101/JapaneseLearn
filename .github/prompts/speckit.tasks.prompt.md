@@ -268,11 +268,11 @@ agent: speckit.tasks
 > After R1.3: R1.5 and R1.8 may run in parallel (different files). After R1.4: R1.6 may proceed.
 
 - [x] R1.5 **[slint-developer]** Rename `LessonStackLabel` → `LessonLabel` (file rename, component name, all exports and usages). **Depends on R1.3.** — see [speckit.subtask.R1-5.prompt.md](.github/prompts/speckit.subtask.R1-5.prompt.md)
-- [ ] R1.6 **[slint-developer]** Create `ExerciseView` and `ExerciseGrid` in `lib/vocabulary/ui/components/`; export from `vocabulary_lib.slint`. **Depends on R1.4.** — see [speckit.subtask.R1-6.prompt.md](.github/prompts/speckit.subtask.R1-6.prompt.md)
-- [ ] R1.7 **[slint-developer]** Update `VocabularyPage`: use `ExerciseView` + `ExerciseGrid` in Exercise tab; remove Flashcard action-bar tab. **Depends on R1.6.** — see [speckit.subtask.R1-7.prompt.md](.github/prompts/speckit.subtask.R1-7.prompt.md)
-- [ ] R1.8 **[slint-developer]** Redesign `MatchingExerciseView`: 5-row pagination, Submit button, `result-view` flag with correct/incorrect coloring, Close button. **Depends on R1.3.** — see [speckit.subtask.R1-8.prompt.md](.github/prompts/speckit.subtask.R1-8.prompt.md)
-- [ ] R1.9 **[slint-developer]** Create `TestView` in `lib/vocabulary/ui/components/` (CommonGrid with Matching Test → MatchingExerciseView). **Depends on R1.4, R1.8.** — see [speckit.subtask.R1-9.prompt.md](.github/prompts/speckit.subtask.R1-9.prompt.md)
-- [ ] R1.10 **[slint-developer]** Redesign `ReviewPage`: lesson selection list (read-only), `TestView` for selected lesson, heading shows lesson name. **Depends on R1.5, R1.9.** — see [speckit.subtask.R1-10.prompt.md](.github/prompts/speckit.subtask.R1-10.prompt.md)
+- [x] R1.6 **[slint-developer]** Create `ExerciseView` and `ExerciseGrid` in `lib/vocabulary/ui/components/`; export from `vocabulary_lib.slint`. **Depends on R1.4.** — see [speckit.subtask.R1-6.prompt.md](.github/prompts/speckit.subtask.R1-6.prompt.md)
+- [x] R1.7 **[slint-developer]** Update `VocabularyPage`: use `ExerciseView` + `ExerciseGrid` in Exercise tab; remove Flashcard action-bar tab. **Depends on R1.6.** — see [speckit.subtask.R1-7.prompt.md](.github/prompts/speckit.subtask.R1-7.prompt.md)
+- [x] R1.8 **[slint-developer]** Redesign `MatchingExerciseView`: 5-row pagination, Submit button, `result-view` flag with correct/incorrect coloring, Close button. **Depends on R1.3.** — see [speckit.subtask.R1-8.prompt.md](.github/prompts/speckit.subtask.R1-8.prompt.md)
+- [x] R1.9 **[slint-developer]** Create `TestView` in `lib/vocabulary/ui/components/` (CommonGrid with Matching Test → MatchingExerciseView). **Depends on R1.4, R1.8.** — see [speckit.subtask.R1-9.prompt.md](.github/prompts/speckit.subtask.R1-9.prompt.md)
+- [x] R1.10 **[slint-developer]** Redesign `ReviewPage`: lesson selection list (read-only), `TestView` for selected lesson, heading shows lesson name. **Depends on R1.5, R1.9.** — see [speckit.subtask.R1-10.prompt.md](.github/prompts/speckit.subtask.R1-10.prompt.md)
 
 ## Phase 7: Future Backlog (Extensible)
 - [ ] 7.1 Add audio playback (Japanese text‑to‑speech integration).
