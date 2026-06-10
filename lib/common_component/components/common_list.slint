@@ -1,22 +1,24 @@
 import { Tokens } from "@styles";
 import { CommonBtn } from "common_button.slint";
 
-export component CommonList {
-    in property<string> title: "";
-    in property<[string]> items: ["Item 1", "Item 2"];
-    in property<string> addButtonText: "Add";
+export component CommonList inherits Rectangle {
+    in property <string> title: "";
+    in property <string> addButtonText: "Add";
     // Toggled by the add button; bind <=> to the parent's form-visible property
     // so clicking the button opens/closes the create form declaratively.
     in-out property <bool> add-stack: false;
-
-    Rectangle {
-        width: 100%;
-        background: Tokens.page-background;
-        border-radius: Tokens.card-container-border-radius;
-        border-width: Tokens.border-width;
-        border-color: Tokens.border-color;
-
-        VerticalLayout {
+    // Rectangle {            // wraping a Rectangle here messups the y-position of the entire CommonList, including title
+    // preferred to let CommonList inherits Rectangle to enable background, and border
+    width: 100%;
+    height: 300px;     // very large height causes issue, and won't allow Flickable to show the last button
+    background: Tokens.page-background;
+    border-radius: Tokens.card-container-border-radius;
+    border-width: Tokens.border-width;
+    border-color: Tokens.border-color;
+    Flickable {
+        viewport-height: list.preferred-height;
+        vertical-stretch: 1;
+        list := VerticalLayout {
             padding: Tokens.padding-lg;
             spacing: Tokens.spacing-md;
             alignment: LayoutAlignment.stretch;
@@ -39,3 +41,4 @@ export component CommonList {
         }
     }
 }
+// }

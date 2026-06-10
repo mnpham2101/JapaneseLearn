@@ -151,22 +151,21 @@ export component FlashcardManagerView inherits Rectangle {
 
             if !FlashcardAppLogic.study-session-active && FlashcardAppLogic.selected-stack-index == -1: HorizontalLayout {
                 alignment: center;
-                Rectangle {
-                    max-width: 330px;
-                    CommonList {
-                        title: "Flashcard Stacks";
-                        add-stack <=> root.show-create-form;
-                        flashcard-list := FlashcardList {
-                            stacks: FlashcardAppLogic.flashcard-list;
-                            selected-index: FlashcardAppLogic.selected-stack-index;
-                            label-selected(index) => {
-                                FlashcardAppLogic.selected-stack-index = index;
-                                debug("[Bug6.5] flashcardlist label-selected(index), stack-idx=", FlashcardAppLogic.selected-stack-index);
-                            }
+                // Rectangle {              // very important to remove this wrapper, effect flickable in CommonList - confirmed root causu
+                //     max-width: 330px;    // this width somehow causes incorrect -vertical display, static not scrollable flickable
+                CommonList {
+                    title: "Flashcard Stacks";
+                    add-stack <=> root.show-create-form;
+                    flashcard-list := FlashcardList {
+                        stacks: FlashcardAppLogic.flashcard-list;
+                        selected-index: FlashcardAppLogic.selected-stack-index;
+                        label-selected(index) => {
+                            FlashcardAppLogic.selected-stack-index = index;
+                            debug("[Bug6.5] flashcardlist label-selected(index), stack-idx=", FlashcardAppLogic.selected-stack-index);
                         }
-
-                        addButtonText: "Add Stack";
                     }
+
+                    addButtonText: "Add Stack";
                 }
             }
         }

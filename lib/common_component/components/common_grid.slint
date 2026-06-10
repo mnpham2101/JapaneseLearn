@@ -26,6 +26,9 @@ export component CommonGrid inherits Rectangle {
             text: item.text;
             enabled: item.enabled;
             primary: item.active;
+            // Slint's GridLayout cannot compute layout for Opacity-wrapped repeated items.
+            // Override visibility so disabled items remain in the grid flow (shown grayed out).
+            visible: true;
             clicked => {
                 item-clicked(i);
             }
