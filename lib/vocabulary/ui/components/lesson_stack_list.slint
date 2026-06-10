@@ -79,41 +79,38 @@ export component LessonStackList inherits Rectangle {
                     }
                 }
             }
+            Rectangle {
+                border-color: Tokens.border-color;
+                border-radius: Tokens.border-radius;
+                border-width: Tokens.border-width;
+                VerticalLayout {
+                    spacing: Tokens.spacing-sm;
+                    padding: Tokens.padding-sm;
 
-            HorizontalLayout {
-                Rectangle {
-                    border-color: Tokens.border-color;
-                    border-radius: Tokens.border-radius;
-                    border-width: Tokens.border-width;
-                    VerticalLayout {
+                    for lesson[i] in VocabularyAppLogic.lesson-list: HorizontalLayout {
                         spacing: Tokens.spacing-sm;
-                        padding: Tokens.padding-sm;
 
-                        for lesson[i] in VocabularyAppLogic.lesson-list: HorizontalLayout {
-                            spacing: Tokens.spacing-sm;
-
-                            // Lesson label — checkable, mirrors FlashcardLabel usage.
+                        // Lesson label — checkable, mirrors FlashcardLabel usage.
                         LessonLabel {
-                                horizontal-stretch: 1;
-                                height: 36px;
-                                lesson: lesson;
-                                checkable: true;
-                                checked: VocabularyAppLogic.selected-lesson-index == i;
-                                clicked => {
-                                    VocabularyAppLogic.selected-lesson-index = i;
-                                }
+                            horizontal-stretch: 1;
+                            height: 36px;
+                            lesson: lesson;
+                            checkable: true;
+                            checked: VocabularyAppLogic.selected-lesson-index == i;
+                            clicked => {
+                                VocabularyAppLogic.selected-lesson-index = i;
                             }
+                        }
 
-                            // Delete button for this lesson row.
+                        // Delete button for this lesson row.
                         CommonBtn {
-                                width: 36px;
-                                height: 36px;
-                                text: "✕";
-                                accessibilityLabel: "Delete lesson " + lesson.name;
-                                clicked => {
-                                    VocabularyAppLogic.selected-lesson-index = i;
-                                    VocabularyAppLogic.lesson-delete-confirmed();
-                                }
+                            width: 36px;
+                            height: 36px;
+                            text: "✕";
+                            accessibilityLabel: "Delete lesson " + lesson.name;
+                            clicked => {
+                                VocabularyAppLogic.selected-lesson-index = i;
+                                VocabularyAppLogic.lesson-delete-confirmed();
                             }
                         }
                     }
