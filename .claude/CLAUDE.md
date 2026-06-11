@@ -39,6 +39,7 @@ Pick the next open task from `.github/prompts/speckit.tasks.prompt.md`. For mult
 |---|---|
 | Architecture & folder layout | `.claude/rules/architecture.md` |
 | Slint/UI patterns and library setup | `.claude/rules/slint-code-style.md` |
+| Slint Flickable + @children scrollable component pattern | `.claude/rules/slint-flickable-pattern.md` |
 | Rust patterns and callback wiring | `.claude/rules/rust-code-style.md` |
 | General coding practices (incl. minimal dependencies) | `.claude/rules/general-programming-practice.md` |
 | Commit message format | `.claude/rules/commit-msg-format.md` |
