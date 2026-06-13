@@ -8,7 +8,7 @@ When this skill is invoked, execute the following workflow in order.
 
 ## BugID format
 
-A BugID is `X.Y` — `X` is the phase number, `Y` is the sequence number within that phase (e.g., `6.5`). The bug list lives under "## Bug lists" in `@.github/prompts/speckit.specify.prompt.md`. When a BugID appears in a filename, replace the dot with a dash: the report for `6.5` is `@.github/speckit.bug.6-5.report.md`.
+A BugID is `X.Y` — `X` is the phase number, `Y` is the sequence number within that phase (e.g., `6.5`). The bug list lives under "## Bug lists" in `@.claude/specs/requirements.md`. When a BugID appears in a path, replace the dot with a dash: the report for `6.5` is `@.claude/bugs/6-5/report.md`.
 
 ## Responsibilities by agent
 
@@ -26,17 +26,17 @@ Steps 4, 5, 7 follow the same agent boundaries as `implement-tasks/SKILL.md` Ste
 
 ## Step 1 — Pick the bug `[task-manager]`
 
-Read the "## Bug lists" section of `@.github/prompts/speckit.specify.prompt.md`. Select the first bug marked `(not done)`. If the user reports a `(done)` bug has regressed, re-open it (change its status back to `(not done)`) and select it instead.
+Read the "## Bug lists" section of `@.claude/specs/requirements.md`. Select the first bug marked `(not done)`. If the user reports a `(done)` bug has regressed, re-open it (change its status back to `(not done)`) and select it instead.
 
 ## Step 2 — Confirm the bug `[task-manager]`
 
-1. If the bug entry references a report file (`@.github/speckit.bug.[BugID].report.md`), read it for the description and any suggested fix. If no such file exists yet, you will create it in step 6.
+1. If the bug entry references a report file (`@.claude/bugs/[BugID-with-dash]/report.md`), read it for the description and any suggested fix. If no such file exists yet, you will create it in step 6.
 2. Read the relevant code; assess any suggested fix for feasibility and refine it.
 3. **UI bugs**: run the app, capture a screenshot, and compare it against the reported symptom before concluding your analysis.
 4. **Backend bugs**: compare the bug description against the expected behavior; read the code that is supposed to produce that behavior and analyze where it diverges.
 5. **Slint reactivity/codegen bugs** (a property or binding silently doesn't update the UI): when source-level inspection of the `.slint`/`.rs` is inconclusive, compare the *generated* Rust for the broken component against a similar *working* one. Build, locate the emitted file (`target/debug/build/<crate>-*/out/*.rs`), and diff the two for the property/binding in question — e.g. whether the compiler emitted `set_property_binding(...)` (a real reactive `Property` cell) or constant-folded the read away entirely (`ModelRc::new(VecModel::from(vec![]))` with no reference to the global). To capture both states for the same crate: copy the current generated file aside, edit the source, `touch` it to force regeneration, rebuild, diff, then restore the source and rebuild again. This pinpoints the exact codegen divergence — and thus the root cause — far faster than testing theories about timing, caching, or duplicate globals (see Bug 6.4: a property declared without an explicit binding was const-folded to `[]` at every read site, while the working analogue's explicit binding produced a genuine reactive property read).
 6. Present your findings — confirmed symptom, root cause, evidence (screenshot or code excerpt) — to the user and get confirmation that this is the right bug and root cause.
-7. **Write these findings into `@.github/speckit.bug.[BugID].report.md`** (create the file if it doesn't exist): bug description, confirmed symptom, root cause, and supporting evidence. This file is the source of truth the rest of the workflow builds on.
+7. **Write these findings into `@.claude/bugs/[BugID-with-dash]/report.md`** (create the file under `.claude/bugs/<BugID-with-dash>/` if it doesn't exist): bug description, confirmed symptom, root cause, and supporting evidence. This file is the source of truth the rest of the workflow builds on.
 8. Commit the report file with message `Confirm bug [BugID]`.
 
 ### Variant — CRITICAL bug, dependency issue, or version conflict `[task-manager]`
@@ -50,7 +50,7 @@ Use this in place of the steps above when the bug is a build failure, dependency
 
 ## Step 3 — Plan the fix `[task-manager]`
 
-1. Write the confirmed (and optimized) fix description into `@.github/speckit.bug.[BugID].report.md`.
+1. Write the confirmed (and optimized) fix description into `@.claude/bugs/[BugID-with-dash]/report.md`.
 2. Break the fix into atomic tasks and subtasks per `task-planning.md`, labeling each with its responsible agent.
 3. Present the plan to the user and get approval.
 4. Commit with message `Solution plan [BugID]`.
@@ -69,6 +69,6 @@ Invoke **slint-tester** to add or update CRUD/unit tests covering the fixed beha
 
 ## Step 7 — Close `[task-manager]`
 
-1. Follow `implement-tasks/SKILL.md` Step 4b: present the commit message, get review approval, commit, and mark the bug `(done)` in `speckit.specify.prompt.md`.
+1. Follow `implement-tasks/SKILL.md` Step 4b: present the commit message, get review approval, commit, and mark the bug `(done)` in `.claude/specs/requirements.md`.
 2. Report the closed BugID and outcome to the user.
 

@@ -1,3 +1,7 @@
+---
+agent: speckit.constitution
+---
+
 # Japanese Learn — CLAUDE.md
 
 Rust + Slint Japanese flashcard app targeting desktop (Windows) and WebAssembly.
@@ -15,8 +19,15 @@ wasm-pack build --release --target web
 python3 -m http.server
 ```
 
-Always use `--bin japanese_learn` — parallel bin+cdylib builds share a PDB name.  
-For LNK1201 (PDB locked): see `.claude/skill/implement-tasks/SKILL.md` Step 3.
+### Windows LNK1201 (PDB locked)
+
+```powershell
+taskkill /F /IM japanese_learn.exe 2>$null
+Remove-Item "target\debug\deps\japanese_learn.pdb" -ErrorAction SilentlyContinue
+Remove-Item "target\debug\japanese_learn.pdb" -ErrorAction SilentlyContinue
+cargo build --bin japanese_learn
+```
+Always use `--bin japanese_learn` — parallel bin+cdylib builds share a PDB name.
 
 ## Project Structure
 
@@ -25,12 +36,13 @@ src/main.rs            # entry point only
 ui/                    # Slint components (components/, model/, pages/, styles/)
 lib/                   # Slint+Rust libraries (libA) and Rust-only services (libB)
 test/                  # automated tests
-.claude/               # agents, rules, skills, specs, tasks, bugs
+.claude/               # agents, rules, skills
+.github/prompts/       # task list and constitution
 ```
 
 ## Implementation
 
-Pick the next open task from `.claude/tasks/tasks.md`. For multi-task work, use the **task-manager** agent; follow the [implement-tasks skill](.claude/skill/implement-tasks/SKILL.md).
+Pick the next open task from `.github/prompts/speckit.tasks.prompt.md`. For multi-task work, use the **task-manager** agent; follow the [implement-tasks skill](.claude/skill/implement-tasks/SKILL.md).
 
 ## Rules & Standards
 
@@ -38,9 +50,7 @@ Pick the next open task from `.claude/tasks/tasks.md`. For multi-task work, use 
 |---|---|
 | Architecture & folder layout | `.claude/rules/architecture.md` |
 | Slint/UI patterns and library setup | `.claude/rules/slint-code-style.md` |
-| Slint Flickable + @children scrollable component pattern | `.claude/rules/slint-flickable-pattern.md` |
 | Rust patterns and callback wiring | `.claude/rules/rust-code-style.md` |
-| General coding practices (incl. minimal dependencies) | `.claude/rules/general-programming-practice.md` |
+| General coding practices | `.claude/rules/general-programming-practice.md` |
 | Commit message format | `.claude/rules/commit-msg-format.md` |
-| Atomic commit rules | `.claude/rules/atomic-commit-rule.md` |
 | Test format and templates | `.claude/rules/slint-test-format.md` |

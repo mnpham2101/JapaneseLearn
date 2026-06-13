@@ -1,0 +1,97 @@
+@startuml Bug 6.8 — Call-flow diagram (stacks.json / vocabulary.json persistence)
+!theme plain
+skinparam defaultFontSize 12
+skinparam sequenceMessageAlign center
+skinparam maxMessageSize 160
+
+' ════════════════════════════════════════════════════════════════════════
+' Use case 1 — App start-up: load persisted stacks.json
+' ════════════════════════════════════════════════════════════════════════
+== Use Case 1: App start-up — load data/stacks.json ==
+
+participant "main()\n(src/main.rs)" as Main
+participant "flashcard::init\n(lib/flashcard/src/lib.rs)" as FlashcardInit
+participant "load_stacks()\nSTACKS_FILE = \"data/stacks.json\"\n(lib/flashcard/src/lib.rs)" as LoadStacks
+participant "FlashcardAppLogic\n(global, lib/flashcard)" as FlashcardLogic
+
+Main -> FlashcardInit : flashcard::init(&window)
+FlashcardInit -> LoadStacks : load_stacks()
+
+alt desktop (#cfg not(target_arch = "wasm32"))
+    LoadStacks -> LoadStacks : std::fs::read_to_string(\n  "data/stacks.json")\n→ serde_json::from_str::<Vec<StackData>>\n→ from_stack_data(data)
+    LoadStacks --> FlashcardInit : Some(Vec<FlashcardStackModel>)
+else wasm32
+    LoadStacks --> FlashcardInit : None (stub — no fs access)
+end
+
+FlashcardInit -> FlashcardLogic : set_flashcard_list(loaded_stacks)
+note right of FlashcardInit
+  Relative path "data/stacks.json" resolves against
+  the process's current working directory — the
+  project root when launched via `cargo run`/the
+  packaged binary, so the file lives at <project-root>/data/.
+end note
+
+' ════════════════════════════════════════════════════════════════════════
+' Use case 2 — App start-up: load persisted vocabulary.json (or seed defaults)
+' ════════════════════════════════════════════════════════════════════════
+== Use Case 2: App start-up — load data/vocabulary.json (or seed defaults) ==
+
+participant "vocabulary::init\n(lib/vocabulary/src/lib.rs)" as VocabInit
+participant "load_vocabulary()\nVOCABULARY_FILE = \"data/vocabulary.json\"\n(lib/vocabulary/src/lib.rs)" as LoadVocab
+participant "load_and_save_defaults()\n(lib/vocabulary/src/lib.rs)\nincludes ui/data/n5_*.json via include_str!()" as LoadDefaults
+participant "VocabularyAppLogic\n(global, lib/vocabulary)" as VocabLogic
+
+Main -> VocabInit : vocabulary::init(&window)
+
+alt "data/vocabulary.json" does not exist (first launch / fresh checkout)
+    VocabInit -> LoadDefaults : load_and_save_defaults()
+    LoadDefaults -> LoadDefaults : combine bundled n5_verbs / n5_adjectives /\nn5_vocabulary JSON (compile-time include_str!)
+    LoadDefaults -> VocabInit : save_vocabulary(&combined)\n→ writes "data/vocabulary.json"
+    LoadDefaults --> VocabInit : Vec<LessonData> (combined defaults)
+else "data/vocabulary.json" exists
+    VocabInit -> LoadVocab : load_vocabulary()
+    LoadVocab -> LoadVocab : std::fs::read_to_string(\n  "data/vocabulary.json")\n→ serde_json::from_str::<Vec<LessonData>>
+    LoadVocab --> VocabInit : Vec<LessonData> (saved lessons)
+end
+
+VocabInit -> VocabLogic : set_lesson_list(lessons_to_slint(lessons))
+note right of VocabInit
+  ui/data/*.json remains compile-time bundled seed
+  data (immutable asset, embedded via include_str!).
+  data/vocabulary.json is the persisted runtime copy —
+  written on first launch, then on every CRUD mutation.
+end note
+
+' ════════════════════════════════════════════════════════════════════════
+' Use case 3 — Persisting on mutation (save_stacks / save_vocabulary)
+' ════════════════════════════════════════════════════════════════════════
+== Use Case 3: Persisting on CRUD mutation ==
+
+actor User
+participant "FlashcardPage / VocabularyPage\n(Slint UI)" as UI
+participant "flashcard::init\non_*_confirmed handlers\n(lib/flashcard/src/lib.rs)" as FlashcardHandler
+participant "save_stacks()\n(lib/flashcard/src/lib.rs)" as SaveStacks
+participant "vocabulary::init\non_*_confirmed handlers\n(lib/vocabulary/src/lib.rs)" as VocabHandler
+participant "save_vocabulary()\n(lib/vocabulary/src/lib.rs)" as SaveVocab
+
+User -> UI : create/edit/delete stack or card
+UI -> FlashcardHandler : on_stack_*_confirmed / on_flashcard_*_confirmed
+FlashcardHandler -> SaveStacks : save_stacks(&stacks)
+SaveStacks -> SaveStacks : std::fs::create_dir_all(\n  Path::new("data/stacks.json").parent())\nstd::fs::write("data/stacks.json", json)
+
+User -> UI : create/edit/delete lesson or word
+UI -> VocabHandler : on_lesson_*_confirmed / on_word_*_confirmed
+VocabHandler -> SaveVocab : save_vocabulary(&lessons)
+SaveVocab -> SaveVocab : std::fs::create_dir_all(\n  Path::new("data/vocabulary.json").parent())\nstd::fs::write("data/vocabulary.json", json)
+
+note over SaveStacks, SaveVocab
+  Bug 6.8 fix: both constants now point at "data/<file>.json"
+  (project-root data/ folder, sibling to src/ ui/ lib/ test/)
+  instead of bare "<file>.json", which polluted the repo root.
+  create_dir_all ensures the folder exists on first save in
+  a fresh checkout. Both desktop-only — #[cfg(target_arch = "wasm32")]
+  variants are no-ops (no filesystem on the web target).
+end note
+
+@enduml

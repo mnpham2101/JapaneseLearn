@@ -1,8 +1,8 @@
 ---
 paths:
-  - .github/prompts/speckit.tasks.prompt.md
-  - .github/prompts/speckit.subtask.*.prompt.md
-  - .github/prompts/speckit.task.*.architecture.md
+  - .claude/tasks/tasks.md
+  - .claude/tasks/subtask/*.md
+  - .claude/tasks/architecture/task-*.md
 ---
 
 # Task Planning Rules
@@ -50,10 +50,10 @@ Tasks within a phase must be ordered and grouped according to this dependency ch
 
 | Level | Format | Example | Location |
 |---|---|---|---|
-| Task | `M.N` | `6.2` | `speckit.tasks.prompt.md` |
-| Subtask | `M.N.X` | `6.2.1` | `speckit.tasks.prompt.md` (reference) + `speckit.subtask.M-N-X.prompt.md` (detail) |
+| Task | `M.N` | `6.2` | `.claude/tasks/tasks.md` |
+| Subtask | `M.N.X` | `6.2.1` | `.claude/tasks/tasks.md` (reference) + `.claude/tasks/subtask/M-N-X.md` (detail) |
 
-- `M` = phase number (matches the phase in `speckit.plan.prompt.md`)
+- `M` = phase number (matches the phase in `.claude/specs/plan.md`)
 - `N` = sequential task number within the phase
 - `X` = sequential subtask number within task `M.N`
 
@@ -63,22 +63,27 @@ Tasks within a phase must be ordered and grouped according to this dependency ch
 
 | What | File | Authored by |
 |---|---|---|
-| All tasks (`M.N`) and subtask references (`M.N.X`) | `speckit.tasks.prompt.md` | task-manager |
-| Subtask detail (goals + technical approach) | `speckit.subtask.M-N-X.prompt.md` (one file per subtask) | task-manager |
-| Task-scoped architecture plan (only when a task spans ≥2 libraries/modules) | `speckit.task.M-N.architecture.md` (e.g. `speckit.task.6-9.architecture.md` for Task 6.9) | project-owner (on task-manager's request) |
+| All tasks (`M.N`) and subtask references (`M.N.X`) | `.claude/tasks/tasks.md` | task-manager |
+| Subtask detail (goals + technical approach) | `.claude/tasks/subtask/M-N-X.md` (one file per subtask) | task-manager |
+| Task-scoped architecture plan (only when a task spans ≥2 libraries/modules) | `.claude/tasks/architecture/task-M-N.md` (e.g. `task-6-9.md` for Task 6.9) | project-owner (on task-manager's request) |
 
-**Never** write subtask implementation detail inline in `speckit.tasks.prompt.md` — keep the tasks file scannable. A subtask entry in the tasks file is one line plus a file reference.
+**Never** write subtask implementation detail inline in `.claude/tasks/tasks.md` — keep the tasks file scannable. A subtask entry in the tasks file is one line plus a file reference.
 
 **Commit ownership**: each author commits what it writes, in its own atomic commit, separate from any implementation commit — task-manager commits the task/subtask files before delegating to developer agents; project-owner commits the architecture plan file it authors. Neither bundles the other's planning docs into its commit.
 
 ---
 
-## Task Format in `speckit.tasks.prompt.md`
+## Task Format in `.claude/tasks/tasks.md`
 
 ### Simple task (single deliverable, no subtasks needed)
 
 ```
 - [ ] 6.2 **[rust-developer]** Implement `FlashcardExerciseTransformer` in `lib/exercise_generator`: one card per spelling word; two cards (kanji + spelling) when kanji is present. Unit tests inline. **Depends on 6.1.**
+```
+
+File reference format for subtasks (link text = ID only, path = `.claude/tasks/subtask/`):
+```
+- [ ] 6.4.1 Lesson list + create/delete callbacks — see [6-4-1.md](.claude/tasks/subtask/6-4-1.md)
 ```
 
 Rules:
@@ -89,9 +94,9 @@ Rules:
 
 ```
 - [ ] 6.4 **[slint-developer]** Vocabulary lesson CRUD UI in `lib/vocabulary/ui/`: lesson list, word form with all fields, VocabularyAppLogic global.
-  - [ ] 6.4.1 Lesson list + create/delete callbacks — see [speckit.subtask.6-4-1.prompt.md](.github/prompts/speckit.subtask.6-4-1.prompt.md)
-  - [ ] 6.4.2 Word form: spelling, kanji, meaning, type fields — see [speckit.subtask.6-4-2.prompt.md](.github/prompts/speckit.subtask.6-4-2.prompt.md)
-  - [ ] 6.4.3 Word form: tense list and example list — see [speckit.subtask.6-4-3.prompt.md](.github/prompts/speckit.subtask.6-4-3.prompt.md)
+  - [ ] 6.4.1 Lesson list + create/delete callbacks — see [6-4-1.md](.claude/tasks/subtask/6-4-1.md)
+  - [ ] 6.4.2 Word form: spelling, kanji, meaning, type fields — see [6-4-2.md](.claude/tasks/subtask/6-4-2.md)
+  - [ ] 6.4.3 Word form: tense list and example list — see [6-4-3.md](.claude/tasks/subtask/6-4-3.md)
 ```
 
 Rules:
@@ -102,7 +107,7 @@ Rules:
 ### Subtask reference format
 
 ```
-- [ ] 6.4.1 Lesson list + create/delete callbacks — see [speckit.subtask.6-4-1.prompt.md](.github/prompts/speckit.subtask.6-4-1.prompt.md)
+- [ ] 6.4.1 Lesson list + create/delete callbacks — see [6-4-1.md](.claude/tasks/subtask/6-4-1.md)
 ```
 
 ### Dependency declaration
@@ -124,8 +129,8 @@ Every task and subtask that has a non-trivial predecessor ends with `**Depends o
 
 ## Subtask File Format
 
-File name: `speckit.subtask.M-N-X.prompt.md`  
-Location: `.github/prompts/`
+File name: `M-N-X.md`  
+Location: `.claude/tasks/subtask/`
 
 ```markdown
 # Subtask M.N.X — [one-line title]
@@ -180,11 +185,12 @@ Optional. Include only if there is a non-obvious design decision, an existing pa
 
 Required **only** when a task's subtasks change code across **≥2 libraries/modules** (e.g., a `lib/vocabulary` change that also calls into `lib/exercise_generator`). task-manager detects this during Phase 2 (Investigate) and invokes **project-owner** to author the file — task-manager does not draft this diagram itself.
 
-File name: `speckit.task.M-N.architecture.md` (e.g. `speckit.task.6-9.architecture.md` for Task 6.9 — same dash convention as subtask files)
-Location: `.github/prompts/`
+File name: `task-M-N.md` (e.g. `task-6-9.md` for Task 6.9)
+Location: `.claude/tasks/architecture/`
 
 ```markdown
 # Task M.N — Architecture Plan
+<!-- File: .claude/tasks/architecture/task-M-N.md -->
 
 **Modules involved**: `lib/vocabulary`, `lib/exercise_generator`
 **What changes between them**: [one sentence — the specific interaction this task adds or modifies]
@@ -224,7 +230,7 @@ Rules:
 
 ## Format Rules
 
-1. **Tasks are scannable; subtasks are actionable.** `speckit.tasks.prompt.md` is the map; subtask files are the briefs.
-2. **No implementation detail in `speckit.tasks.prompt.md`.** Keep entries to: checkbox, ID, agent label, one-line goal, dependency, subtask file reference.
+1. **Tasks are scannable; subtasks are actionable.** `tasks/tasks.md` is the map; subtask files in `tasks/subtask/` are the briefs.
+2. **No implementation detail in `tasks/tasks.md`.** Keep entries to: checkbox, ID, agent label, one-line goal, dependency, subtask file reference.
 3. **One subtask = one logical change = one commit.** Enforced by `atomic-commit-rule.md`.
 4. **Architecture plan files are task-scoped, not project-scoped.** See § Task-Scoped Architecture Plan File Format above for the full spec and scope rules.

@@ -22,7 +22,7 @@ Implementing agents (slint-developer, rust-developer) handle Steps 3 and 4a. **s
 
 ## Step 1 — Pick the task  `[task-manager]`
 
-Read `@.github/prompts/speckit.tasks.prompt.md`. Find the first unchecked task (`- [ ]`) in the current phase. If the user specified a task ID, use that instead.
+Read `@.claude/tasks/tasks.md`. Find the first unchecked task (`- [ ]`) in the current phase. If the user specified a task ID, use that instead.
 
 State the task ID and description before doing anything else. If anything is ambiguous, ask before proceeding.
 
@@ -71,6 +71,6 @@ The implementing agent suggests the commit message at the end of its session, fo
    git commit -m "<message>"
    ```
 
-3. Mark the task done in `@.github/prompts/speckit.tasks.prompt.md`: change `- [ ]` to `- [x]`.
+3. Mark the task done in `@.claude/tasks/tasks.md`: change `- [ ]` to `- [x]`.
 
 4. If review surfaces follow-up work: propose the changes, add approved follow-ups using dot-suffix numbers (e.g., `1.3.1`), and get approval before implementing them.
