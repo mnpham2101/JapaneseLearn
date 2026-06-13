@@ -26,52 +26,55 @@ export component LessonDetailPane inherits Rectangle {
     border-radius: Tokens.border-radius;
     border-width: Tokens.border-width;
     preferred-width: 100%;
+    Flickable {
+        vertical-stretch: 1;
+        viewport-height: word-rows.preferred-height;
+        word-rows := VerticalLayout {
+            spacing: Tokens.spacing-sm;
+            padding: Tokens.padding-sm;
 
-    VerticalLayout {
-        spacing: Tokens.spacing-sm;
-        padding: Tokens.padding-sm;
-
-        // Word rows — one per word in the selected lesson.
+            // Word rows — one per word in the selected lesson.
         for word[i] in VocabularyAppLogic.lesson-list[VocabularyAppLogic.selected-lesson-index].words: Rectangle {
-            height: 44px;
-            border-radius: Tokens.border-radius;
+                height: 44px;
+                border-radius: Tokens.border-radius;
 
-            HorizontalLayout {
-                spacing: Tokens.padding-sm;
-                padding: Tokens.padding-sm;
+                HorizontalLayout {
+                    spacing: Tokens.padding-sm;
+                    padding: Tokens.padding-sm;
 
-                // Spelling
+                    // Spelling
                 TextBox {
-                    text: word.spelling;
-                    horizontal-stretch: 3;
-                }
+                        text: word.spelling;
+                        horizontal-stretch: 3;
+                    }
 
-                TextBox {
-                    text: word.kanji;
-                    horizontal-stretch: 3;
-                }
+                    TextBox {
+                        text: word.kanji;
+                        horizontal-stretch: 3;
+                    }
 
-                TextBox {
-                    text: word.meaning;
-                    horizontal-stretch: 3;
-                }
+                    TextBox {
+                        text: word.meaning;
+                        horizontal-stretch: 3;
+                    }
 
-                TextBox {
-                    text: word.word-type;
-                    horizontal-stretch: 3;
-                }
+                    TextBox {
+                        text: word.word-type;
+                        horizontal-stretch: 3;
+                    }
 
-                // Delete button for this word row.
+                    // Delete button for this word row.
                 Rectangle {
-                    CommonBtn {
-                        width: 50px;
-                        height: 36px;
-                        text: "Close";
-                        accessibilityLabel: "Delete word " + word.spelling;
-                        clicked => {
-                            VocabularyAppLogic.word-delete-confirmed(
+                        CommonBtn {
+                            width: 50px;
+                            height: 36px;
+                            text: "Close";
+                            accessibilityLabel: "Delete word " + word.spelling;
+                            clicked => {
+                                VocabularyAppLogic.word-delete-confirmed(
                             VocabularyAppLogic.selected-lesson-index,
                             i);
+                            }
                         }
                     }
                 }
