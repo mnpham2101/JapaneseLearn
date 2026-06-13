@@ -148,6 +148,12 @@ See `.claude/rules/architecture.md` for the full libA / libB / libC definitions.
 
 - No new libraries or crates. Uses `include_str!()` (Rust built-in) for embedding and existing `serde_json` for parsing. Data folder convention (`lib/[library]/ui/data/`) is documented in `architecture.md`.
 
+---
+## ✅ Milestone 2 Complete — Phases 3 · 4 · 5 · 6 · 6.D · 6.R · 6.S · 6.B · 6.T · R1
+*Tagged: v2.0.0 / Milestone2*
+
+---
+
 ## Phase 7: Mobile Support (Android + Swipe Gestures)
 **Goal**: Deploy on Android; add swipe navigation. Placed here so all subsequent feature phases are built mobile-ready from the start.
 
