@@ -294,3 +294,4 @@ All phases from 3 through R1 are done. Tagged: `v2.0.0` / `Milestone2`.
   - Documentation of architecture, modules, and usage.
   - Rust test suite covering core features.
   - Backlog items prepared for future iterations.
+
