@@ -137,12 +137,15 @@ fn save_vocabulary(_lessons: &[LessonData]) {}
 
 // ── Default data ──────────────────────────────────────────────────────────────
 
+const LOAD_DEFAULT_FROM_MARKDOWN: bool = false;
+const LOAD_DEFAULT_FROM_JSON: bool = true;
+
 /// Embed the three default JSON datasets at compile time and write them to
 /// `vocabulary.json`.  Returns the combined lesson list.
 /// Only compiled on non-WASM targets (uses `save_vocabulary` which gates on
 /// the same cfg).
 #[cfg(not(target_arch = "wasm32"))]
-fn load_and_save_defaults() -> Vec<LessonData> {
+fn load_and_save_defaults_from_json() -> Vec<LessonData> {
     let verbs_json = include_str!("../ui/data/n5_verbs.json");
     let adjectives_json = include_str!("../ui/data/n5_adjectives.json");
     let vocabulary_json = include_str!("../ui/data/n5_vocabulary.json");
@@ -154,6 +157,29 @@ fn load_and_save_defaults() -> Vec<LessonData> {
     }
     save_vocabulary(&combined);
     combined
+}
+
+#[cfg(not(target_arch = "wasm32"))]
+fn load_and_save_defaults_from_md() -> Vec<LessonData> {
+    let verbs_md = include_str!("../ui/data/n5_verbs.md");
+    let adjectives_md = include_str!("../ui/data/n5_adjectives.md");
+    let vocabulary_md = include_str!("../ui/data/n5_vocabulary.md");
+
+    let mut combined = Vec::new();
+    for src in &[verbs_md, adjectives_md, vocabulary_md] {
+        combined.extend(vocabulary_markdown_io::parse_vocabulary(src));
+    }
+    save_vocabulary(&combined);
+    combined
+}
+
+#[cfg(not(target_arch = "wasm32"))]
+fn load_and_save_defaults(from_json: bool) -> Vec<LessonData> {
+    if from_json {
+        load_and_save_defaults_from_json()
+    } else {
+        load_and_save_defaults_from_md()
+    }
 }
 
 // ── init ──────────────────────────────────────────────────────────────────────
@@ -172,7 +198,7 @@ where
     #[cfg(not(target_arch = "wasm32"))]
     {
         if !std::path::Path::new(VOCABULARY_FILE).exists() {
-            let defaults = load_and_save_defaults();
+            let defaults = load_and_save_defaults(LOAD_DEFAULT_FROM_MARKDOWN);
             logic.set_lesson_list(lessons_to_slint(&defaults));
         } else {
             let saved = load_vocabulary();
@@ -456,7 +482,7 @@ where
         logic.on_restore_defaults_clicked(move || {
             #[cfg(not(target_arch = "wasm32"))]
             {
-                let defaults = load_and_save_defaults();
+                let defaults = load_and_save_defaults(LOAD_DEFAULT_FROM_MARKDOWN);
                 let ui = ui_weak.unwrap();
                 let logic = ui.global::<VocabularyAppLogic>();
                 logic.set_lesson_list(lessons_to_slint(&defaults));
