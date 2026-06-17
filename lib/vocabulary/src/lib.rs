@@ -137,8 +137,7 @@ fn save_vocabulary(_lessons: &[LessonData]) {}
 
 // ── Default data ──────────────────────────────────────────────────────────────
 
-const LOAD_DEFAULT_FROM_MARKDOWN: bool = false;
-const LOAD_DEFAULT_FROM_JSON: bool = true;
+const LOAD_DEFAULT_FROM_MARKDOWN: bool = true;
 
 /// Embed the three default JSON datasets at compile time and write them to
 /// `vocabulary.json`.  Returns the combined lesson list.
@@ -174,11 +173,11 @@ fn load_and_save_defaults_from_md() -> Vec<LessonData> {
 }
 
 #[cfg(not(target_arch = "wasm32"))]
-fn load_and_save_defaults(from_json: bool) -> Vec<LessonData> {
-    if from_json {
-        load_and_save_defaults_from_json()
-    } else {
+fn load_and_save_defaults(from_markdown: bool) -> Vec<LessonData> {
+    if from_markdown {
         load_and_save_defaults_from_md()
+    } else {
+        load_and_save_defaults_from_json()
     }
 }
 

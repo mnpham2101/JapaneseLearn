@@ -13,24 +13,47 @@ use crate::{LessonData, TenseData, WordData};
 /// tense: past|食べました
 /// example: 犬が走る。
 /// ```
+/// Strip a heading marker (e.g. `"##"` or `"###"`) from the start of a line.
+///
+/// Tolerates any whitespace between the marker and the heading text —
+/// including the full-width ideographic space (U+3000) that IME input
+/// sometimes inserts instead of an ASCII space. Returns `None` if `line`
+/// does not start with `marker`, if it is actually a deeper heading (e.g.
+/// `marker` is `"##"` but the line starts with `"###"`), or if no heading
+/// text follows.
+fn strip_heading(line: &str, marker: &str) -> Option<String> {
+    let rest = line.strip_prefix(marker)?;
+    if rest.starts_with('#') {
+        return None;
+    }
+    let text = rest.trim();
+    if text.is_empty() {
+        None
+    } else {
+        Some(text.to_string())
+    }
+}
+
+/// Split a `key: value` field line into its key and value.
+///
+/// Tolerates a space before the colon (`"type : noun"`) and a full-width
+/// colon (`"kanji：庭"`) — both of which appear in hand-edited markdown
+/// alongside the standard `"key: value"` form.
+fn split_field(line: &str) -> Option<(&str, String)> {
+    let idx = line.find([':', '：'])?;
+    let key = line[..idx].trim();
+    let colon_len = line[idx..].chars().next()?.len_utf8();
+    let value = line[idx + colon_len..].trim().to_string();
+    Some((key, value))
+}
+
 pub(crate) fn parse_vocabulary(source: &str) -> Vec<LessonData> {
     let mut lessons: Vec<LessonData> = Vec::new();
     let mut current_word: Option<WordData> = None;
 
     for raw_line in source.lines() {
         let line = raw_line.trim();
-        if let Some(lesson_name) = line.strip_prefix("## ") {
-            // Flush any pending word before starting a new lesson.
-            if let Some(word) = current_word.take() {
-                if let Some(lesson) = lessons.last_mut() {
-                    lesson.words.push(word);
-                }
-            }
-            lessons.push(LessonData {
-                name: lesson_name.trim().to_string(),
-                words: vec![],
-            });
-        } else if let Some(spelling) = line.strip_prefix("### ") {
+        if let Some(spelling) = strip_heading(line, "###") {
             // Flush any pending word before starting a new word entry.
             if let Some(word) = current_word.take() {
                 if let Some(lesson) = lessons.last_mut() {
@@ -38,25 +61,39 @@ pub(crate) fn parse_vocabulary(source: &str) -> Vec<LessonData> {
                 }
             }
             current_word = Some(WordData {
-                spelling: spelling.trim().to_string(),
+                spelling,
                 ..Default::default()
             });
-        } else if let Some(word) = current_word.as_mut() {
-            if let Some(val) = line.strip_prefix("kanji: ") {
-                word.kanji = val.to_string();
-            } else if let Some(val) = line.strip_prefix("meaning: ") {
-                word.meaning = val.to_string();
-            } else if let Some(val) = line.strip_prefix("type: ") {
-                word.word_type = val.to_string();
-            } else if let Some(val) = line.strip_prefix("tense: ") {
-                if let Some((name, conjugation)) = val.split_once('|') {
-                    word.tenses.push(TenseData {
-                        name: name.to_string(),
-                        conjugation: conjugation.to_string(),
-                    });
+        } else if let Some(lesson_name) = strip_heading(line, "##") {
+            // Flush any pending word before starting a new lesson.
+            if let Some(word) = current_word.take() {
+                if let Some(lesson) = lessons.last_mut() {
+                    lesson.words.push(word);
                 }
-            } else if let Some(val) = line.strip_prefix("example: ") {
-                word.examples.push(val.to_string());
+            }
+            lessons.push(LessonData {
+                name: lesson_name,
+                words: vec![],
+            });
+        } else if let Some(word) = current_word.as_mut() {
+            if let Some((key, value)) = split_field(line) {
+                match key {
+                    "kanji" => word.kanji = value,
+                    "meaning" => word.meaning = value,
+                    "type" => word.word_type = value,
+                    "tense" => {
+                        if let Some((name, conjugation)) = value.split_once('|') {
+                            word.tenses.push(TenseData {
+                                name: name.trim().to_string(),
+                                conjugation: conjugation.trim().to_string(),
+                            });
+                        }
+                    }
+                    "example" if !value.is_empty() => {
+                        word.examples.push(value);
+                    }
+                    _ => {}
+                }
             }
         }
     }
@@ -157,5 +194,37 @@ mod tests {
     fn parse_empty_input_returns_empty_vec() {
         let lessons = parse_vocabulary("");
         assert!(lessons.is_empty());
+    }
+
+    /// Reproduces the せんせい/きょうじゅ bug: a heading using a full-width
+    /// space (U+3000) after `###` must still start a new word, not be
+    /// swallowed into the previous word's fields.
+    #[test]
+    fn parse_heading_with_fullwidth_space() {
+        let src = "## People\n\n### せんせい\nkanji: 先生\nmeaning: teacher\ntype: noun\n\n###　きょうじゅ\nkanji:　教授\nmeaning: professor\ntype: noun\n";
+        let lessons = parse_vocabulary(src);
+        assert_eq!(lessons[0].words.len(), 2);
+        assert_eq!(lessons[0].words[0].spelling, "せんせい");
+        assert_eq!(lessons[0].words[0].meaning, "teacher");
+        assert_eq!(lessons[0].words[1].spelling, "きょうじゅ");
+        assert_eq!(lessons[0].words[1].kanji, "教授");
+        assert_eq!(lessons[0].words[1].meaning, "professor");
+    }
+
+    #[test]
+    fn parse_field_with_space_before_colon() {
+        let src = "## Time\n\n### あさ\nkanji :　朝\nmeaning :  morning\ntype : noun\n";
+        let lessons = parse_vocabulary(src);
+        let word = &lessons[0].words[0];
+        assert_eq!(word.kanji, "朝");
+        assert_eq!(word.meaning, "morning");
+        assert_eq!(word.word_type, "noun");
+    }
+
+    #[test]
+    fn parse_field_with_fullwidth_colon() {
+        let src = "## Places\n\n### にわ\nkanji：庭\nmeaning: yard\n";
+        let lessons = parse_vocabulary(src);
+        assert_eq!(lessons[0].words[0].kanji, "庭");
     }
 }

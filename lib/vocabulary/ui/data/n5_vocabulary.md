@@ -1,4 +1,9 @@
 ## N5 Vocabulary — People
+### ひと
+kanji: 人
+meaning: person; people
+type: noun
+example: あのひとは だれですか。(Who is that person?)
 
 ### がくせい
 kanji: 学生
@@ -12,26 +17,169 @@ meaning: teacher
 type: noun
 example: せんせいは やさしいです。(The teacher is kind.)
 
+###　きょうじゅ
+kanji:　教授
+meaning: professor
+type: noun
+example:
+
 ### ともだち
 kanji: 友達
 meaning: friend
 type: noun
-example: ともだちと えいがを みます。(I watch a movie with my friend.)
+example: ともだちと えいがを みます。：I watch a movie with my friend.
+
+### かいしゃいん
+kanji:会社員
+meaning: office worker
+type: noun
+example:
+
+###　こうむいん
+kanji: 公務員
+meaning: gov worker
+type: noun
+example:
+
+###　てんいん
+kanji:　店員
+meaning: store worker
+type: noun
+example:
+
+###　けいさつ
+kanji:　警察
+meaning: police
+type: noun
+example:　けいさつ を よびます
+
+###　いしゃ
+kanji:　医者
+meaning: doctor
+type: noun
+example:
+
+### しゃちょう
+kanji:社長
+meaning: president
+type: noun
+example:
+
+###　ぶちょう
+kanji:部長
+meaning: department lead
+type: noun
+example:
+
+###　かちょう
+kanji:課長
+meaning: team lead
+type: noun
+example:
 
 ### かぞく
 kanji: 家族
 meaning: family
 type: noun
-example: かぞくと たべます。(I eat with my family.)
+example: かぞくと たべます。: I eat with my family.
 
-### ひと
-kanji: 人
-meaning: person; people
+### ちち
+kanji: 父
+meaning: father
 type: noun
-example: あのひとは だれですか。(Who is that person?)
+example:ちちを　よく　はなします。
+
+### ちち
+kanji: お父さん
+meaning: father
+type: noun
+example:
+
+### はは
+kanji: 母
+meaning: mother
+type: noun
+example:
+
+### おかあさん
+kanji: お母さん
+meaning: mother
+type: noun
+example:
+
+### あに
+kanji: 兄
+meaning: older brother
+type: noun
+example:
+
+### おにいさん
+kanji: お兄さん
+meaning: older brother
+type: noun
+example:
+
+### おとうと
+kanji:　弟
+meaning: younger brother
+type: noun
+example: 弟は　家族で　いちばん　うたが　しょうずです。　：  My brother sings best in my family
+
+### あね
+kanji: あね
+meaning: older sister
+type: noun
+example:
+
+### あねえさん
+kanji:　お姉さん
+meaning: older sister
+type: noun
+example:
+
+### いもうと
+kanji: 妹
+meaning: younger sister
+type: noun
+example:
+
+###　むすこ
+kanji:　息子
+meaning: son
+type: noun
+example:
+
+### むすめ
+kanji: 娘
+meaning: daughter
+type: noun
+example:
+
+### そふ
+kanji: 祖父
+meaning: grandfather
+type: noun
+example:
+
+### おじいさん
+kanji:
+meaning: grandfather
+type: noun
+example:
+
+### そぼ
+kanji: 祖母
+meaning: grandmother
+type: noun
+example:
+
+###　おばあさん
+kanji: おばあさん
+meaning: grandmother
+type: noun
+example:
 
 ## N5 Vocabulary — Objects
-
 ### ほん
 kanji: 本
 meaning: book
@@ -70,7 +218,6 @@ type: noun
 example: かみに かきます。(I write on paper.)
 
 ## N5 Vocabulary — Places
-
 ### いえ
 kanji: 家
 meaning: house; home
@@ -83,6 +230,42 @@ kanji: 学校
 meaning: school
 type: noun
 example: がっこうに いきます。(I go to school.)
+
+### だいがく
+kanji: 大学
+meaning: university
+type: noun
+example:
+
+### しょうがっこう
+kanji: 小学校
+meaning: elementary school
+type: noun
+example:
+
+### ちゅうがっこう
+kanji: 中学校
+meaning: middle school
+type: noun
+example:
+
+### こうとうがっこう
+kanji: 高等学校
+meaning: high school
+type: noun
+example:
+
+### きょうしつ
+kanji: 教室
+meaning: classroom
+type: noun
+example:
+
+### たいしかん
+kanji: 大使館
+meaning: embassy
+type: noun
+example:
 
 ### えき
 kanji: 駅
@@ -108,8 +291,49 @@ meaning: library
 type: noun
 example: としょかんで べんきょうします。(I study at the library.)
 
-## N5 Vocabulary — Food and Drink
+### デパート
+kanji:
+meaning: department store
+type: noun
+example:
 
+###  ショッピングモール
+kanji:
+meaning: shoping mall
+type: noun
+example:
+
+### ジム
+kanji:
+meaning: gym
+type: noun
+example:
+
+### こうえん
+kanji:
+meaning: park
+type: noun
+example:
+
+###　にわ
+kanji：庭
+meaning: yard
+type: noun
+example:
+
+###　しょくどう
+kanji:　食堂
+meaning: cateferia
+type: noun
+example:
+
+###　じむしょ
+kanji:　事務所
+meaning: office
+type: noun
+example:
+
+## N5 Vocabulary — Food and Drink
 ### みず
 kanji: 水
 meaning: water
@@ -140,7 +364,90 @@ meaning: fish
 type: noun
 example: さかなを たべます。(I eat fish.)
 
+###　ワイン
+kanji:
+meaning: wine
+type: noun
+example:
+
+###　おさけ
+kanji:　お酒
+meaning: wine
+type: noun
+example:
+
+###　 ジュース
+kanji:
+meaning: juice
+type: noun
+example:
+
 ## N5 Vocabulary — Time
+###　せんしゅう
+kanji:　先週
+meaning: last week
+type: noun
+example:
+
+###　こんしゅう
+kanji:　今週
+meaning: this week
+type: noun
+example:
+
+### らいしゅう
+kanji:　来週
+meaning: next week
+type: noun
+example:
+
+###　せんげつ
+kanji:先月
+meaning: last month
+type: noun
+example:
+
+###　こんげつ
+kanji:　今月
+meaning: this month
+type: noun
+example:
+
+###　らいげつ
+kanji:　来月
+meaning: next month
+type: noun
+example:
+
+###　きょねん
+kanji:　去年
+meaning: last year
+type: noun
+example:
+
+###　ことし
+kanji:　今年
+meaning: this year
+type: noun
+example:
+
+###　らいねん
+kanji:　来年
+meaning: next yesr
+type: noun
+example:
+
+###　おととい
+kanji:　一昨日
+meaning: the day before yesterday
+type: noun
+example:
+
+### きのう
+kanji: 昨日
+meaning: yesterday
+type: noun
+example: きのうは てんきが わるかったです。(The weather was bad yesterday.)
 
 ### きょう
 kanji: 今日
@@ -154,11 +461,11 @@ meaning: tomorrow
 type: noun
 example: あしたも がっこうに いきます。(I will go to school tomorrow too.)
 
-### きのう
-kanji: 昨日
-meaning: yesterday
+###　あさって
+kanji:
+meaning: the day after tommorow
 type: noun
-example: きのうは てんきが わるかったです。(The weather was bad yesterday.)
+example:
 
 ### まいにち
 kanji: 毎日
@@ -172,8 +479,127 @@ meaning: now
 type: noun
 example: いまは なんじですか。(What time is it now?)
 
-## N5 Vocabulary — Numbers and Quantities
+###　けさ
+kanji :　今朝
+meaning: this morning
+type: noun
+example:
 
+###　きょうのごご
+kanji :　今日の午後
+meaning : this afternoon
+type: noun
+example :
+
+###　こんばん
+kanji :　今晩
+meaning : this evening
+type: noun
+example:
+
+###　ごぜん
+kanji :
+meaning :  morning (AM)
+type : noun
+example :
+
+###　あさ
+kanji :　朝
+meaning :  morning
+type : noun
+example :
+
+###　ごご
+kanji :　午後
+meaning : afternoon (PM)
+type : noun
+example :
+
+###　はる
+kanji :　春
+meaning :  spring
+type : noun
+example :
+
+###　なつ
+kanji :　夏
+meaning :  summer
+type : noun
+example :
+
+###　あき
+kanji:　秋
+meaning:  autumn
+type: noun
+example:
+
+### ふゆ
+kanji:　冬
+meaning: winter
+type: noun
+example:
+
+###　しゅう
+kanji:　週
+meaning: week
+type: noun
+example:
+
+###　しゅうまつ
+kanji:　週末
+meaning: weekend
+type: noun
+example:
+
+###　つき
+kanji:　月
+meaning: month
+type: noun
+example:
+
+###　げつようび
+kanji:　月曜日
+meaning: Monday
+type: noun
+example:
+
+###　かようび
+kanji:　火曜日
+meaning: Tuesday
+type: noun
+example:
+
+###　すいようび
+kanji: 水曜日
+meaning:　Wed
+type: noun
+example:
+
+###　もくようび
+kanji:木曜日
+meaning: Thu
+type: noun
+example:
+
+###　きんようび
+kanji:　金曜日
+meaning: Fri
+type: noun
+example:
+
+###　　どようび
+kanji:　　土曜日
+meaning: Sat
+type: noun
+example:
+
+###　にちようび
+kanji:　日曜日
+meaning: Sun
+type: noun
+example:
+
+## N5 Vocabulary — Numbers and Quantities
 ### いくら
 kanji: 幾ら
 meaning: how much (price)
@@ -187,7 +613,6 @@ type: noun
 example: なんにんですか。(How many people are there?)
 
 ## N5 Vocabulary — Nature and Weather
-
 ### てんき
 kanji: 天気
 meaning: weather
