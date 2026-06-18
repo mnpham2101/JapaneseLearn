@@ -18,7 +18,8 @@ tense: potential-negative-form-informal : たべられない
 example: まいにち やさいを たべます。: I eat vegetables every day
 example: あさごはんに　パンを　たべました。：　I ate bread for breakfast
 example: パンを　食べた　ところ　です。：　Tôi vừa ăn bánh mình xong.
-example: いえで　あさごはんを　たべたばかりです。: Tôi mới vừa ăn sáng ở nhà.　
+example: いえで　あさごはんを　たべたばかりです。: Tôi mới vừa ăn sáng ở nhà.
+example: わたしの　しゅみは　いろいろな　みせの　ケーキを　たべることで　: Sở thích của tôi là ăn bánh ở nhiều cửa hàng khác nhau.
 example: わたしは　とても　からい　たべものを　食べられる　：tôi có thể ăn đồ ăn rất cay.
 example: わたしは まいばん かぞくと ごはんを 食べます。: tôi ăn tối với gia đình mỗi tối.
 
@@ -263,6 +264,25 @@ tense: potential-negative-form-informal (nai-form) :　おがれない
 tense: te-form : 
 example: かいだんで　にかいに　おがれる。: I will climb up the 2nd floor by ladder.
 
+### のぼる
+kanji: 登る
+meaning: to climb
+type: verb (dictionary)
+tense: present : のぼります
+tense: past-formal :
+tense: past-informal (ta-form):
+tense: negative-present-formal:
+tense: negative-present-informal (nai-form):
+tense: negative-past-formal  :
+tense: negative-past-informal (nai-form) :
+tense: potential-form-formal :
+tense: potential-form-informal (ta-form) :
+tense: potential-negative-form :
+tense: potential-negative-form-informal (nai-form) :
+tense: te-form : 
+example: こんども、いっしょに　山に　(やまに) のぼりましょうね　: Lần sau đi leo núi chung nữa nhé.
+
+
 ## N5 Verbs — Daily Actions
 
 ### する
@@ -285,10 +305,14 @@ example: しゅくだいを します。: I do homework.
 example: かいものを しました。: I went shopping.
 example: しごとを するために　とうきょうへ　かえります。 : Tôi về Tokyo để làm việc.
 example: りょうりをすることが　すきです。: Tôi thích nấu ăn
-example: たっきゅうを　することが　だいすきます。 :  Tôi cực kỳ thích chơi bóng bàn.
+example: たっきゅうを　することが　だいすきです。 :  Tôi cực kỳ thích chơi bóng bàn.
+example: 私のゆめは　日本へ　りょこうする　こと　です。　: Ước  mơ của tôi là đi du lịch Nhật Bản.
+example: 私のしゅみは　サッカーを　することだ。: Sở thích của tôi là chơi đá banh.
 example: らいねんの秋（あき）に　りゅうがくできます。:　Tôi có thể đi du học Nhật Bản mùa thu năm sau.
-example:  :  Tôi có thể nấu ăn chiều này.
-example:  :  Tôi có thể dùng bữa tối nay.
+example: この店では　どのいらいで　しょくじが　できますか :  Ở nhà hàng này, có thể tốn bao nhiêu tiền để dùng bữa?
+example: 今日のゆうがた　りょうり　できます :  Tôi có thể nấu ăn chiều này.
+example:　今晩、有名なレストランで　食事 します　: Tôi dùng bữa (しょくじ)　tối nay ở nhà hàng nổi tiếng (ゆうめい).
+
 example:  :  Bạn có đề nghị gì không?
 example:  :  Bạn có muốn đề nghị gì không?
 example:  :  Tôi đề nghị đi coi film chung cuối tuần này.
@@ -334,6 +358,26 @@ example: せんせいに ききました。(I asked the teacher.)
 ### かく
 kanji: 書く
 meaning: to write
+type: verb (dictionary)
+tense: present : かきます
+tense: past-formal :
+tense: past-informal (ta-form):
+tense: negative-present-formal:
+tense: negative-present-informal (nai-form):
+tense: negative-past-formal  :
+tense: negative-past-informal (nai-form) :
+tense: potential-form-formal :
+tense: potential-form-informal (ta-form) :
+tense: potential-negative-form :
+tense: potential-negative-form-informal (nai-form) :
+tense: te-form :
+example: てがみを かきます。: I write a letter.
+example: なまえを かきました。: I wrote my name.
+example:
+
+### かく
+kanji: 描き
+meaning: to draw
 type: verb (dictionary)
 tense: present : かきます
 tense: past-formal :
@@ -522,7 +566,7 @@ tense: potential-form-informal (ta-form) :
 tense: potential-negative-form :
 tense: potential-negative-form-informal (nai-form) :
 tense: te-form : はたらいて
-example: かいしゃで はたらきます。(I work at a company.)
+example: かいしゃで はたらきます。: I work at a company.
 
 ### べんきょうする
 kanji: 勉強する
@@ -540,7 +584,7 @@ tense: potential-form-informal (ta-form) :
 tense: potential-negative-form :
 tense: potential-negative-form-informal (nai-form) :
 tense: te-form : べんきょうして
-example: まいにち にほんごを べんきょうします。(I study Japanese every day.)
+example: まいにち にほんごを べんきょうします。: I study Japanese every day.
 
 ### おしえる
 kanji: 教える
@@ -576,9 +620,28 @@ tense: potential-form-informal : 説明できる
 tense: potential-negative-form :
 tense: potential-negative-form-informal :
 tense: te-form :
-example: このもんだいを　せつめいできます。(có thể giải thích vấn đề này)
-example: 先生は　問題を　説明しました。　　(thầy giáo đã giải thích vấn đề / bài toán này)
-example:  かれは りゆうを せつめいしなかった (Anh ấy không thể giải thích lý do)
+example: このもんだいを　せつめいできます。: có thể giải thích vấn đề này
+example: 先生は　問題を　説明しました。　　: thầy giáo đã giải thích vấn đề / bài toán này
+example:  かれは りゆうを せつめいしなかった : Anh ấy không thể giải thích lý do
+
+### そだてる
+kanji:　育てる
+meaning: to nurture
+type: verb (dictionary)
+tense: present : そだてます
+tense: past-formal :
+tense: past-informal (ta-form):
+tense: negative-present-formal:
+tense: negative-present-informal (nai-form):
+tense: negative-past-formal  :
+tense: negative-past-informal (nai-form) :
+tense: potential-form-formal :
+tense: potential-form-informal (ta-form) :
+tense: potential-negative-form :
+tense: potential-negative-form-informal (nai-form) :
+tense: te-form : 
+example: 
+
 
 ### ひく
 kanji:
@@ -597,8 +660,63 @@ tense: potential-negative-form : ひけません
 tense: potential-negative-form-informal : ひけたい
 tense: te-form :
 example: わたしは　がっきを　ひくのが　へたです。 : tôi chơi đàn kém.
+example:　私のしゅみは　がっきが　ひく　ことです。: sở thích của tôi là chơi đàn.
 example: がっきが　ひけます。　ピアノが　とくい　です。 : tôi có thể chơi đàn. Tôi có khiếu piano.
 example: ギータが　にがて　だ。ギータが　ひけない。　: Tôi dở ghita. Tôi không chơi ghita được.
+
+### おしえる
+kanji: 教える
+meaning: to teach
+type: verb (dictionary)
+tense: present : おしえます
+tense: past-formal :
+tense: past-informal (ta-form):
+tense: negative-present-formal:
+tense: negative-present-informal (nai-form):
+tense: negative-past-formal  :
+tense: negative-past-informal (nai-form) :
+tense: potential-form-formal :
+tense: potential-form-informal (ta-form) :
+tense: potential-negative-form :
+tense: potential-negative-form-informal (nai-form) :
+tense: te-form : おしえて
+example: えいごを おしえます。: I teach English.
+
+### あつめる
+kanji:　集める 
+meaning: to collect
+type: verb (dictionary)
+tense: present : あつめます
+tense: past-formal :
+tense: past-informal (ta-form):
+tense: negative-present-formal:
+tense: negative-present-informal (nai-form):
+tense: negative-past-formal  :
+tense: negative-past-informal (nai-form) :
+tense: potential-form-formal :
+tense: potential-form-informal (ta-form) :
+tense: potential-negative-form :
+tense: potential-negative-form-informal (nai-form) :
+tense: te-form : 
+example: かれは、　一年間 (いちねんかん)　ずっと　切手　(きって)　を　あつめています  :　anh ta sưu tập tem suốt cả năm nay 
+
+### たてます
+kanji: 
+meaning: to builf
+type: verb (dictionary)
+tense: present : 
+tense: past-formal :
+tense: past-informal (ta-form):
+tense: negative-present-formal:
+tense: negative-present-informal (nai-form):
+tense: negative-past-formal  :
+tense: negative-past-informal (nai-form) :
+tense: potential-form-formal :
+tense: potential-form-informal (ta-form) :
+tense: potential-negative-form :
+tense: potential-negative-form-informal (nai-form) :
+tense: te-form : 
+example:  : 
 
 ## N5 Verbs — Giving and Receiving
 
@@ -715,8 +833,9 @@ tense: potential-form-informal :
 tense: potential-negative-form :
 tense: potential-negative-form-informal :
 tense: te-form :
-example: にほんで きれいな しゃしんを とります。: Tôi chụp ảnh.
-example:
+example: にほんで きれいな しゃしんを とります。: Tôi chụp ảnh đẹp ở Nhật.
+example: いもうとのしゅみは　しゃしんを　とることです。　: Sở thích của em gái tôi là chụp ảnh.
+
 example:
 
 ### おく
@@ -839,6 +958,24 @@ tense: potential-negative-form :
 tense: potential-negative-form-informal (nai-form) :
 tense: te-form : つかって
 example: パソコンを つかいます。(I use a computer.)
+
+### つくる
+kanji: 
+meaning: to make
+type: verb (dictionary)
+tense: present : 
+tense: past-formal :
+tense: past-informal (ta-form):
+tense: negative-present-formal:
+tense: negative-present-informal (nai-form):
+tense: negative-past-formal  :
+tense: negative-past-informal (nai-form) :
+tense: potential-form-formal :
+tense: potential-form-informal (ta-form) :
+tense: potential-negative-form :
+tense: potential-negative-form-informal (nai-form) :
+tense: te-form :
+example:　ばんごはんを　つくった。　: tôi đã làm đồ ăn tối.
 
 ### あう
 kanji: 会う
