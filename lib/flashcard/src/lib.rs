@@ -9,6 +9,7 @@ use flashcard::FlashcardAppLogic;
 // ── Persistence ──────────────────────────────────────────────────────────────
 
 const STACKS_FILE: &str = "data/stacks.json";
+const SENTENCES_FILE: &str = "data/sentences.json";
 
 #[derive(serde::Serialize, serde::Deserialize)]
 struct CardData {
@@ -76,6 +77,19 @@ fn save_stacks(stacks: &[flashcard::FlashcardStackModel]) {
 #[cfg(target_arch = "wasm32")]
 fn save_stacks(_stacks: &[flashcard::FlashcardStackModel]) {}
 
+#[cfg(not(target_arch = "wasm32"))]
+fn save_sentences(stacks: &[flashcard::FlashcardStackModel]) {
+    if let Ok(json) = serde_json::to_string_pretty(&to_stack_data(stacks)) {
+        if let Some(parent) = std::path::Path::new(SENTENCES_FILE).parent() {
+            let _ = std::fs::create_dir_all(parent);
+        }
+        let _ = std::fs::write(SENTENCES_FILE, json);
+    }
+}
+
+#[cfg(target_arch = "wasm32")]
+fn save_sentences(_stacks: &[flashcard::FlashcardStackModel]) {}
+
 /// Save the current flashcard list held by the global to disk.
 ///
 /// Called from other libraries (e.g. `vocabulary`) after they update
@@ -90,6 +104,21 @@ where
     save_stacks(&stacks);
 }
 
+/// Save the current sentence stack list held by the global to disk.
+///
+/// Called from other libraries (e.g. `vocabulary`) after they generate
+/// sentence exercises via `FlashcardAppLogic`.
+pub fn save_sentence_list<T>(ui: &T)
+where
+    T: slint::ComponentHandle + 'static,
+    for<'a> FlashcardAppLogic<'a>: slint::Global<'a, T>,
+{
+    let logic = ui.global::<FlashcardAppLogic>();
+    let stacks: Vec<flashcard::FlashcardStackModel> =
+        logic.get_sentence_stack_list().iter().collect();
+    save_sentences(&stacks);
+}
+
 #[cfg(not(target_arch = "wasm32"))]
 fn load_stacks() -> Option<Vec<flashcard::FlashcardStackModel>> {
     let json = std::fs::read_to_string(STACKS_FILE).ok()?;
@@ -99,6 +128,18 @@ fn load_stacks() -> Option<Vec<flashcard::FlashcardStackModel>> {
 
 #[cfg(target_arch = "wasm32")]
 fn load_stacks() -> Option<Vec<flashcard::FlashcardStackModel>> {
+    None
+}
+
+#[cfg(not(target_arch = "wasm32"))]
+fn load_sentences() -> Option<Vec<flashcard::FlashcardStackModel>> {
+    let json = std::fs::read_to_string(SENTENCES_FILE).ok()?;
+    let data: Vec<StackData> = serde_json::from_str(&json).ok()?;
+    Some(from_stack_data(data))
+}
+
+#[cfg(target_arch = "wasm32")]
+fn load_sentences() -> Option<Vec<flashcard::FlashcardStackModel>> {
     None
 }
 
@@ -135,6 +176,11 @@ where
     // Restore persisted stacks on startup (no-op on WASM).
     if let Some(stacks) = load_stacks() {
         logic.set_flashcard_list(slint::ModelRc::new(slint::VecModel::from(stacks)));
+    }
+
+    // Restore persisted sentence stacks on startup (no-op on WASM).
+    if let Some(sentences) = load_sentences() {
+        logic.set_sentence_stack_list(slint::ModelRc::new(slint::VecModel::from(sentences)));
     }
 
     {
