@@ -294,6 +294,12 @@ where
             if let Some(stack) = stacks.get_mut(stack_idx) {
                 let mut cards: Vec<flashcard::FlashcardModel> = stack.flashcards.iter().collect();
                 if let Some(card) = cards.get_mut(card_idx) {
+                    if card.known == known {
+                        // Value already matches — skip the rebuild/save/progress
+                        // refresh entirely (e.g. a resync-triggered navigation
+                        // re-fires `known-changed` with the same value).
+                        return;
+                    }
                     card.known = known;
                 }
                 stack.flashcards = slint::ModelRc::new(slint::VecModel::from(cards));

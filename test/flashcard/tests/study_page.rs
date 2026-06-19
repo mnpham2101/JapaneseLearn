@@ -20,6 +20,12 @@
 //   is invoked with a card index that does not exist in that stack — the handler's card
 //   mutation is skipped via get_mut returning None, but update_progress still runs and
 //   recomputes known-count/total-count as 0/0 from the empty stack
+//
+// # [Task 8.2]:
+// - on_known_changed repeated-call guard: invoking known-changed with the same boolean value
+//   the card already holds (e.g. a resync-triggered navigation re-firing the callback) does
+//   not corrupt state — known stays correct and known-count/total-count remain accurate across
+//   repeated identical invocations
 
 use std::cell::Cell;
 
@@ -239,4 +245,45 @@ fn study_page_progress_empty_stack() {
 
     assert_eq!(logic.get_known_count(), 0);
     assert_eq!(logic.get_total_count(), 0);
+}
+
+/// Covers: Task 8.2 — repeated on_known_changed calls with the same value are a no-op that
+/// does not corrupt state. Simulates a resync-triggered navigation re-firing known-changed
+/// with the value the card already holds (e.g. Prev/Next re-syncing `known` on every card
+/// switch per Phase 8.B), confirming known stays true and known-count/total-count stay 1/1
+/// across repeated identical invocations.
+#[test]
+fn study_page_known_changed_repeated_noop() {
+    let window = setup();
+    let logic = window.global::<FlashcardAppLogic>();
+    seed_stack(&logic, "Stack A");
+    logic.set_selected_stack_index(0);
+    seed_card(&logic, "猫", "cat");
+
+    logic.invoke_known_changed(0, 0, true);
+    let card = logic
+        .get_flashcard_list()
+        .row_data(0)
+        .unwrap()
+        .flashcards
+        .row_data(0)
+        .unwrap();
+    assert!(card.known);
+    assert_eq!(logic.get_known_count(), 1);
+    assert_eq!(logic.get_total_count(), 1);
+
+    // Repeat the same call twice more — must remain a no-op.
+    logic.invoke_known_changed(0, 0, true);
+    logic.invoke_known_changed(0, 0, true);
+
+    let card = logic
+        .get_flashcard_list()
+        .row_data(0)
+        .unwrap()
+        .flashcards
+        .row_data(0)
+        .unwrap();
+    assert!(card.known);
+    assert_eq!(logic.get_known_count(), 1);
+    assert_eq!(logic.get_total_count(), 1);
 }
