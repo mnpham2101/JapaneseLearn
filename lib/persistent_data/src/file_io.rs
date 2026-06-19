@@ -11,7 +11,7 @@
 ///     println!("File content: {}", content);
 /// }
 /// ```
-#[cfg(not(target_arch = "wasm32"))]
+#[cfg(not(any(target_arch = "wasm32", target_os = "android")))]
 pub fn open_markdown_file() -> Option<String> {
     use std::io::Read;
     let path = rfd::FileDialog::new()
@@ -31,6 +31,12 @@ pub fn open_markdown_file() -> Option<String> {
     None
 }
 
+/// Android stub — `rfd` file dialogs are not supported on Android; a dedicated file-picker integration is required.
+#[cfg(target_os = "android")]
+pub fn open_markdown_file() -> Option<String> {
+    None
+}
+
 /// Opens a save-file dialog for the user to choose a destination and writes `content` as markdown.
 ///
 /// Returns `true` on success, or `false` if the user cancels or an I/O error occurs.
@@ -40,7 +46,7 @@ pub fn open_markdown_file() -> Option<String> {
 /// let saved = persistent_data::file_io::save_markdown_file("# My Stacks\n");
 /// assert!(saved);
 /// ```
-#[cfg(not(target_arch = "wasm32"))]
+#[cfg(not(any(target_arch = "wasm32", target_os = "android")))]
 pub fn save_markdown_file(content: &str) -> bool {
     use std::io::Write;
     let Some(path) = rfd::FileDialog::new()
@@ -58,6 +64,12 @@ pub fn save_markdown_file(content: &str) -> bool {
 
 /// WASM stub — file dialogs are not available on WebAssembly.
 #[cfg(target_arch = "wasm32")]
+pub fn save_markdown_file(_content: &str) -> bool {
+    false
+}
+
+/// Android stub — `rfd` file dialogs are not supported on Android; a dedicated file-picker integration is required.
+#[cfg(target_os = "android")]
 pub fn save_markdown_file(_content: &str) -> bool {
     false
 }
