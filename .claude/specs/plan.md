@@ -173,15 +173,74 @@ See `.claude/rules/architecture.md` for the full libA / libB / libC definitions.
 - Ensure compliance with constitution best practices (UI separation, modularity, `@styles` usage).
 - Document testing results and performance benchmarks.
 
-## Phase 9: Analytics
-**Goal**: Track study sessions and display per-stack progress using pure Slint chart components — no charting library.
+## Phase 8.B: Bug Fixes (pre-Analytics)
+**Goal**: Fix known/unknown count accuracy before Analytics depends on it.
 
-- **Library type**: libA — `lib/analytics/`.
-- Session log stored as JSON (`sessions.json`); each entry: date, stack name, total cards, known count.
-- Slint components: `ProgressBarChart` (horizontal bar, known% vs unknown%) and `SessionHistoryChart` (vertical bars over last N sessions), implemented via proportional `Rectangle` widths/heights.
-- Rust modules: `session_log.rs` (append + read), `stats.rs` (aggregate per stack).
-- Add `AnalyticsPage` with navigation in `MainWindow`; record a session entry on study session close.
-- No new third-party dependencies beyond `serde`/`serde_json`.
+- Fix `Flashcard.known` reactivity in `lib/flashcard/ui/components/flashcard.slint`: the
+  `in-out property <bool> known: data.known` default binding stops tracking `data.known`
+  once `CommonBtn.checked <=> known` performs its first toggle, so switching cards no
+  longer resyncs `known` to the new card's actual status. Fix so `known-changed` always
+  reports the correct card/value, and `known-count`/`total-count` stay accurate after
+  navigation.
+
+## Phase 8.V: Extended Vocabulary Data Model
+**Goal**: Each `tense:` entry becomes its own flashcard; each `example:` sentence becomes
+its own sentence flashcard, persisted separately. Per `extended-vocab.md`.
+
+- **This is a live data-loss bug fix, not just a future-proofing change.**
+  `lib/vocabulary/src/lib.rs` already defaults to loading bundled vocabulary via
+  `vocabulary_markdown_io::parse_vocabulary()` (`LOAD_DEFAULT_FROM_MARKDOWN = true`), used
+  for both first-launch auto-load and "Restore Defaults". That parser currently splits
+  `tense:` values on `'|'`, but every bundled `.md` file uses a second colon
+  (`tense: present-formal : たべます`) — so all tense data is silently dropped today. The
+  `.json` files remain the secondary/manual-import fallback format only, kept in sync but
+  not the default load path.
+- Fix `vocabulary_markdown_io.rs`: parse `tense: <label> : <conjugation>` (second colon,
+  not `|`) and `example: <sentence> : <meaning>`. Add `ExampleData { sentence, meaning }`;
+  update Slint models and the example-add callback signature.
+- Add `TenseType` enum to `lib/exercise_generator` (libD): fixed N5 variants (parenthetical
+  qualifiers like `(nai-form)` stripped before matching) plus `Other(String)` fallback for
+  user-typed labels.
+- Extend `FlashcardExerciseTransformer` (same transformer, evolved mapping): each tense
+  entry with a conjugation generates an additional flashcard (front = conjugation,
+  back = meaning + derived type `"{word_type} ({tense_label})"`).
+- Add `SentenceExerciseTransformer` (`VocabularyLesson → FlashcardStackData`, reuses the
+  existing card shape) + `ExerciseRequest::Sentence` / `ExerciseOutput::Sentence`.
+- "Generate Flashcards" now calls both `Flashcard` and `Sentence` requests in one click,
+  writing `stacks.json` (unchanged) and a new `sentences.json`.
+- `FlashcardManagerView` gains a second stack list backed by `sentences.json`, reusing
+  `FlashcardStack`/`Flashcard` unmodified.
+- Update bundled default `.md` (and matching `.json`) datasets so `example:` lines carry a
+  meaning.
+
+## Phase 9: Analytics
+**Goal**: Track study sessions and surface per-stack progress plus a study calendar with
+days-until-test, per `analytic-v1.md`. Depends on Phase 8.B (accurate known/total counts).
+
+**New libraries**:
+- `lib/study_analytic` (**libB**) — pure Rust computation, no Slint, no UI. Owns
+  `VocabularyStudyAnalytic`: known-vs-total aggregation, studied-day tracking, and
+  days-until-target-date math. Future stat types are added as new classes in this crate or
+  new methods on `VocabularyStudyAnalytic` — never inside the Slint lib.
+- `lib/analytics` (**libA**) — `AnalyticsPage` and Slint-only views: a calendar grid
+  (proportional `Rectangle` cells per day, marking studied days, showing "N days until
+  test") and a known-vs-total chart (proportional `Rectangle` widths/heights, no charting
+  library). `init()` calls into `lib/study_analytic` for all numbers and only sets results
+  onto Slint properties — no calculation logic lives in `.slint` files.
+
+**Dependency**: add `chrono` (`default-features = false, features = ["clock", "wasmbind"]`)
+to `lib/study_analytic` for date arithmetic (days-in-month, weekday offsets, date parsing)
+— `wasmbind` is required for `Local::now()` to work on `wasm32` via JS interop. This is the
+only new third-party crate in Milestone 3.
+
+- Session log stored as JSON (`sessions.json`, owned by `lib/analytics`); each entry: date,
+  stack name, total cards, known count. A session entry is recorded when a study session
+  closes (hook into `FlashcardAppLogic.study-session-active` going false).
+- Target test date is a plain `TextInput` (`YYYY-MM-DD`), parsed and validated in Rust — no
+  calendar-picker widget, no new UI dependency.
+- `lib/analytics` depends on `lib/flashcard` (workspace dep) to read session data at
+  session-close time, the same cross-library pattern `lib/vocabulary` already uses with
+  `lib/flashcard`.
 
 ## Phase 10: Grammar Study Mode
 **Goal**: Grammar lessons with three exercise types and pass/fail tracking per exercise.
