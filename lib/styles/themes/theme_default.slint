@@ -101,7 +101,8 @@ export global Tokens {
 
     // ── Component size tokens ────────────────────────────────────────────────
     // Icon-only square button (known/unknown toggle, row delete ✕)
-    out property <length> size-btn-icon: 32px;
+    // 44px meets the 44dp/44px minimum recommended touch target for mobile/touch UIs.
+    out property <length> size-btn-icon: 44px;
     // Small text button (Cancel, Back)
     out property <length> size-btn-sm: 80px;
     // Standard button — matches CommonBtn preferred-width

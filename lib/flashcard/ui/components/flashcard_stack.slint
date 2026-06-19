@@ -24,11 +24,13 @@ export component FlashcardStack inherits Rectangle {
     // drag-source: index of the row being dragged (-1 = no drag active).
     // drag-current-y: accumulated Y offset since drag started.
     // drag-target: computed destination row, clamped to valid range.
-    // Row slot height = card height (44px) + VerticalLayout spacing (8px) = 52px.
+    // Row slot height = card height (Tokens.size-btn-icon + 2 * Tokens.padding-sm)
+    // + VerticalLayout spacing (Tokens.spacing-sm).
     in-out property <int> drag-source: -1;
     in-out property <length> drag-current-y: 0px;
+    property <length> row-slot-height: Tokens.size-btn-icon + 2 * Tokens.padding-sm + Tokens.spacing-sm;
     property <int> drag-target: drag-source < 0 ? -1 : max(0, min(stack.flashcards.length - 1,
-              drag-source + round(drag-current-y / 1px / 52)));
+              drag-source + round(drag-current-y / row-slot-height)));
 
     // Root carries the explicit size + styling. The Flickable below is a
     // direct child of root (see slint-flickable-pattern.md) so its unbounded
@@ -97,7 +99,10 @@ export component FlashcardStack inherits Rectangle {
             card-list := VerticalLayout {
                 spacing: Tokens.spacing-sm;
                 for card[i] in stack.flashcards: Rectangle {
-                    height: 44px;
+                    // Row height must clear Tokens.size-btn-icon (44px) plus the
+                    // HorizontalLayout's padding-sm (8px) on top and bottom, or the
+                    // delete button overflows the row.
+                    height: Tokens.size-btn-icon + 2 * Tokens.padding-sm;
                     border-radius: Tokens.border-radius;
                     // Highlight row that is the current drop target.
                     background: root.drag-target == i && root.drag-source != i ? Tokens.drag-target-highlight : transparent;
