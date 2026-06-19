@@ -1,4 +1,4 @@
-import { Tokens } from "@styles";
+import { Tokens, SwipeArea } from "@styles";
 import { CommonBtn } from "@common_component";
 import { Flashcard } from "../components/flashcard.slint";
 import { FlashcardAppLogic } from "../flashcard_app_logic.slint";
@@ -28,21 +28,42 @@ export component StudySessionView inherits Rectangle {
                 }
 
                 // Flashcard bound to the current card in the active stack.
+                // SwipeArea gives the Rectangle's bounds to its TouchArea and
+                // forwards the HorizontalLayout below as its @children, so
+                // swipe gestures over the card area trigger navigation.
                 Rectangle {
                     // width: 100%;
                     // preferred-height: 200px;      // no effect on layout
-                    HorizontalLayout {
-                        alignment: center;
-                        session-card := Flashcard {
-                            width: min(root.width - 32px, Tokens.size-flashcard-full-view);
-                            data: FlashcardAppLogic.flashcard-list[FlashcardAppLogic.selected-stack-index].flashcards[root.current-card-index];
+                    SwipeArea {
+                        swiped-left => {
+                            if (root.current-card-index < FlashcardAppLogic.flashcard-list[FlashcardAppLogic.selected-stack-index].flashcards.length - 1) {
+                                root.current-card-index = root.current-card-index + 1;
+                            }
+                            session-card.show-back = false;
+                        }
+                        swiped-right => {
+                            if (root.current-card-index > 0) {
+                                root.current-card-index = root.current-card-index - 1;
+                            }
+                            session-card.show-back = false;
+                        }
+                        swiped-down => {
+                            FlashcardAppLogic.study-session-active = false;
+                        }
 
-                            // Whenever the known status changes, update model data.
-                        changed known => {
-                                FlashcardAppLogic.known-changed(
-                                    FlashcardAppLogic.selected-stack-index,
-                                    root.current-card-index,
-                                    self.known);
+                        HorizontalLayout {
+                            alignment: center;
+                            session-card := Flashcard {
+                                width: min(root.width - 32px, Tokens.size-flashcard-full-view);
+                                data: FlashcardAppLogic.flashcard-list[FlashcardAppLogic.selected-stack-index].flashcards[root.current-card-index];
+
+                                // Whenever the known status changes, update model data.
+                            changed known => {
+                                    FlashcardAppLogic.known-changed(
+                                        FlashcardAppLogic.selected-stack-index,
+                                        root.current-card-index,
+                                        self.known);
+                                }
                             }
                         }
                     }
