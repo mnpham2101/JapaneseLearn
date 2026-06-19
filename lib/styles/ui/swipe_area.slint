@@ -1,0 +1,42 @@
+// Reusable swipe-gesture wrapper. Sized to fill its parent (no children, no
+// explicit size declared on the root — see .claude/rules/slint-position-layout.md).
+// Wrap any content via @children, e.g. wrapping a Flashcard so it can still
+// be tapped to flip while also responding to swipe gestures.
+export component SwipeArea {
+    in property <length> swipe-threshold: 50px;
+
+    callback swiped-left();
+    callback swiped-right();
+    callback swiped-down();
+
+    property <length> delta-x;
+    property <length> delta-y;
+
+    // Declared before @children so child content's own TouchAreas (e.g. a
+    // Flashcard's tap-to-flip TouchArea) are drawn on top and still receive
+    // taps; this TouchArea only reacts to drags that exceed swipe-threshold.
+    TouchArea {
+        pointer-event(event) => {
+            if (event.kind == PointerEventKind.up) {
+                delta-x = self.mouse-x - self.pressed-x;
+                delta-y = self.mouse-y - self.pressed-y;
+
+                if (abs(delta-x) >= abs(delta-y)) {
+                    if (abs(delta-x) > swipe-threshold) {
+                        if (delta-x < 0px) {
+                            swiped-left();
+                        } else {
+                            swiped-right();
+                        }
+                    }
+                } else {
+                    if (delta-y > swipe-threshold) {
+                        swiped-down();
+                    }
+                }
+            }
+        }
+    }
+
+    @children
+}
