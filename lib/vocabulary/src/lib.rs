@@ -630,6 +630,40 @@ where
                     vocab_logic.set_active_view(1);
                 }
             }
+
+            // Dispatch the same lessons through the Sentence request — additive,
+            // does not affect the Flashcard branch's notification or tab switch.
+            let sentence_output = ExerciseGeneratorFor::<VocabularyLesson>::generate(
+                &service,
+                ExerciseRequest::Sentence,
+                &lessons,
+            );
+
+            if let Some(ExerciseOutput::Sentence(stacks)) = sentence_output {
+                let slint_sentence_stacks: Vec<flashcard::flashcard::FlashcardStackModel> = stacks
+                    .iter()
+                    .map(|stack| flashcard::flashcard::FlashcardStackModel {
+                        stackname: stack.name.clone().into(),
+                        flashcards: slint::ModelRc::new(slint::VecModel::from(
+                            stack
+                                .cards
+                                .iter()
+                                .map(|card| flashcard::flashcard::FlashcardModel {
+                                    jap_obj: card.front.clone().into(),
+                                    explanation: card.back.clone().into(),
+                                    known: card.known,
+                                    is_kanji: card.is_kanji,
+                                })
+                                .collect::<Vec<_>>(),
+                        )),
+                    })
+                    .collect();
+
+                flashcard_logic.set_sentence_stack_list(slint::ModelRc::new(
+                    slint::VecModel::from(slint_sentence_stacks),
+                ));
+                ::flashcard::save_sentence_list(&ui);
+            }
         });
     }
 }
