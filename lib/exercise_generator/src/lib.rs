@@ -2,6 +2,7 @@
 
 pub mod flashcard_transformer;
 pub mod models;
+pub mod sentence_transformer;
 pub mod service;
 pub mod tense_type;
 pub mod transformer;

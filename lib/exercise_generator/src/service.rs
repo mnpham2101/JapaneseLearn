@@ -2,6 +2,7 @@
 
 use crate::flashcard_transformer::FlashcardExerciseTransformer;
 use crate::models::VocabularyLesson;
+use crate::sentence_transformer::SentenceExerciseTransformer;
 use crate::transformer::{ExerciseOutput, ExerciseRequest, Transformer};
 
 /// Dispatcher trait — implemented once per source type S.
@@ -27,6 +28,9 @@ impl ExerciseGeneratorFor<VocabularyLesson> for ExerciseGeneratorService {
         match request {
             ExerciseRequest::Flashcard => Some(ExerciseOutput::Flashcard(
                 FlashcardExerciseTransformer.transform(source),
+            )),
+            ExerciseRequest::Sentence => Some(ExerciseOutput::Sentence(
+                SentenceExerciseTransformer.transform(source),
             )),
             // ExerciseRequest::Matching => Some(ExerciseOutput::Matching(
             //     MatchingExerciseTransformer.transform(source),

@@ -21,6 +21,7 @@ pub trait Transformer<S, T> {
 #[non_exhaustive]
 pub enum ExerciseRequest {
     Flashcard,
+    Sentence,
     // Matching,    // add when MatchingExerciseTransformer is implemented
     // FillBlank,   // add when FillBlankExerciseTransformer is implemented
 }
@@ -31,5 +32,6 @@ pub enum ExerciseRequest {
 /// The calling libA pattern-matches on this to extract the concrete type it needs.
 pub enum ExerciseOutput {
     Flashcard(Vec<crate::models::FlashcardStackData>),
+    Sentence(Vec<crate::models::FlashcardStackData>),
     // Matching(Vec<crate::models::MatchingSet>),   // add alongside the request variant
 }
