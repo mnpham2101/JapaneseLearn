@@ -5,6 +5,11 @@
 // - Generating flashcards names only newly created stacks (not pre-existing ones) in
 //   generation-notification, and switches active-view to the Exercise tab (1)
 // - Regenerating with no new lessons produces no notification and does not change active-view
+//
+// # [Task 8.V.13]:
+// - Generating exercises from a word with a tense entry and an example sentence produces,
+//   end-to-end: a spelling flashcard + a tense-derived flashcard in flashcard-list, and a
+//   single sentence flashcard (front = sentence, back = meaning) in sentence-stack-list
 
 use std::cell::Cell;
 
@@ -29,6 +34,7 @@ fn init_backend() {
 fn cleanup_artifacts() {
     let _ = std::fs::remove_file("data/stacks.json");
     let _ = std::fs::remove_file("data/vocabulary.json");
+    let _ = std::fs::remove_file("data/sentences.json");
 }
 
 fn setup() -> VocabularyExerciseTestWindow {
@@ -130,6 +136,84 @@ fn generate_exercises_names_only_new_stack_among_existing() {
         "notification should not re-name the pre-existing stack 'Existing Lesson', got: {notification}"
     );
     assert_eq!(vocab_logic.get_active_view(), 1);
+
+    cleanup_artifacts();
+}
+
+/// Covers: Task 8.V.13 — generating exercises from a word with a tense entry and an
+/// example sentence produces a tense-derived flashcard in flashcard-list and a sentence
+/// flashcard in sentence-stack-list, end-to-end through invoke_generate_exercises_clicked()
+#[test]
+fn generate_exercises_creates_tense_and_sentence_cards() {
+    let window = setup();
+    let vocab_logic = window.global::<VocabularyAppLogic>();
+    let flashcard_logic = window.global::<flashcard::flashcard::FlashcardAppLogic>();
+
+    vocab_logic.invoke_lesson_create_confirmed("Test Lesson".into());
+    vocab_logic.invoke_word_add_confirmed(
+        0,
+        "たべる".into(),
+        "".into(),
+        "to eat".into(),
+        "verb".into(),
+    );
+    vocab_logic.invoke_word_tense_add_confirmed(0, 0, "past-formal".into(), "たべました".into());
+    vocab_logic.invoke_word_example_add_confirmed(
+        0,
+        0,
+        "おいしいです。".into(),
+        "It is delicious.".into(),
+    );
+
+    vocab_logic.invoke_generate_exercises_clicked();
+
+    // --- flashcard-list: spelling card + tense-derived card ---
+    let flashcard_list = flashcard_logic.get_flashcard_list();
+    let stack = (0..flashcard_list.row_count())
+        .map(|i| flashcard_list.row_data(i).unwrap())
+        .find(|s| s.stackname == "Test Lesson")
+        .expect("expected a 'Test Lesson' stack in flashcard-list");
+
+    let cards: Vec<_> = (0..stack.flashcards.row_count())
+        .map(|i| stack.flashcards.row_data(i).unwrap())
+        .collect();
+
+    let spelling_card = cards
+        .iter()
+        .find(|c| c.jap_obj == "たべる")
+        .expect("expected a spelling card with jap_obj == 'たべる'");
+    assert_eq!(spelling_card.explanation, "to eat");
+
+    let tense_card = cards
+        .iter()
+        .find(|c| c.jap_obj == "たべました")
+        .expect("expected a tense-derived card with jap_obj == 'たべました'");
+    let tense_explanation = tense_card.explanation.to_string();
+    assert!(
+        tense_explanation.contains("to eat"),
+        "tense card explanation should contain 'to eat', got: {tense_explanation}"
+    );
+    assert!(
+        tense_explanation.contains("verb"),
+        "tense card explanation should contain 'verb', got: {tense_explanation}"
+    );
+    assert!(
+        tense_explanation.contains("past-formal")
+            || tense_explanation.to_lowercase().contains("past"),
+        "tense card explanation should reference the 'past-formal' tense, got: {tense_explanation}"
+    );
+
+    // --- sentence-stack-list: exactly one sentence card ---
+    let sentence_stack_list = flashcard_logic.get_sentence_stack_list();
+    let sentence_stack = (0..sentence_stack_list.row_count())
+        .map(|i| sentence_stack_list.row_data(i).unwrap())
+        .find(|s| s.stackname == "Test Lesson")
+        .expect("expected a 'Test Lesson' stack in sentence-stack-list");
+
+    assert_eq!(sentence_stack.flashcards.row_count(), 1);
+    let sentence_card = sentence_stack.flashcards.row_data(0).unwrap();
+    assert_eq!(sentence_card.jap_obj, "おいしいです。");
+    assert_eq!(sentence_card.explanation, "It is delicious.");
 
     cleanup_artifacts();
 }
