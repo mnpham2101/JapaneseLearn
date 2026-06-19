@@ -1,4 +1,4 @@
-use crate::{LessonData, TenseData, WordData};
+use crate::{ExampleData, LessonData, TenseData, WordData};
 
 /// Parse a vocabulary markdown string into a list of [`LessonData`].
 ///
@@ -106,7 +106,14 @@ pub(crate) fn parse_vocabulary(source: &str) -> Vec<LessonData> {
                         }
                     }
                     "example" if !value.is_empty() => {
-                        word.examples.push(value);
+                        // NOTE: sentence/meaning split is not yet implemented here —
+                        // that parsing logic is Task 8.V.7. For now the whole value
+                        // is stored as the sentence with an empty meaning, purely to
+                        // keep this call site compiling against the new ExampleData shape.
+                        word.examples.push(ExampleData {
+                            sentence: value,
+                            meaning: String::new(),
+                        });
                     }
                     _ => {}
                 }
@@ -142,7 +149,12 @@ pub(crate) fn serialize_vocabulary(lessons: &[LessonData]) -> String {
                 out.push_str(&format!("tense: {} : {}\n", tense.name, tense.conjugation));
             }
             for example in &word.examples {
-                out.push_str(&format!("example: {}\n", example));
+                // NOTE: placeholder format — Task 8.V.7 will finalize the
+                // sentence/meaning serialization format to match the parser.
+                out.push_str(&format!(
+                    "example: {} : {}\n",
+                    example.sentence, example.meaning
+                ));
             }
             out.push('\n');
         }
@@ -191,8 +203,8 @@ mod tests {
         assert_eq!(word.tenses[1].name, "negative");
         assert_eq!(word.tenses[1].conjugation, "たべません");
         assert_eq!(word.examples.len(), 2);
-        assert_eq!(word.examples[0], "犬が走る。");
-        assert_eq!(word.examples[1], "その犬は大きい。");
+        assert_eq!(word.examples[0].sentence, "犬が走る。");
+        assert_eq!(word.examples[1].sentence, "その犬は大きい。");
     }
 
     /// Reproduces the literal bundled-data pattern from `extended-vocab.md`,

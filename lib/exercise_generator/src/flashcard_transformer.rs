@@ -42,7 +42,7 @@ fn make_cards(word: &VocabularyWord) -> Vec<FlashcardCardData> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::models::{TenseEntry, VocabularyLesson, VocabularyWord};
+    use crate::models::{ExampleEntry, TenseEntry, VocabularyLesson, VocabularyWord};
 
     fn word(spelling: &str, kanji: Option<&str>, meaning: &str) -> VocabularyWord {
         VocabularyWord {
@@ -54,7 +54,10 @@ mod tests {
                 name: "past".into(),
                 conjugation: "食べました".into(),
             }],
-            examples: vec!["犬が好きです".into()],
+            examples: vec![ExampleEntry {
+                sentence: "犬が好きです".into(),
+                meaning: "I like dogs".into(),
+            }],
         }
     }
 

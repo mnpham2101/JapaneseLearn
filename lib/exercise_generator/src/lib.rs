@@ -7,7 +7,8 @@ pub mod tense_type;
 pub mod transformer;
 
 pub use models::{
-    FlashcardCardData, FlashcardStackData, TenseEntry, VocabularyLesson, VocabularyWord,
+    ExampleEntry, FlashcardCardData, FlashcardStackData, TenseEntry, VocabularyLesson,
+    VocabularyWord,
 };
 pub use service::{ExerciseGeneratorFor, ExerciseGeneratorService};
 pub use tense_type::TenseType;

@@ -3,13 +3,18 @@ export struct TenseEntryModel {
     conjugation: string,
 }
 
+export struct ExampleData {
+    sentence: string,
+    meaning: string,
+}
+
 export struct VocabularyWordModel {
     spelling: string,
     kanji: string,
     meaning: string,
     word-type: string,
     tenses: [TenseEntryModel],
-    examples: [string],
+    examples: [ExampleData],
 }
 
 export struct VocabularyLessonModel {
@@ -37,7 +42,7 @@ export global VocabularyAppLogic {
 
     callback word-tense-add-confirmed(lesson-idx: int, word-idx: int, tense-name: string, conjugation: string);
     callback word-tense-delete-confirmed(lesson-idx: int, word-idx: int, tense-idx: int);
-    callback word-example-add-confirmed(lesson-idx: int, word-idx: int, example: string);
+    callback word-example-add-confirmed(lesson-idx: int, word-idx: int, sentence: string, meaning: string);
     callback word-example-delete-confirmed(lesson-idx: int, word-idx: int, example-idx: int);
 
     callback import-vocabulary-clicked();

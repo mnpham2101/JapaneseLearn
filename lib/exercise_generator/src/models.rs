@@ -15,7 +15,7 @@ pub struct VocabularyWord {
     pub meaning: String,
     pub word_type: Option<String>, // noun, verb, adjective, …
     pub tenses: Vec<TenseEntry>,
-    pub examples: Vec<String>,
+    pub examples: Vec<ExampleEntry>,
 }
 
 /// A conjugation tense entry (e.g. name = "past", conjugation = "食べました").
@@ -23,6 +23,14 @@ pub struct VocabularyWord {
 pub struct TenseEntry {
     pub name: String,
     pub conjugation: String,
+}
+
+/// An example sentence with its meaning (e.g. sentence = "犬が好きです",
+/// meaning = "I like dogs").
+#[derive(Debug, Clone)]
+pub struct ExampleEntry {
+    pub sentence: String,
+    pub meaning: String,
 }
 
 // ─── Target types ────────────────────────────────────────────────────────────

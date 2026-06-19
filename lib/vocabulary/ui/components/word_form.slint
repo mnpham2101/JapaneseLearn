@@ -1,6 +1,6 @@
 import { CommonBtn } from "@common_component";
 import { Tokens } from "@styles";
-import { TenseEntryModel, VocabularyAppLogic } from "../vocabulary_app_logic.slint";
+import { ExampleData, TenseEntryModel, VocabularyAppLogic } from "../vocabulary_app_logic.slint";
 
 // Inline form for adding a new vocabulary word to a lesson.
 // Caller provides lesson-idx and word-idx so the confirmed callbacks carry the correct indices.
@@ -11,7 +11,7 @@ export component WordForm inherits VerticalLayout {
     in property <int> lesson-idx: -1;
     in property <int> word-idx: -1;
     in property <[TenseEntryModel]> tense-data;
-    in property <[string]> example-data;
+    in property <[ExampleData]> example-data;
 
     callback word-add-confirmed(lesson-idx: int, spelling: string, kanji: string, meaning: string, word-type: string);
     callback word-cancel;
@@ -306,9 +306,17 @@ export component WordForm inherits VerticalLayout {
 
         Text {
             horizontal-stretch: 1;
-            text: example;
+            text: example.sentence;
             font-size: Tokens.font-size-body;
             color: Tokens.text-primary;
+            vertical-alignment: center;
+        }
+
+        Text {
+            horizontal-stretch: 1;
+            text: example.meaning;
+            font-size: Tokens.font-size-body;
+            color: Tokens.text-secondary;
             vertical-alignment: center;
         }
 
@@ -366,6 +374,31 @@ export component WordForm inherits VerticalLayout {
                 }
             }
 
+            example-meaning-field := Rectangle {
+                height: 36px;
+                border-width: Tokens.border-width;
+                border-color: Tokens.border-color;
+                border-radius: Tokens.border-radius;
+                background: Tokens.card-field-background;
+
+                example-meaning-input := TextInput {
+                    font-size: Tokens.font-size-body;
+                    color: Tokens.text-primary;
+                    vertical-alignment: center;
+                    width: parent.width - 12px;
+                    x: Tokens.spacing-xs;
+                }
+
+                Text {
+                    visible: example-meaning-input.text == "";
+                    text: "Meaning";
+                    font-size: Tokens.font-size-body;
+                    color: Tokens.text-placeholder;
+                    vertical-alignment: center;
+                    x: Tokens.spacing-xs;
+                }
+            }
+
             HorizontalLayout {
                 spacing: Tokens.spacing-sm;
                 alignment: end;
@@ -380,9 +413,11 @@ export component WordForm inherits VerticalLayout {
                         VocabularyAppLogic.word-example-add-confirmed(
                             root.lesson-idx,
                             root.word-idx,
-                            example-input.text
+                            example-input.text,
+                            example-meaning-input.text
                         );
                         example-input.text = "";
+                        example-meaning-input.text = "";
                         add-example-area.show-add-example = false;
                     }
                 }
@@ -394,6 +429,7 @@ export component WordForm inherits VerticalLayout {
                     accessibilityLabel: "Cancel add example";
                     clicked => {
                         example-input.text = "";
+                        example-meaning-input.text = "";
                         add-example-area.show-add-example = false;
                     }
                 }

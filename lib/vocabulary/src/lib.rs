@@ -7,8 +7,8 @@ pub mod vocabulary {
 pub mod vocabulary_markdown_io;
 
 use exercise_generator::{
-    ExerciseGeneratorFor, ExerciseGeneratorService, ExerciseOutput, ExerciseRequest, TenseEntry,
-    VocabularyLesson, VocabularyWord,
+    ExampleEntry, ExerciseGeneratorFor, ExerciseGeneratorService, ExerciseOutput, ExerciseRequest,
+    TenseEntry, VocabularyLesson, VocabularyWord,
 };
 use flashcard::flashcard::FlashcardAppLogic;
 use vocabulary::VocabularyAppLogic;
@@ -22,13 +22,19 @@ pub(crate) struct TenseData {
 }
 
 #[derive(serde::Serialize, serde::Deserialize, Clone, Default)]
+pub(crate) struct ExampleData {
+    pub(crate) sentence: String,
+    pub(crate) meaning: String,
+}
+
+#[derive(serde::Serialize, serde::Deserialize, Clone, Default)]
 pub(crate) struct WordData {
     pub(crate) spelling: String,
     pub(crate) kanji: String,
     pub(crate) meaning: String,
     pub(crate) word_type: String,
     pub(crate) tenses: Vec<TenseData>,
-    pub(crate) examples: Vec<String>,
+    pub(crate) examples: Vec<ExampleData>,
 }
 
 #[derive(serde::Serialize, serde::Deserialize, Clone, Default)]
@@ -61,7 +67,14 @@ fn slint_to_lessons(logic: &VocabularyAppLogic) -> Vec<LessonData> {
                             conjugation: t.conjugation.to_string(),
                         })
                         .collect(),
-                    examples: word.examples.iter().map(|e| e.to_string()).collect(),
+                    examples: word
+                        .examples
+                        .iter()
+                        .map(|e| ExampleData {
+                            sentence: e.sentence.to_string(),
+                            meaning: e.meaning.to_string(),
+                        })
+                        .collect(),
                 })
                 .collect(),
         })
@@ -94,7 +107,10 @@ fn lessons_to_slint(data: &[LessonData]) -> slint::ModelRc<vocabulary::Vocabular
                             examples: slint::ModelRc::new(slint::VecModel::from(
                                 word.examples
                                     .iter()
-                                    .map(|e| slint::SharedString::from(e.as_str()))
+                                    .map(|e| vocabulary::ExampleData {
+                                        sentence: e.sentence.clone().into(),
+                                        meaning: e.meaning.clone().into(),
+                                    })
                                     .collect::<Vec<_>>(),
                             )),
                         })
@@ -384,7 +400,7 @@ where
     // ── word-example-add-confirmed ────────────────────────────────────────────
     {
         let ui_weak = ui.as_weak();
-        logic.on_word_example_add_confirmed(move |lesson_idx, word_idx, example| {
+        logic.on_word_example_add_confirmed(move |lesson_idx, word_idx, sentence, meaning| {
             let ui = ui_weak.unwrap();
             let logic = ui.global::<VocabularyAppLogic>();
             if lesson_idx < 0 || word_idx < 0 {
@@ -395,8 +411,8 @@ where
             if let Some(lesson) = lessons.get_mut(lesson_idx as usize) {
                 let mut words: Vec<vocabulary::VocabularyWordModel> = lesson.words.iter().collect();
                 if let Some(word) = words.get_mut(word_idx as usize) {
-                    let mut examples: Vec<slint::SharedString> = word.examples.iter().collect();
-                    examples.push(example);
+                    let mut examples: Vec<vocabulary::ExampleData> = word.examples.iter().collect();
+                    examples.push(vocabulary::ExampleData { sentence, meaning });
                     word.examples = slint::ModelRc::new(slint::VecModel::from(examples));
                 }
                 lesson.words = slint::ModelRc::new(slint::VecModel::from(words));
@@ -420,7 +436,7 @@ where
             if let Some(lesson) = lessons.get_mut(lesson_idx as usize) {
                 let mut words: Vec<vocabulary::VocabularyWordModel> = lesson.words.iter().collect();
                 if let Some(word) = words.get_mut(word_idx as usize) {
-                    let mut examples: Vec<slint::SharedString> = word.examples.iter().collect();
+                    let mut examples: Vec<vocabulary::ExampleData> = word.examples.iter().collect();
                     if (example_idx as usize) < examples.len() {
                         examples.remove(example_idx as usize);
                     }
@@ -547,7 +563,14 @@ where
                                     conjugation: t.conjugation.to_string(),
                                 })
                                 .collect(),
-                            examples: word.examples.iter().map(|e| e.to_string()).collect(),
+                            examples: word
+                                .examples
+                                .iter()
+                                .map(|e| ExampleEntry {
+                                    sentence: e.sentence.to_string(),
+                                    meaning: e.meaning.to_string(),
+                                })
+                                .collect(),
                         })
                         .collect(),
                 })
