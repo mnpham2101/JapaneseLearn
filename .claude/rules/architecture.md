@@ -75,11 +75,12 @@ Cargo.toml
 | `lib/flashcard` | libA | Flashcard CRUD UI, stack management, session persistence |
 | `lib/persistent_data` | libB | Local file import/export (markdown parsing, file dialogs) |
 | `lib/styles` | libC | Design tokens, color palette, typography, spacing, animation curves |
-| `lib/analytics` | libA | Study-session logging, statistics computation, chart Slint components |
+| `lib/analytics` | libA | `AnalyticsPage` Slint views only — calendar grid + known-vs-total chart as proportional `Rectangle`s, `sessions.json` log; computation delegated to `lib/study_analytic` |
+| `lib/study_analytic` | libB | Pure Rust study-progress computation — `VocabularyStudyAnalytic` (known-vs-total, study-days, days-until-target-date); no Slint, no UI, consumed only by `lib/analytics`'s `init()` |
 | `lib/grammar` | libA | Grammar lesson models, exercise UI (matching, reconstruct, fill-blank), exercise engine |
 | `lib/audio` | libB | TTS and audio playback — OS voice engine on desktop, Web Speech API on WASM |
 | `lib/vocabulary` | libA | Vocabulary lesson CRUD UI, lesson persistence to `vocabulary.json`; word bank and sentence bank are internal data structures (not visible UI) used by exercise generation |
-| `lib/exercise_generator` | libD | Transformer service: converts `VocabularyLesson` data into exercise datasets (`FlashcardStackData`, future output types); databases are decoupled — conversion is on-demand only |
+| `lib/exercise_generator` | libD | Transformer service: converts `VocabularyLesson` data into exercise datasets — `FlashcardStackData` (word + tense-derived cards) and sentence-card stacks (front = sentence, back = meaning, persisted to `sentences.json`); databases are decoupled — conversion is on-demand only |
 
 ## Platform-Specific Notes
 
