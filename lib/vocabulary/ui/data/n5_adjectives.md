@@ -8,8 +8,8 @@ tense: present = おおきい
 tense: past = おおきかった
 tense: negative = おおきくない
 tense: negative past = おおきくなかった
-example: これは おおきい いぬです。(This is a big dog.)
-example: あの たてものは おおきいです。(That building is large.)
+example: これは おおきい いぬです。 : This is a big dog.
+example: あの たてものは おおきいです。 : That building is large.
 
 ### ちいさい
 kanji: 小さい
@@ -19,7 +19,7 @@ tense: present = ちいさい
 tense: past = ちいさかった
 tense: negative = ちいさくない
 tense: negative past = ちいさくなかった
-example: ちいさい ねこが います。(There is a small cat.)
+example: ちいさい ねこが います。 : There is a small cat.
 
 ### あたらしい
 kanji: 新しい
@@ -29,7 +29,7 @@ tense: present = あたらしい
 tense: past = あたらしかった
 tense: negative = あたらしくない
 tense: negative past = あたらしくなかった
-example: あたらしい くるまを かいました。(I bought a new car.)
+example: あたらしい くるまを かいました。 : I bought a new car.
 
 ### ふるい
 kanji: 古い
@@ -39,7 +39,7 @@ tense: present = ふるい
 tense: past = ふるかった
 tense: negative = ふるくない
 tense: negative past = ふるくなかった
-example: この ほんは ふるいです。(This book is old.)
+example: この ほんは ふるいです。 : This book is old.
 
 ### たかい
 kanji: 高い
@@ -49,8 +49,8 @@ tense: present = たかい
 tense: past = たかかった
 tense: negative = たかくない
 tense: negative past = たかくなかった
-example: この レストランは たかいです。(This restaurant is expensive.)
-example: やまが たかい。(The mountain is tall.)
+example: この レストランは たかいです。 : This restaurant is expensive.
+example: やまが たかい。 : The mountain is tall.
 
 ### やすい
 kanji: 安い
@@ -60,7 +60,7 @@ tense: present = やすい
 tense: past = やすかった
 tense: negative = やすくない
 tense: negative past = やすくなかった
-example: このみせは やすいです。(This shop is cheap.)
+example: このみせは やすいです。 : This shop is cheap.
 
 ###
 kanji:
@@ -96,8 +96,8 @@ tense: present = いい / よい
 tense: past = よかった
 tense: negative = よくない
 tense: negative past = よくなかった
-example: きょうは いい てんきです。(The weather is good today.)
-example: よかったです。(It was good.)
+example: きょうは いい てんきです。 : The weather is good today.
+example: よかったです。 : It was good.
 
 ### わるい
 kanji: 悪い
@@ -107,7 +107,7 @@ tense: present = わるい
 tense: past = わるかった
 tense: negative = わるくない
 tense: negative past = わるくなかった
-example: きょうは てんきが わるいです。(The weather is bad today.)
+example: きょうは てんきが わるいです。 : The weather is bad today.
 
 ### おもい
 kanji: おもい
@@ -130,8 +130,8 @@ tense: present = きれいです
 tense: past = きれいでした
 tense: negative = きれいじゃありません
 tense: negative past = きれいじゃありませんでした
-example: はなが きれいです。(The flowers are beautiful.)
-example: へやを きれいに します。(I make the room clean.)
+example: はなが きれいです。 : The flowers are beautiful.
+example: へやを きれいに します。 : I make the room clean.
 
 ### しずか
 kanji: 静か
@@ -141,7 +141,7 @@ tense: present = しずかです
 tense: past = しずかでした
 tense: negative = しずかじゃありません
 tense: negative past = しずかじゃありませんでした
-example: としょかんは しずかです。(The library is quiet.)
+example: としょかんは しずかです。 : The library is quiet.
 
 ### にぎやか
 kanji: 賑やか
@@ -151,7 +151,7 @@ tense: present = にぎやかです
 tense: past = にぎやかでした
 tense: negative = にぎやかじゃありません
 tense: negative past = にぎやかじゃありませんでした
-example: まちが にぎやかです。(The town is lively.)
+example: まちが にぎやかです。 : The town is lively.
 
 ### べんり
 kanji: 便利
@@ -161,7 +161,7 @@ tense: present = べんりです
 tense: past = べんりでした
 tense: negative = べんりじゃありません
 tense: negative past = べんりじゃありませんでした
-example: このちかてつは べんりです。(This subway is convenient.)
+example: このちかてつは べんりです。 : This subway is convenient.
 
 ###
 kanji:
@@ -408,7 +408,7 @@ tense: present = あつい
 tense: past = あつかった
 tense: negative = あつくない
 tense: negative past = あつくなかった
-example: きょうは あついです。(It is hot today.)
+example: きょうは あついです。 : It is hot today.
 
 ### さむい
 kanji: 寒い
@@ -418,7 +418,7 @@ tense: present = さむい
 tense: past = さむかった
 tense: negative = さむくない
 tense: negative past = さむくなかった
-example: ふゆは さむいです。(Winter is cold.)
+example: ふゆは さむいです。 : Winter is cold.
 
 ### つめたい
 kanji: 冷たい
@@ -428,7 +428,7 @@ tense: present = つめたい
 tense: past = つめたかった
 tense: negative = つめたくない
 tense: negative past = つめたくなかった
-example: みずが つめたいです。(The water is cold.)
+example: みずが つめたいです。 : The water is cold.
 
 ### からい
 kanji: 辛い
@@ -438,7 +438,7 @@ tense: present = からい
 tense: past = からかった
 tense: negative = からくない
 tense: negative past = からくなかった
-example: このりょうりは からいです。(This dish is spicy.)
+example: このりょうりは からいです。 : This dish is spicy.
 
 ## N5 Adjectives — reference/like/dislike/want to have/want to do
 ### すき
@@ -449,8 +449,8 @@ tense: present = すきです
 tense: past = すきでした
 tense: negative = すきじゃありません
 tense: negative past = すきじゃありませんでした
-example: にほんごが すきです。(I like Japanese.)
-example: すしが すきです。(I like sushi.)
+example: にほんごが すきです。 : I like Japanese.
+example: すしが すきです。 : I like sushi.
 exmaple:　かれは　しつれいだ　から、わたしは　かれが　すきじゃないです。: Since he is rude, I don't like him.
 
 ### きらい
@@ -461,7 +461,7 @@ tense: present = きらいです
 tense: past = きらいでした
 tense: negative = きらいじゃありません
 tense: negative past = きらいじゃありませんでした
-example: からいたべものが きらいです。(I dislike spicy food.)
+example: からいたべものが きらいです。 : I dislike spicy food.
 
 ### とくい
 kanji: 得意
@@ -484,7 +484,7 @@ tense: present = じょうずです
 tense: past = じょうずでした
 tense: negative = じょうずじゃありません
 tense: negative past = じょうずじゃありませんでした
-example: かれは えいごが じょうずです。(He is good at English.)
+example: かれは えいごが じょうずです。 : He is good at English.
 
 ### へた
 kanji: 下手
@@ -494,7 +494,7 @@ tense: present = へたです
 tense: past = へたでした
 tense: negative = へたじゃありません
 tense: negative past = へたじゃありませんでした
-example: わたしは りょうりが へたです。(I am bad at cooking.)
+example: わたしは りょうりが へたです。 : I am bad at cooking.
 
 ###　にがて
 kanji:　苦手

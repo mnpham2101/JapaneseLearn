@@ -9,7 +9,10 @@
         "word_type": "noun",
         "tenses": [],
         "examples": [
-          "わたしは がくせいです。(I am a student.)"
+          {
+            "sentence": "わたしは がくせいです。",
+            "meaning": "I am a student."
+          }
         ]
       },
       {
@@ -19,7 +22,10 @@
         "word_type": "noun",
         "tenses": [],
         "examples": [
-          "せんせいは やさしいです。(The teacher is kind.)"
+          {
+            "sentence": "せんせいは やさしいです。",
+            "meaning": "The teacher is kind."
+          }
         ]
       },
       {
@@ -29,7 +35,10 @@
         "word_type": "noun",
         "tenses": [],
         "examples": [
-          "ともだちと えいがを みます。(I watch a movie with my friend.)"
+          {
+            "sentence": "ともだちと えいがを みます。",
+            "meaning": "I watch a movie with my friend."
+          }
         ]
       },
       {
@@ -39,7 +48,10 @@
         "word_type": "noun",
         "tenses": [],
         "examples": [
-          "かぞくと たべます。(I eat with my family.)"
+          {
+            "sentence": "かぞくと たべます。",
+            "meaning": "I eat with my family."
+          }
         ]
       },
       {
@@ -49,7 +61,10 @@
         "word_type": "noun",
         "tenses": [],
         "examples": [
-          "あのひとは だれですか。(Who is that person?)"
+          {
+            "sentence": "あのひとは だれですか。",
+            "meaning": "Who is that person?"
+          }
         ]
       }
     ]
@@ -64,8 +79,14 @@
         "word_type": "noun",
         "tenses": [],
         "examples": [
-          "ほんを よみます。(I read a book.)",
-          "つくえの うえに ほんが あります。(There is a book on the desk.)"
+          {
+            "sentence": "ほんを よみます。",
+            "meaning": "I read a book."
+          },
+          {
+            "sentence": "つくえの うえに ほんが あります。",
+            "meaning": "There is a book on the desk."
+          }
         ]
       },
       {
@@ -75,7 +96,10 @@
         "word_type": "noun",
         "tenses": [],
         "examples": [
-          "くるまで いきます。(I go by car.)"
+          {
+            "sentence": "くるまで いきます。",
+            "meaning": "I go by car."
+          }
         ]
       },
       {
@@ -85,7 +109,10 @@
         "word_type": "noun",
         "tenses": [],
         "examples": [
-          "でんわを かけます。(I make a phone call.)"
+          {
+            "sentence": "でんわを かけます。",
+            "meaning": "I make a phone call."
+          }
         ]
       },
       {
@@ -95,7 +122,10 @@
         "word_type": "noun",
         "tenses": [],
         "examples": [
-          "かばんの なかに ほんが あります。(There is a book in the bag.)"
+          {
+            "sentence": "かばんの なかに ほんが あります。",
+            "meaning": "There is a book in the bag."
+          }
         ]
       },
       {
@@ -105,7 +135,10 @@
         "word_type": "noun",
         "tenses": [],
         "examples": [
-          "めがねを かけます。(I wear glasses.)"
+          {
+            "sentence": "めがねを かけます。",
+            "meaning": "I wear glasses."
+          }
         ]
       },
       {
@@ -115,7 +148,10 @@
         "word_type": "noun",
         "tenses": [],
         "examples": [
-          "かみに かきます。(I write on paper.)"
+          {
+            "sentence": "かみに かきます。",
+            "meaning": "I write on paper."
+          }
         ]
       }
     ]
@@ -130,8 +166,14 @@
         "word_type": "noun",
         "tenses": [],
         "examples": [
-          "いえに かえります。(I return home.)",
-          "いえが おおきいです。(The house is big.)"
+          {
+            "sentence": "いえに かえります。",
+            "meaning": "I return home."
+          },
+          {
+            "sentence": "いえが おおきいです。",
+            "meaning": "The house is big."
+          }
         ]
       },
       {
@@ -141,7 +183,10 @@
         "word_type": "noun",
         "tenses": [],
         "examples": [
-          "がっこうに いきます。(I go to school.)"
+          {
+            "sentence": "がっこうに いきます。",
+            "meaning": "I go to school."
+          }
         ]
       },
       {
@@ -151,7 +196,10 @@
         "word_type": "noun",
         "tenses": [],
         "examples": [
-          "えきの まえに あります。(It is in front of the station.)"
+          {
+            "sentence": "えきの まえに あります。",
+            "meaning": "It is in front of the station."
+          }
         ]
       },
       {
@@ -161,7 +209,10 @@
         "word_type": "noun",
         "tenses": [],
         "examples": [
-          "みせで かいものを します。(I shop at the store.)"
+          {
+            "sentence": "みせで かいものを します。",
+            "meaning": "I shop at the store."
+          }
         ]
       },
       {
@@ -171,7 +222,10 @@
         "word_type": "noun",
         "tenses": [],
         "examples": [
-          "びょういんに いきます。(I go to the hospital.)"
+          {
+            "sentence": "びょういんに いきます。",
+            "meaning": "I go to the hospital."
+          }
         ]
       },
       {
@@ -181,7 +235,10 @@
         "word_type": "noun",
         "tenses": [],
         "examples": [
-          "としょかんで べんきょうします。(I study at the library.)"
+          {
+            "sentence": "としょかんで べんきょうします。",
+            "meaning": "I study at the library."
+          }
         ]
       }
     ]
@@ -196,7 +253,10 @@
         "word_type": "noun",
         "tenses": [],
         "examples": [
-          "みずを のみます。(I drink water.)"
+          {
+            "sentence": "みずを のみます。",
+            "meaning": "I drink water."
+          }
         ]
       },
       {
@@ -206,7 +266,10 @@
         "word_type": "noun",
         "tenses": [],
         "examples": [
-          "ごはんを たべます。(I eat a meal.)"
+          {
+            "sentence": "ごはんを たべます。",
+            "meaning": "I eat a meal."
+          }
         ]
       },
       {
@@ -216,7 +279,10 @@
         "word_type": "noun",
         "tenses": [],
         "examples": [
-          "やさいを たべます。(I eat vegetables.)"
+          {
+            "sentence": "やさいを たべます。",
+            "meaning": "I eat vegetables."
+          }
         ]
       },
       {
@@ -226,7 +292,10 @@
         "word_type": "noun",
         "tenses": [],
         "examples": [
-          "にくが すきです。(I like meat.)"
+          {
+            "sentence": "にくが すきです。",
+            "meaning": "I like meat."
+          }
         ]
       },
       {
@@ -236,7 +305,10 @@
         "word_type": "noun",
         "tenses": [],
         "examples": [
-          "さかなを たべます。(I eat fish.)"
+          {
+            "sentence": "さかなを たべます。",
+            "meaning": "I eat fish."
+          }
         ]
       }
     ]
@@ -251,7 +323,10 @@
         "word_type": "noun",
         "tenses": [],
         "examples": [
-          "きょうは もくようびです。(Today is Thursday.)"
+          {
+            "sentence": "きょうは もくようびです。",
+            "meaning": "Today is Thursday."
+          }
         ]
       },
       {
@@ -261,7 +336,10 @@
         "word_type": "noun",
         "tenses": [],
         "examples": [
-          "あしたも がっこうに いきます。(I will go to school tomorrow too.)"
+          {
+            "sentence": "あしたも がっこうに いきます。",
+            "meaning": "I will go to school tomorrow too."
+          }
         ]
       },
       {
@@ -271,7 +349,10 @@
         "word_type": "noun",
         "tenses": [],
         "examples": [
-          "きのうは てんきが わるかったです。(The weather was bad yesterday.)"
+          {
+            "sentence": "きのうは てんきが わるかったです。",
+            "meaning": "The weather was bad yesterday."
+          }
         ]
       },
       {
@@ -281,7 +362,10 @@
         "word_type": "noun",
         "tenses": [],
         "examples": [
-          "まいにち にほんごを べんきょうします。(I study Japanese every day.)"
+          {
+            "sentence": "まいにち にほんごを べんきょうします。",
+            "meaning": "I study Japanese every day."
+          }
         ]
       },
       {
@@ -291,7 +375,10 @@
         "word_type": "noun",
         "tenses": [],
         "examples": [
-          "いまは なんじですか。(What time is it now?)"
+          {
+            "sentence": "いまは なんじですか。",
+            "meaning": "What time is it now?"
+          }
         ]
       }
     ]
@@ -306,7 +393,10 @@
         "word_type": "noun",
         "tenses": [],
         "examples": [
-          "これは いくらですか。(How much is this?)"
+          {
+            "sentence": "これは いくらですか。",
+            "meaning": "How much is this?"
+          }
         ]
       },
       {
@@ -316,7 +406,10 @@
         "word_type": "noun",
         "tenses": [],
         "examples": [
-          "なんにんですか。(How many people are there?)"
+          {
+            "sentence": "なんにんですか。",
+            "meaning": "How many people are there?"
+          }
         ]
       }
     ]
@@ -331,7 +424,10 @@
         "word_type": "noun",
         "tenses": [],
         "examples": [
-          "きょうは いい てんきです。(The weather is good today.)"
+          {
+            "sentence": "きょうは いい てんきです。",
+            "meaning": "The weather is good today."
+          }
         ]
       },
       {
@@ -341,7 +437,10 @@
         "word_type": "noun",
         "tenses": [],
         "examples": [
-          "きょうは はれです。(It is sunny today.)"
+          {
+            "sentence": "きょうは はれです。",
+            "meaning": "It is sunny today."
+          }
         ]
       },
       {
@@ -351,7 +450,10 @@
         "word_type": "noun",
         "tenses": [],
         "examples": [
-          "あめが ふります。(It rains.)"
+          {
+            "sentence": "あめが ふります。",
+            "meaning": "It rains."
+          }
         ]
       },
       {
@@ -361,7 +463,10 @@
         "word_type": "noun",
         "tenses": [],
         "examples": [
-          "やまに のぼります。(I climb a mountain.)"
+          {
+            "sentence": "やまに のぼります。",
+            "meaning": "I climb a mountain."
+          }
         ]
       },
       {
@@ -371,7 +476,10 @@
         "word_type": "noun",
         "tenses": [],
         "examples": [
-          "うみで およぎます。(I swim in the sea.)"
+          {
+            "sentence": "うみで およぎます。",
+            "meaning": "I swim in the sea."
+          }
         ]
       }
     ]

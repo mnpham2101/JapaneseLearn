@@ -8,14 +8,32 @@
         "meaning": "big; large",
         "word_type": "adjective (i-adj)",
         "tenses": [
-          { "name": "present", "conjugation": "おおきい" },
-          { "name": "past", "conjugation": "おおきかった" },
-          { "name": "negative", "conjugation": "おおきくない" },
-          { "name": "negative past", "conjugation": "おおきくなかった" }
+          {
+            "name": "present",
+            "conjugation": "おおきい"
+          },
+          {
+            "name": "past",
+            "conjugation": "おおきかった"
+          },
+          {
+            "name": "negative",
+            "conjugation": "おおきくない"
+          },
+          {
+            "name": "negative past",
+            "conjugation": "おおきくなかった"
+          }
         ],
         "examples": [
-          "これは おおきい いぬです。(This is a big dog.)",
-          "あの たてものは おおきいです。(That building is large.)"
+          {
+            "sentence": "これは おおきい いぬです。",
+            "meaning": "This is a big dog."
+          },
+          {
+            "sentence": "あの たてものは おおきいです。",
+            "meaning": "That building is large."
+          }
         ]
       },
       {
@@ -24,13 +42,28 @@
         "meaning": "small; little",
         "word_type": "adjective (i-adj)",
         "tenses": [
-          { "name": "present", "conjugation": "ちいさい" },
-          { "name": "past", "conjugation": "ちいさかった" },
-          { "name": "negative", "conjugation": "ちいさくない" },
-          { "name": "negative past", "conjugation": "ちいさくなかった" }
+          {
+            "name": "present",
+            "conjugation": "ちいさい"
+          },
+          {
+            "name": "past",
+            "conjugation": "ちいさかった"
+          },
+          {
+            "name": "negative",
+            "conjugation": "ちいさくない"
+          },
+          {
+            "name": "negative past",
+            "conjugation": "ちいさくなかった"
+          }
         ],
         "examples": [
-          "ちいさい ねこが います。(There is a small cat.)"
+          {
+            "sentence": "ちいさい ねこが います。",
+            "meaning": "There is a small cat."
+          }
         ]
       },
       {
@@ -39,13 +72,28 @@
         "meaning": "new",
         "word_type": "adjective (i-adj)",
         "tenses": [
-          { "name": "present", "conjugation": "あたらしい" },
-          { "name": "past", "conjugation": "あたらしかった" },
-          { "name": "negative", "conjugation": "あたらしくない" },
-          { "name": "negative past", "conjugation": "あたらしくなかった" }
+          {
+            "name": "present",
+            "conjugation": "あたらしい"
+          },
+          {
+            "name": "past",
+            "conjugation": "あたらしかった"
+          },
+          {
+            "name": "negative",
+            "conjugation": "あたらしくない"
+          },
+          {
+            "name": "negative past",
+            "conjugation": "あたらしくなかった"
+          }
         ],
         "examples": [
-          "あたらしい くるまを かいました。(I bought a new car.)"
+          {
+            "sentence": "あたらしい くるまを かいました。",
+            "meaning": "I bought a new car."
+          }
         ]
       },
       {
@@ -54,13 +102,28 @@
         "meaning": "old (for things)",
         "word_type": "adjective (i-adj)",
         "tenses": [
-          { "name": "present", "conjugation": "ふるい" },
-          { "name": "past", "conjugation": "ふるかった" },
-          { "name": "negative", "conjugation": "ふるくない" },
-          { "name": "negative past", "conjugation": "ふるくなかった" }
+          {
+            "name": "present",
+            "conjugation": "ふるい"
+          },
+          {
+            "name": "past",
+            "conjugation": "ふるかった"
+          },
+          {
+            "name": "negative",
+            "conjugation": "ふるくない"
+          },
+          {
+            "name": "negative past",
+            "conjugation": "ふるくなかった"
+          }
         ],
         "examples": [
-          "この ほんは ふるいです。(This book is old.)"
+          {
+            "sentence": "この ほんは ふるいです。",
+            "meaning": "This book is old."
+          }
         ]
       }
     ]
@@ -74,14 +137,32 @@
         "meaning": "expensive; tall; high",
         "word_type": "adjective (i-adj)",
         "tenses": [
-          { "name": "present", "conjugation": "たかい" },
-          { "name": "past", "conjugation": "たかかった" },
-          { "name": "negative", "conjugation": "たかくない" },
-          { "name": "negative past", "conjugation": "たかくなかった" }
+          {
+            "name": "present",
+            "conjugation": "たかい"
+          },
+          {
+            "name": "past",
+            "conjugation": "たかかった"
+          },
+          {
+            "name": "negative",
+            "conjugation": "たかくない"
+          },
+          {
+            "name": "negative past",
+            "conjugation": "たかくなかった"
+          }
         ],
         "examples": [
-          "この レストランは たかいです。(This restaurant is expensive.)",
-          "やまが たかい。(The mountain is tall.)"
+          {
+            "sentence": "この レストランは たかいです。",
+            "meaning": "This restaurant is expensive."
+          },
+          {
+            "sentence": "やまが たかい。",
+            "meaning": "The mountain is tall."
+          }
         ]
       },
       {
@@ -90,13 +171,28 @@
         "meaning": "cheap; inexpensive",
         "word_type": "adjective (i-adj)",
         "tenses": [
-          { "name": "present", "conjugation": "やすい" },
-          { "name": "past", "conjugation": "やすかった" },
-          { "name": "negative", "conjugation": "やすくない" },
-          { "name": "negative past", "conjugation": "やすくなかった" }
+          {
+            "name": "present",
+            "conjugation": "やすい"
+          },
+          {
+            "name": "past",
+            "conjugation": "やすかった"
+          },
+          {
+            "name": "negative",
+            "conjugation": "やすくない"
+          },
+          {
+            "name": "negative past",
+            "conjugation": "やすくなかった"
+          }
         ],
         "examples": [
-          "このみせは やすいです。(This shop is cheap.)"
+          {
+            "sentence": "このみせは やすいです。",
+            "meaning": "This shop is cheap."
+          }
         ]
       },
       {
@@ -105,14 +201,32 @@
         "meaning": "good",
         "word_type": "adjective (i-adj)",
         "tenses": [
-          { "name": "present", "conjugation": "いい / よい" },
-          { "name": "past", "conjugation": "よかった" },
-          { "name": "negative", "conjugation": "よくない" },
-          { "name": "negative past", "conjugation": "よくなかった" }
+          {
+            "name": "present",
+            "conjugation": "いい / よい"
+          },
+          {
+            "name": "past",
+            "conjugation": "よかった"
+          },
+          {
+            "name": "negative",
+            "conjugation": "よくない"
+          },
+          {
+            "name": "negative past",
+            "conjugation": "よくなかった"
+          }
         ],
         "examples": [
-          "きょうは いい てんきです。(The weather is good today.)",
-          "よかったです。(It was good.)"
+          {
+            "sentence": "きょうは いい てんきです。",
+            "meaning": "The weather is good today."
+          },
+          {
+            "sentence": "よかったです。",
+            "meaning": "It was good."
+          }
         ]
       },
       {
@@ -121,13 +235,28 @@
         "meaning": "bad",
         "word_type": "adjective (i-adj)",
         "tenses": [
-          { "name": "present", "conjugation": "わるい" },
-          { "name": "past", "conjugation": "わるかった" },
-          { "name": "negative", "conjugation": "わるくない" },
-          { "name": "negative past", "conjugation": "わるくなかった" }
+          {
+            "name": "present",
+            "conjugation": "わるい"
+          },
+          {
+            "name": "past",
+            "conjugation": "わるかった"
+          },
+          {
+            "name": "negative",
+            "conjugation": "わるくない"
+          },
+          {
+            "name": "negative past",
+            "conjugation": "わるくなかった"
+          }
         ],
         "examples": [
-          "きょうは てんきが わるいです。(The weather is bad today.)"
+          {
+            "sentence": "きょうは てんきが わるいです。",
+            "meaning": "The weather is bad today."
+          }
         ]
       }
     ]
@@ -141,13 +270,28 @@
         "meaning": "hot (weather or temperature)",
         "word_type": "adjective (i-adj)",
         "tenses": [
-          { "name": "present", "conjugation": "あつい" },
-          { "name": "past", "conjugation": "あつかった" },
-          { "name": "negative", "conjugation": "あつくない" },
-          { "name": "negative past", "conjugation": "あつくなかった" }
+          {
+            "name": "present",
+            "conjugation": "あつい"
+          },
+          {
+            "name": "past",
+            "conjugation": "あつかった"
+          },
+          {
+            "name": "negative",
+            "conjugation": "あつくない"
+          },
+          {
+            "name": "negative past",
+            "conjugation": "あつくなかった"
+          }
         ],
         "examples": [
-          "きょうは あついです。(It is hot today.)"
+          {
+            "sentence": "きょうは あついです。",
+            "meaning": "It is hot today."
+          }
         ]
       },
       {
@@ -156,13 +300,28 @@
         "meaning": "cold (weather)",
         "word_type": "adjective (i-adj)",
         "tenses": [
-          { "name": "present", "conjugation": "さむい" },
-          { "name": "past", "conjugation": "さむかった" },
-          { "name": "negative", "conjugation": "さむくない" },
-          { "name": "negative past", "conjugation": "さむくなかった" }
+          {
+            "name": "present",
+            "conjugation": "さむい"
+          },
+          {
+            "name": "past",
+            "conjugation": "さむかった"
+          },
+          {
+            "name": "negative",
+            "conjugation": "さむくない"
+          },
+          {
+            "name": "negative past",
+            "conjugation": "さむくなかった"
+          }
         ],
         "examples": [
-          "ふゆは さむいです。(Winter is cold.)"
+          {
+            "sentence": "ふゆは さむいです。",
+            "meaning": "Winter is cold."
+          }
         ]
       },
       {
@@ -171,13 +330,28 @@
         "meaning": "cold (to the touch)",
         "word_type": "adjective (i-adj)",
         "tenses": [
-          { "name": "present", "conjugation": "つめたい" },
-          { "name": "past", "conjugation": "つめたかった" },
-          { "name": "negative", "conjugation": "つめたくない" },
-          { "name": "negative past", "conjugation": "つめたくなかった" }
+          {
+            "name": "present",
+            "conjugation": "つめたい"
+          },
+          {
+            "name": "past",
+            "conjugation": "つめたかった"
+          },
+          {
+            "name": "negative",
+            "conjugation": "つめたくない"
+          },
+          {
+            "name": "negative past",
+            "conjugation": "つめたくなかった"
+          }
         ],
         "examples": [
-          "みずが つめたいです。(The water is cold.)"
+          {
+            "sentence": "みずが つめたいです。",
+            "meaning": "The water is cold."
+          }
         ]
       },
       {
@@ -186,13 +360,28 @@
         "meaning": "spicy; hot (taste)",
         "word_type": "adjective (i-adj)",
         "tenses": [
-          { "name": "present", "conjugation": "からい" },
-          { "name": "past", "conjugation": "からかった" },
-          { "name": "negative", "conjugation": "からくない" },
-          { "name": "negative past", "conjugation": "からくなかった" }
+          {
+            "name": "present",
+            "conjugation": "からい"
+          },
+          {
+            "name": "past",
+            "conjugation": "からかった"
+          },
+          {
+            "name": "negative",
+            "conjugation": "からくない"
+          },
+          {
+            "name": "negative past",
+            "conjugation": "からくなかった"
+          }
         ],
         "examples": [
-          "このりょうりは からいです。(This dish is spicy.)"
+          {
+            "sentence": "このりょうりは からいです。",
+            "meaning": "This dish is spicy."
+          }
         ]
       }
     ]
@@ -206,14 +395,32 @@
         "meaning": "pretty; beautiful; clean",
         "word_type": "adjective (na-adj)",
         "tenses": [
-          { "name": "present", "conjugation": "きれいです" },
-          { "name": "past", "conjugation": "きれいでした" },
-          { "name": "negative", "conjugation": "きれいじゃありません" },
-          { "name": "negative past", "conjugation": "きれいじゃありませんでした" }
+          {
+            "name": "present",
+            "conjugation": "きれいです"
+          },
+          {
+            "name": "past",
+            "conjugation": "きれいでした"
+          },
+          {
+            "name": "negative",
+            "conjugation": "きれいじゃありません"
+          },
+          {
+            "name": "negative past",
+            "conjugation": "きれいじゃありませんでした"
+          }
         ],
         "examples": [
-          "はなが きれいです。(The flowers are beautiful.)",
-          "へやを きれいに します。(I make the room clean.)"
+          {
+            "sentence": "はなが きれいです。",
+            "meaning": "The flowers are beautiful."
+          },
+          {
+            "sentence": "へやを きれいに します。",
+            "meaning": "I make the room clean."
+          }
         ]
       },
       {
@@ -222,13 +429,28 @@
         "meaning": "quiet; calm",
         "word_type": "adjective (na-adj)",
         "tenses": [
-          { "name": "present", "conjugation": "しずかです" },
-          { "name": "past", "conjugation": "しずかでした" },
-          { "name": "negative", "conjugation": "しずかじゃありません" },
-          { "name": "negative past", "conjugation": "しずかじゃありませんでした" }
+          {
+            "name": "present",
+            "conjugation": "しずかです"
+          },
+          {
+            "name": "past",
+            "conjugation": "しずかでした"
+          },
+          {
+            "name": "negative",
+            "conjugation": "しずかじゃありません"
+          },
+          {
+            "name": "negative past",
+            "conjugation": "しずかじゃありませんでした"
+          }
         ],
         "examples": [
-          "としょかんは しずかです。(The library is quiet.)"
+          {
+            "sentence": "としょかんは しずかです。",
+            "meaning": "The library is quiet."
+          }
         ]
       },
       {
@@ -237,13 +459,28 @@
         "meaning": "lively; bustling",
         "word_type": "adjective (na-adj)",
         "tenses": [
-          { "name": "present", "conjugation": "にぎやかです" },
-          { "name": "past", "conjugation": "にぎやかでした" },
-          { "name": "negative", "conjugation": "にぎやかじゃありません" },
-          { "name": "negative past", "conjugation": "にぎやかじゃありませんでした" }
+          {
+            "name": "present",
+            "conjugation": "にぎやかです"
+          },
+          {
+            "name": "past",
+            "conjugation": "にぎやかでした"
+          },
+          {
+            "name": "negative",
+            "conjugation": "にぎやかじゃありません"
+          },
+          {
+            "name": "negative past",
+            "conjugation": "にぎやかじゃありませんでした"
+          }
         ],
         "examples": [
-          "まちが にぎやかです。(The town is lively.)"
+          {
+            "sentence": "まちが にぎやかです。",
+            "meaning": "The town is lively."
+          }
         ]
       },
       {
@@ -252,13 +489,28 @@
         "meaning": "convenient; handy",
         "word_type": "adjective (na-adj)",
         "tenses": [
-          { "name": "present", "conjugation": "べんりです" },
-          { "name": "past", "conjugation": "べんりでした" },
-          { "name": "negative", "conjugation": "べんりじゃありません" },
-          { "name": "negative past", "conjugation": "べんりじゃありませんでした" }
+          {
+            "name": "present",
+            "conjugation": "べんりです"
+          },
+          {
+            "name": "past",
+            "conjugation": "べんりでした"
+          },
+          {
+            "name": "negative",
+            "conjugation": "べんりじゃありません"
+          },
+          {
+            "name": "negative past",
+            "conjugation": "べんりじゃありませんでした"
+          }
         ],
         "examples": [
-          "このちかてつは べんりです。(This subway is convenient.)"
+          {
+            "sentence": "このちかてつは べんりです。",
+            "meaning": "This subway is convenient."
+          }
         ]
       },
       {
@@ -267,14 +519,32 @@
         "meaning": "liked; favorite",
         "word_type": "adjective (na-adj)",
         "tenses": [
-          { "name": "present", "conjugation": "すきです" },
-          { "name": "past", "conjugation": "すきでした" },
-          { "name": "negative", "conjugation": "すきじゃありません" },
-          { "name": "negative past", "conjugation": "すきじゃありませんでした" }
+          {
+            "name": "present",
+            "conjugation": "すきです"
+          },
+          {
+            "name": "past",
+            "conjugation": "すきでした"
+          },
+          {
+            "name": "negative",
+            "conjugation": "すきじゃありません"
+          },
+          {
+            "name": "negative past",
+            "conjugation": "すきじゃありませんでした"
+          }
         ],
         "examples": [
-          "にほんごが すきです。(I like Japanese.)",
-          "すしが すきです。(I like sushi.)"
+          {
+            "sentence": "にほんごが すきです。",
+            "meaning": "I like Japanese."
+          },
+          {
+            "sentence": "すしが すきです。",
+            "meaning": "I like sushi."
+          }
         ]
       },
       {
@@ -283,13 +553,28 @@
         "meaning": "disliked; hated",
         "word_type": "adjective (na-adj)",
         "tenses": [
-          { "name": "present", "conjugation": "きらいです" },
-          { "name": "past", "conjugation": "きらいでした" },
-          { "name": "negative", "conjugation": "きらいじゃありません" },
-          { "name": "negative past", "conjugation": "きらいじゃありませんでした" }
+          {
+            "name": "present",
+            "conjugation": "きらいです"
+          },
+          {
+            "name": "past",
+            "conjugation": "きらいでした"
+          },
+          {
+            "name": "negative",
+            "conjugation": "きらいじゃありません"
+          },
+          {
+            "name": "negative past",
+            "conjugation": "きらいじゃありませんでした"
+          }
         ],
         "examples": [
-          "からいたべものが きらいです。(I dislike spicy food.)"
+          {
+            "sentence": "からいたべものが きらいです。",
+            "meaning": "I dislike spicy food."
+          }
         ]
       },
       {
@@ -298,13 +583,28 @@
         "meaning": "good at; skilled",
         "word_type": "adjective (na-adj)",
         "tenses": [
-          { "name": "present", "conjugation": "じょうずです" },
-          { "name": "past", "conjugation": "じょうずでした" },
-          { "name": "negative", "conjugation": "じょうずじゃありません" },
-          { "name": "negative past", "conjugation": "じょうずじゃありませんでした" }
+          {
+            "name": "present",
+            "conjugation": "じょうずです"
+          },
+          {
+            "name": "past",
+            "conjugation": "じょうずでした"
+          },
+          {
+            "name": "negative",
+            "conjugation": "じょうずじゃありません"
+          },
+          {
+            "name": "negative past",
+            "conjugation": "じょうずじゃありませんでした"
+          }
         ],
         "examples": [
-          "かれは えいごが じょうずです。(He is good at English.)"
+          {
+            "sentence": "かれは えいごが じょうずです。",
+            "meaning": "He is good at English."
+          }
         ]
       },
       {
@@ -313,13 +613,28 @@
         "meaning": "bad at; unskilled",
         "word_type": "adjective (na-adj)",
         "tenses": [
-          { "name": "present", "conjugation": "へたです" },
-          { "name": "past", "conjugation": "へたでした" },
-          { "name": "negative", "conjugation": "へたじゃありません" },
-          { "name": "negative past", "conjugation": "へたじゃありませんでした" }
+          {
+            "name": "present",
+            "conjugation": "へたです"
+          },
+          {
+            "name": "past",
+            "conjugation": "へたでした"
+          },
+          {
+            "name": "negative",
+            "conjugation": "へたじゃありません"
+          },
+          {
+            "name": "negative past",
+            "conjugation": "へたじゃありませんでした"
+          }
         ],
         "examples": [
-          "わたしは りょうりが へたです。(I am bad at cooking.)"
+          {
+            "sentence": "わたしは りょうりが へたです。",
+            "meaning": "I am bad at cooking."
+          }
         ]
       }
     ]

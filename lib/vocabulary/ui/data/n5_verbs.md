@@ -133,7 +133,7 @@ tense: potential-form-informal :
 tense: potential-negative-form :
 tense: potential-negative-form-informal (nai-form) :
 tense: te-form : でて
-example: うちを でます。(I leave the house.)
+example: うちを でます。 : I leave the house.
 
 ### でる
 kanji: 出る
@@ -151,7 +151,7 @@ tense:  potential-form-informal :s
 tense: potential-negative-form :
 tense: potential-negative-form-informal (nai-form) :
 tense: te-form : でて
-example: うちを でます。(I leave the house.)
+example: うちを でます。 : I leave the house.
 
 ### はいる
 kanji: 入る
@@ -169,7 +169,7 @@ tense:  potential-form-informal :
 tense: potential-negative-form :
 tense: potential-negative-form-informal (nai-form) :
 tense: te-form : はいって
-example: へやに はいります。(I enter the room.)
+example: へやに はいります。 : I enter the room.
 
 ### さんぽする
 kanji:
@@ -245,7 +245,7 @@ tense:  potential-form-informal :
 tense: potential-negative-form :
 tense: potential-negative-form-informal (nai-form) :
 tense: te-form : あるいて
-example: えきまで あるきます。(I walk to the station.)
+example: えきまで あるきます。 : I walk to the station.
 
 ### のる
 kanji: 乗る
@@ -263,7 +263,7 @@ tense:  potential-form-informal :
 tense: potential-negative-form :
 tense: potential-negative-form-informal (nai-form) :
 tense: te-form : のって
-example: バスに のります。(I ride the bus.)
+example: バスに のります。 : I ride the bus.
 
 ### あがる
 kanji:　上がる
@@ -415,8 +415,8 @@ tense:  potential-form-informal :
 tense: potential-negative-form :
 tense: potential-negative-form-informal (nai-form) :
 tense: te-form :
-example: てがみを かきます。(I write a letter.)
-example: なまえを かきました。(I wrote my name.)
+example: てがみを かきます。 : I write a letter.
+example: なまえを かきました。 : I wrote my name.
 example:
 
 ### よむ
@@ -547,7 +547,7 @@ tense:  potential-form-informal :
 tense: potential-negative-form :
 tense: potential-negative-form-informal (nai-form) :
 tense: te-form :
-example: じゅういちじに ねます。(I go to sleep at 11 o'clock.)
+example: じゅういちじに ねます。 : I go to sleep at 11 o'clock.
 example: よるくじから　朝日　ごじまで　ねかれます。
 
 ### かう
@@ -819,7 +819,7 @@ tense: potential-negative-form :　おげられません
 tense: potential-negative-form-informal (nai-form) :　おがられない
 tense: te-form : あげて
 example: ともだちに プレゼントを あげます。: I give a present to my friend.
-example: せんしょう、かれに　お金を　すこし　おげた。I gave him a little money(おかね) lastweek.
+example: せんしょう、かれに　お金を　すこし　おげた。 : I gave him a little money(おかね) lastweek.
 
 ### もらう
 kanji: 貰う
@@ -917,7 +917,7 @@ tense: potential-negative-form-informal :
 tense: te-form :
 example: にほんで きれいな しゃしんを とります。: Tôi chụp ảnh đẹp ở Nhật.
 example: いもうとのしゅみは　しゃしんを　とることです。　: Sở thích của em gái tôi là chụp ảnh.
-example: ここで　しゃしんを　とることが　できますか。　Ở đây có thể chụp hình được ko?
+example: ここで　しゃしんを　とることが　できますか。 : Ở đây có thể chụp hình được ko?
 example:
 
 ### おく
@@ -957,7 +957,7 @@ tense: negative-past-informal (nai-form) :　なかった
 tense: te-form : あって
 example: つくえの うえに ほんが あります。: There is a book on the desk.
 example: じかんが あらない。: I don't have time.
-example: かのじょは　うたが　とても　じょうずです。にんきが　ある。 She sings very well. She is well-liked.
+example: かのじょは　うたが　とても　じょうずです。にんきが　ある。 : She sings very well. She is well-liked.
 
 
 
@@ -997,8 +997,8 @@ tense:  potential-form-informal :
 tense: potential-negative-form :
 tense: potential-negative-form-informal (nai-form) :
 tense: te-form : わかって
-example: にほんごが わかります。(I understand Japanese.)
-example: わかりません。(I don't understand.)
+example: にほんごが わかります。 : I understand Japanese.
+example: わかりません。 : I don't understand.
 
 ### かかる
 kanji:
@@ -1095,7 +1095,7 @@ tense:  potential-form-informal :
 tense: potential-negative-form :
 tense: potential-negative-form-informal (nai-form) :
 tense: te-form : まって
-example: えきで まちます。(I wait at the station.)
+example: えきで まちます。 : I wait at the station.
 
 ### わすれる
 kanji: 忘れる
@@ -1113,7 +1113,7 @@ tense:  potential-form-informal :
 tense: potential-negative-form :
 tense: potential-negative-form-informal (nai-form) :
 tense: te-form : わすれて
-example: なまえを わすれました。(I forgot the name.)
+example: なまえを わすれました。 : I forgot the name.
 
 ### でか
 kanji:

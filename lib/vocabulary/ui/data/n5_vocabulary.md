@@ -3,19 +3,19 @@
 kanji: 人
 meaning: person; people
 type: noun
-example: あのひとは だれですか。(Who is that person?)
+example: あのひとは だれですか。 : Who is that person?
 
 ### がくせい
 kanji: 学生
 meaning: student
 type: noun
-example: わたしは がくせいです。(I am a student.)
+example: わたしは がくせいです。 : I am a student.
 
 ### せんせい
 kanji: 先生
 meaning: teacher
 type: noun
-example: せんせいは やさしいです。(The teacher is kind.)
+example: せんせいは やさしいです。 : The teacher is kind.
 
 ###　きょうじゅ
 kanji:　教授
@@ -190,38 +190,38 @@ example:
 kanji: 本
 meaning: book
 type: noun
-example: ほんを よみます。(I read a book.)
-example: つくえの うえに ほんが あります。(There is a book on the desk.)
+example: ほんを よみます。 : I read a book.
+example: つくえの うえに ほんが あります。 : There is a book on the desk.
 
 ### くるま
 kanji: 車
 meaning: car; vehicle
 type: noun
-example: くるまで いきます。(I go by car.)
+example: くるまで いきます。 : I go by car.
 
 ### でんわ
 kanji: 電話
 meaning: telephone
 type: noun
-example: でんわを かけます。(I make a phone call.)
+example: でんわを かけます。 : I make a phone call.
 
 ### かばん
 kanji: 鞄
 meaning: bag; briefcase
 type: noun
-example: かばんの なかに ほんが あります。(There is a book in the bag.)
+example: かばんの なかに ほんが あります。 : There is a book in the bag.
 
 ### めがね
 kanji: 眼鏡
 meaning: glasses; spectacles
 type: noun
-example: めがねを かけます。(I wear glasses.)
+example: めがねを かけます。 : I wear glasses.
 
 ### かみ
 kanji: 紙
 meaning: paper
 type: noun
-example: かみに かきます。(I write on paper.)
+example: かみに かきます。 : I write on paper.
 
 ### きって
 kanji: 切手
@@ -259,8 +259,8 @@ example:
 kanji: 家
 meaning: house; home
 type: noun
-example: いえに かえります。(I return home.)
-example: いえが おおきいです。(The house is big.)
+example: いえに かえります。 : I return home.
+example: いえが おおきいです。 : The house is big.
 
 ###
 kanji:
@@ -294,7 +294,7 @@ example:
 kanji: 学校
 meaning: school
 type: noun
-example: がっこうに いきます。(I go to school.)
+example: がっこうに いきます。 : I go to school.
 
 ### だいがく
 kanji: 大学
@@ -336,7 +336,7 @@ example:
 kanji: 駅
 meaning: train station
 type: noun
-example: えきの まえに あります。(It is in front of the station.)
+example: えきの まえに あります。 : It is in front of the station.
 
 ### くうこう
 kanji: 空港
@@ -348,19 +348,19 @@ example:
 kanji: 店
 meaning: shop; store
 type: noun
-example: みせで かいものを します。(I shop at the store.)
+example: みせで かいものを します。 : I shop at the store.
 
 ### びょういん
 kanji: 病院
 meaning: hospital
 type: noun
-example: びょういんに いきます。(I go to the hospital.)
+example: びょういんに いきます。 : I go to the hospital.
 
 ### としょかん
 kanji: 図書館
 meaning: library
 type: noun
-example: としょかんで べんきょうします。(I study at the library.)
+example: としょかんで べんきょうします。 : I study at the library.
 
 ### デパート
 kanji:
@@ -409,31 +409,31 @@ example:
 kanji: 水
 meaning: water
 type: noun
-example: みずを のみます。(I drink water.)
+example: みずを のみます。 : I drink water.
 
 ### ごはん
 kanji: ご飯
 meaning: rice; meal
 type: noun
-example: ごはんを たべます。(I eat a meal.)
+example: ごはんを たべます。 : I eat a meal.
 
 ### やさい
 kanji: 野菜
 meaning: vegetable
 type: noun
-example: やさいを たべます。(I eat vegetables.)
+example: やさいを たべます。 : I eat vegetables.
 
 ### にく
 kanji: 肉
 meaning: meat
 type: noun
-example: にくが すきです。(I like meat.)
+example: にくが すきです。 : I like meat.
 
 ### さかな
 kanji: 魚
 meaning: fish
 type: noun
-example: さかなを たべます。(I eat fish.)
+example: さかなを たべます。 : I eat fish.
 
 ###　ワイン
 kanji:
@@ -518,19 +518,19 @@ example:
 kanji: 昨日
 meaning: yesterday
 type: noun
-example: きのうは てんきが わるかったです。(The weather was bad yesterday.)
+example: きのうは てんきが わるかったです。 : The weather was bad yesterday.
 
 ### きょう
 kanji: 今日
 meaning: today
 type: noun
-example: きょうは もくようびです。(Today is Thursday.)
+example: きょうは もくようびです。 : Today is Thursday.
 
 ### あした
 kanji: 明日
 meaning: tomorrow
 type: noun
-example: あしたも がっこうに いきます。(I will go to school tomorrow too.)
+example: あしたも がっこうに いきます。 : I will go to school tomorrow too.
 
 ###　あさって
 kanji:
@@ -542,13 +542,13 @@ example:
 kanji: 毎日
 meaning: every day
 type: noun
-example: まいにち にほんごを べんきょうします。(I study Japanese every day.)
+example: まいにち にほんごを べんきょうします。 : I study Japanese every day.
 
 ### いま
 kanji: 今
 meaning: now
 type: noun
-example: いまは なんじですか。(What time is it now?)
+example: いまは なんじですか。 : What time is it now?
 
 ###　けさ
 kanji :　今朝
@@ -675,44 +675,44 @@ example:
 kanji: 幾ら
 meaning: how much (price)
 type: noun
-example: これは いくらですか。(How much is this?)
+example: これは いくらですか。 : How much is this?
 
 ### なんにん
 kanji: 何人
 meaning: how many people
 type: noun
-example: なんにんですか。(How many people are there?)
+example: なんにんですか。 : How many people are there?
 
 ## N5 Noun — Nature and Weather
 ### てんき
 kanji: 天気
 meaning: weather
 type: noun
-example: きょうは いい てんきです。(The weather is good today.)
+example: きょうは いい てんきです。 : The weather is good today.
 
 ### はれ
 kanji: 晴れ
 meaning: sunny; clear sky
 type: noun
-example: きょうは はれです。(It is sunny today.)
+example: きょうは はれです。 : It is sunny today.
 
 ### あめ
 kanji: 雨
 meaning: rain
 type: noun
-example: あめが ふります。(It rains.)
+example: あめが ふります。 : It rains.
 
 ### やま
 kanji: 山
 meaning: mountain
 type: noun
-example: やまに のぼります。(I climb a mountain.)
+example: やまに のぼります。 : I climb a mountain.
 
 ### うみ
 kanji: 海
 meaning: sea; ocean
 type: noun
-example: うみで およぎます。(I swim in the sea.)
+example: うみで およぎます。 : I swim in the sea.
 
 ## N5 Noun — Abstract
 ###　しゅみ
