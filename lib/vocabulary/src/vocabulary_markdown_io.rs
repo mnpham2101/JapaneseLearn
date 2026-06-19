@@ -47,22 +47,26 @@ fn split_field(line: &str) -> Option<(&str, String)> {
     Some((key, value))
 }
 
-/// Split a tense field's value (`"<label> : <conjugation>"`) on its own
-/// first colon, tolerating the same conventions as [`split_field`]: a space
-/// before the colon and the full-width colon (`：`).
+/// Split a field value on its own first colon (`"<first half> : <second
+/// half>"`), tolerating the same conventions as [`split_field`]: a space
+/// before the colon and the full-width colon (`：`). Both halves are
+/// trimmed.
 ///
-/// Returns `None` if there is no second colon, or if the conjugation half
-/// is empty after trimming — matching the documented rule that a `tense`
-/// line without a spelling does not produce a new word.
-fn split_tense_value(value: &str) -> Option<(String, String)> {
+/// Returns `None` if there is no second colon at all. If a second colon is
+/// found but the second half is empty after trimming, the result depends on
+/// `drop_if_second_half_empty`: when `true`, returns `None` (used by `tense`,
+/// where a label without a conjugation does not produce a new word); when
+/// `false`, returns the pair with an empty second half (used by `example`,
+/// where a sentence is never discarded just because its meaning is blank).
+fn split_first_colon(value: &str, drop_if_second_half_empty: bool) -> Option<(String, String)> {
     let idx = value.find([':', '：'])?;
-    let name = value[..idx].trim();
+    let first = value[..idx].trim();
     let colon_len = value[idx..].chars().next()?.len_utf8();
-    let conjugation = value[idx + colon_len..].trim();
-    if conjugation.is_empty() {
+    let second = value[idx + colon_len..].trim();
+    if second.is_empty() && drop_if_second_half_empty {
         None
     } else {
-        Some((name.to_string(), conjugation.to_string()))
+        Some((first.to_string(), second.to_string()))
     }
 }
 
@@ -101,19 +105,19 @@ pub(crate) fn parse_vocabulary(source: &str) -> Vec<LessonData> {
                     "meaning" => word.meaning = value,
                     "type" => word.word_type = value,
                     "tense" => {
-                        if let Some((name, conjugation)) = split_tense_value(&value) {
+                        if let Some((name, conjugation)) = split_first_colon(&value, true) {
                             word.tenses.push(TenseData { name, conjugation });
                         }
                     }
                     "example" if !value.is_empty() => {
-                        // NOTE: sentence/meaning split is not yet implemented here —
-                        // that parsing logic is Task 8.V.7. For now the whole value
-                        // is stored as the sentence with an empty meaning, purely to
-                        // keep this call site compiling against the new ExampleData shape.
-                        word.examples.push(ExampleData {
-                            sentence: value,
-                            meaning: String::new(),
-                        });
+                        // A second colon separates the sentence from its meaning
+                        // (`example: <sentence> : <meaning>`). Unlike `tense`, an
+                        // example is never dropped: a bare sentence with no colon,
+                        // or a colon with a blank meaning half, still produces an
+                        // ExampleData so user-entered sentences are never lost.
+                        let (sentence, meaning) = split_first_colon(&value, false)
+                            .unwrap_or_else(|| (value.clone(), String::new()));
+                        word.examples.push(ExampleData { sentence, meaning });
                     }
                     _ => {}
                 }
@@ -149,8 +153,6 @@ pub(crate) fn serialize_vocabulary(lessons: &[LessonData]) -> String {
                 out.push_str(&format!("tense: {} : {}\n", tense.name, tense.conjugation));
             }
             for example in &word.examples {
-                // NOTE: placeholder format — Task 8.V.7 will finalize the
-                // sentence/meaning serialization format to match the parser.
                 out.push_str(&format!(
                     "example: {} : {}\n",
                     example.sentence, example.meaning
@@ -204,7 +206,36 @@ mod tests {
         assert_eq!(word.tenses[1].conjugation, "たべません");
         assert_eq!(word.examples.len(), 2);
         assert_eq!(word.examples[0].sentence, "犬が走る。");
+        assert_eq!(word.examples[0].meaning, "");
         assert_eq!(word.examples[1].sentence, "その犬は大きい。");
+        assert_eq!(word.examples[1].meaning, "");
+    }
+
+    /// Reproduces the literal bundled-data pattern from `extended-vocab.md`:
+    /// `example: [japanese sentence] : [sentence-meaning]` — the second
+    /// colon separates the sentence from its meaning, both trimmed.
+    #[test]
+    fn parse_example_with_bundled_data_colon_format() {
+        let src =
+            "## Verbs\n\n### たべる\nmeaning: to eat\nexample: 犬が好きです。 : I like dogs.\n";
+        let lessons = parse_vocabulary(src);
+        let word = &lessons[0].words[0];
+        assert_eq!(word.examples.len(), 1);
+        assert_eq!(word.examples[0].sentence, "犬が好きです。");
+        assert_eq!(word.examples[0].meaning, "I like dogs.");
+    }
+
+    /// Unlike `tense`, an `example` line is never dropped: a colon with an
+    /// empty meaning half still produces an `ExampleData` with the sentence
+    /// preserved and an empty meaning, rather than discarding user data.
+    #[test]
+    fn parse_example_with_empty_meaning_is_kept() {
+        let src = "## Verbs\n\n### たべる\nmeaning: to eat\nexample: 犬が好きです。 :\n";
+        let lessons = parse_vocabulary(src);
+        let word = &lessons[0].words[0];
+        assert_eq!(word.examples.len(), 1);
+        assert_eq!(word.examples[0].sentence, "犬が好きです。");
+        assert_eq!(word.examples[0].meaning, "");
     }
 
     /// Reproduces the literal bundled-data pattern from `extended-vocab.md`,
