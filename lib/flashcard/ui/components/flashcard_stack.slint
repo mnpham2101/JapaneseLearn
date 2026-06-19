@@ -9,8 +9,8 @@ import { Tokens } from "@styles";
 // flashcard-delete-confirmed is fired when the delete button on a card is clicked.
 // flashcard-reordered is fired when a drag-to-reorder gesture completes.
 // stack-delete-confirmed is fired when the "Delete Stack" button is clicked.
-export component FlashcardStack {
-    in property<FlashcardStackModel> stack: { stackname: "", flashcards: [] };
+export component FlashcardStack inherits Rectangle {
+    in property <FlashcardStackModel> stack: { stackname: "", flashcards: [] };
     in-out property <bool> show-add-form: false;
     callback flashcard-add-confirmed(jap: string, meaning: string);
     callback flashcard-field-changed(card-index: int, jap: string, meaning: string);
@@ -27,264 +27,272 @@ export component FlashcardStack {
     // Row slot height = card height (44px) + VerticalLayout spacing (8px) = 52px.
     in-out property <int> drag-source: -1;
     in-out property <length> drag-current-y: 0px;
-    property <int> drag-target: drag-source < 0 ? -1
-        : max(0, min(stack.flashcards.length - 1,
+    property <int> drag-target: drag-source < 0 ? -1 : max(0, min(stack.flashcards.length - 1,
               drag-source + round(drag-current-y / 1px / 52)));
 
-    stack-container := Rectangle {
-        width: 100%;
-        background: Tokens.card-container-background;
-        border-radius: Tokens.card-container-border-radius;
-        border-width: Tokens.border-width;
-        border-color: Tokens.card-container-border-color;
-        clip: true;
+    // Root carries the explicit size + styling. The Flickable below is a
+    // direct child of root (see slint-flickable-pattern.md) so its unbounded
+    // viewport height is clamped by this height instead of leaking upward.
+    width: 100%;
+    min-height: 500px;
+    background: Tokens.card-container-background;
+    border-radius: Tokens.card-container-border-radius;
+    border-width: Tokens.border-width;
+    border-color: Tokens.card-container-border-color;
+    clip: true;
 
-        // Absorbs all pointer events so they never reach the background
-        // TouchArea in StudyPage, which would dismiss this component.
-        TouchArea {}
+    // Absorbs all pointer events so they never reach the background
+    // TouchArea in StudyPage, which would dismiss this component.
+    TouchArea { }
 
-        VerticalLayout {
-            padding: Tokens.padding-lg;
-            spacing: Tokens.spacing-md;
-            alignment: LayoutAlignment.end;
+    VerticalLayout {
+        padding: Tokens.padding-lg;
+        spacing: Tokens.spacing-md;
 
-            HorizontalLayout {
-                spacing: 10px;
+        HorizontalLayout {
+            spacing: 10px;
 
-                Text {
-                    text: stack.stackname;
-                    font-size: Tokens.font-size-title;
-                    font-weight: 700;
-                    color: Tokens.text-primary;
-                    vertical-alignment: center;
-                    horizontal-stretch: 1;
-                }
-
-                CommonBtn {
-                    width: Tokens.size-btn-sm;
-                    height: 32px;
-                    text: "Study";
-                    primary: true;
-                    accessibilityLabel: "Start study session";
-                    clicked => root.study-clicked();
-                }
-
-                CommonBtn {
-                    width: 110px;
-                    height: 32px;
-                    text: "Delete Stack";
-                    accessibilityLabel: "Delete this stack";
-                    clicked => root.stack-delete-confirmed();
-                }
-
-                CommonBtn {
-                    width: Tokens.size-btn-icon;
-                    height: Tokens.size-btn-icon;
-                    text: "✕";
-                    accessibilityLabel: "Close stack";
-                    clicked => root.close-clicked();
-                }
+            Text {
+                text: stack.stackname;
+                font-size: Tokens.font-size-title;
+                font-weight: 700;
+                color: Tokens.text-primary;
+                vertical-alignment: center;
+                horizontal-stretch: 1;
             }
 
-            VerticalLayout {
+            CommonBtn {
+                width: Tokens.size-btn-sm;
+                height: 32px;
+                text: "Study";
+                primary: true;
+                accessibilityLabel: "Start study session";
+                clicked => root.study-clicked();
+            }
+
+            CommonBtn {
+                width: 110px;
+                height: 32px;
+                text: "Delete Stack";
+                accessibilityLabel: "Delete this stack";
+                clicked => root.stack-delete-confirmed();
+            }
+
+            CommonBtn {
+                width: Tokens.size-btn-icon;
+                height: Tokens.size-btn-icon;
+                text: "✕";
+                accessibilityLabel: "Close stack";
+                clicked => root.close-clicked();
+            }
+        }
+
+        // Only the card rows are flickable — the header above and the
+        // add-form/add-button below stay fixed. vertical-stretch: 1 lets
+        // this Flickable absorb whatever space is left in root's fixed
+        // height after the header and footer take their natural size.
+        Flickable {
+            vertical-stretch: 1;
+            viewport-height: card-list.preferred-height;
+            card-list := VerticalLayout {
                 spacing: Tokens.spacing-sm;
                 for card[i] in stack.flashcards: Rectangle {
                     height: 44px;
                     border-radius: Tokens.border-radius;
                     // Highlight row that is the current drop target.
-                    background: root.drag-target == i && root.drag-source != i
-                        ? Tokens.drag-target-highlight : transparent;
+                    background: root.drag-target == i && root.drag-source != i ? Tokens.drag-target-highlight : transparent;
 
                     HorizontalLayout {
-                    spacing: 16px;
-                    padding: Tokens.padding-sm;
+                        spacing: 16px;
+                        padding: Tokens.padding-sm;
 
-                    // Drag handle — press + drag to reorder this row.
+                        // Drag handle — press + drag to reorder this row.
                     Rectangle {
-                        width: 20px;
-                        Text {
-                            text: "≡";
-                            color: root.drag-source == i ? Tokens.text-primary : Tokens.btn-disabled-text;
-                            font-size: Tokens.font-size-caption;
-                            horizontal-alignment: center;
-                            vertical-alignment: center;
-                        }
-                        TouchArea {
-                            mouse-cursor: root.drag-source == i ? MouseCursor.grabbing : MouseCursor.grab;
-                            pointer-event(e) => {
-                                if (e.kind == PointerEventKind.down) {
-                                    root.drag-source = i;
-                                    root.drag-current-y = 0px;
-                                } else if (e.kind == PointerEventKind.up) {
-                                    if (root.drag-source >= 0 && root.drag-source != root.drag-target) {
-                                        root.flashcard-reordered(root.drag-source, root.drag-target);
+                            width: 20px;
+                            Text {
+                                text: "≡";
+                                color: root.drag-source == i ? Tokens.text-primary : Tokens.btn-disabled-text;
+                                font-size: Tokens.font-size-caption;
+                                horizontal-alignment: center;
+                                vertical-alignment: center;
+                            }
+
+                            TouchArea {
+                                mouse-cursor: root.drag-source == i ? MouseCursor.grabbing : MouseCursor.grab;
+                                pointer-event(e) => {
+                                    if (e.kind == PointerEventKind.down) {
+                                        root.drag-source = i;
+                                        root.drag-current-y = 0px;
+                                    } else if (e.kind == PointerEventKind.up) {
+                                        if (root.drag-source >= 0 && root.drag-source != root.drag-target) {
+                                            root.flashcard-reordered(root.drag-source, root.drag-target);
+                                        }
+                                        root.drag-source = -1;
+                                        root.drag-current-y = 0px;
                                     }
-                                    root.drag-source = -1;
-                                    root.drag-current-y = 0px;
                                 }
-                            }
-                            moved => {
-                                if (root.drag-source == i) {
-                                    root.drag-current-y = self.mouse-y - self.pressed-y;
+                                moved => {
+                                    if (root.drag-source == i) {
+                                        root.drag-current-y = self.mouse-y - self.pressed-y;
+                                    }
                                 }
                             }
                         }
-                    }
 
-                    // Japanese word field
+                        // Japanese word field
                     jap-field-container := Rectangle {
-                        horizontal-stretch: 1;
-                        border-width: Tokens.border-width;
-                        border-color: Tokens.border-color;
-                        border-radius: Tokens.border-radius;
-                        background: Tokens.card-field-background;
+                            horizontal-stretch: 1;
+                            border-width: Tokens.border-width;
+                            border-color: Tokens.border-color;
+                            border-radius: Tokens.border-radius;
+                            background: Tokens.card-field-background;
 
-                        jap-txt := TextInput {
-                            text: card.jap-obj;
-                            font-size: Tokens.font-size-body;
-                            color: Tokens.text-primary;
-                            vertical-alignment: center;
-                            width: parent.width - 12px;
-                            x: Tokens.spacing-xs;
-                            edited => {
-                                root.flashcard-field-changed(i, self.text, meaning-txt.text);
+                            jap-txt := TextInput {
+                                text: card.jap-obj;
+                                font-size: Tokens.font-size-body;
+                                color: Tokens.text-primary;
+                                vertical-alignment: center;
+                                width: parent.width - 12px;
+                                x: Tokens.spacing-xs;
+                                edited => {
+                                    root.flashcard-field-changed(i, self.text, meaning-txt.text);
+                                }
                             }
                         }
-                    }
 
-                    // Vietnamese meaning field
+                        // Vietnamese meaning field
                     meaning-field-container := Rectangle {
-                        horizontal-stretch: 1;
-                        border-width: Tokens.border-width;
-                        border-color: Tokens.border-color;
-                        border-radius: Tokens.border-radius;
-                        background: Tokens.card-field-background;
+                            horizontal-stretch: 1;
+                            border-width: Tokens.border-width;
+                            border-color: Tokens.border-color;
+                            border-radius: Tokens.border-radius;
+                            background: Tokens.card-field-background;
 
-                        meaning-txt := TextInput {
-                            text: card.explanation;
-                            font-size: Tokens.font-size-caption;
-                            color: Tokens.text-secondary;
-                            vertical-alignment: center;
-                            width: parent.width - 12px;
-                            x: Tokens.spacing-xs;
-                            edited => {
-                                root.flashcard-field-changed(i, jap-txt.text, self.text);
+                            meaning-txt := TextInput {
+                                text: card.explanation;
+                                font-size: Tokens.font-size-caption;
+                                color: Tokens.text-secondary;
+                                vertical-alignment: center;
+                                width: parent.width - 12px;
+                                x: Tokens.spacing-xs;
+                                edited => {
+                                    root.flashcard-field-changed(i, jap-txt.text, self.text);
+                                }
                             }
                         }
+
+                        CommonBtn {
+                            width: Tokens.size-btn-icon;
+                            height: Tokens.size-btn-icon;
+                            text: "✕";
+                            accessibilityLabel: "Delete card";
+                            clicked => {
+                                root.flashcard-delete-confirmed(i);
+                            }
+                        }
+                    } // HorizontalLayout
+                } // Rectangle (row)
+            } // card-list VerticalLayout
+        } // Flickable
+
+        // Add-flashcard form — slides in when show-add-form is true.
+        // Uses the Vertically stacked up components pattern.
+        if root.show-add-form: Rectangle {
+            background: Tokens.input-form-background;
+            border-radius: Tokens.border-radius;
+            height: self.visible ? 80px : 0px;
+
+            HorizontalLayout {
+                padding: Tokens.padding-sm;
+                spacing: Tokens.spacing-sm;
+                alignment: center;
+
+                // Japanese word input with overlay label as placeholder
+                jap-field := Rectangle {
+                    width: 200px;
+                    height: 36px;
+                    border-width: Tokens.border-width;
+                    border-color: Tokens.border-color;
+                    border-radius: Tokens.border-radius;
+                    background: Tokens.card-field-background;
+
+                    jap-input := TextInput {
+                        font-size: Tokens.font-size-body;
+                        color: Tokens.text-primary;
+                        vertical-alignment: center;
+                        width: parent.width - 12px;
+                        x: Tokens.spacing-xs;
                     }
 
-                    CommonBtn {
-                        width: Tokens.size-btn-icon;
-                        height: Tokens.size-btn-icon;
-                        text: "✕";
-                        accessibilityLabel: "Delete card";
-                        clicked => {
-                            root.flashcard-delete-confirmed(i);
-                        }
+                    Text {
+                        visible: jap-input.text == "";
+                        text: "Japanese word...";
+                        font-size: Tokens.font-size-body;
+                        color: Tokens.text-placeholder;
+                        vertical-alignment: center;
+                        x: Tokens.spacing-xs;
                     }
-                    }  // HorizontalLayout
-                }  // Rectangle (row)
-            }  // VerticalLayout (card list)
+                }
 
-            // Add-flashcard form — slides in when show-add-form is true.
-            // Uses the Vertically stacked up components pattern.
-            if root.show-add-form: Rectangle {
-                background: Tokens.input-form-background;
-                border-radius: Tokens.border-radius;
-                height: self.visible ? 80px : 0px;
+                // Vietnamese meaning input with overlay label as placeholder
+                meaning-field := Rectangle {
+                    width: 200px;
+                    height: 36px;
+                    border-width: Tokens.border-width;
+                    border-color: Tokens.border-color;
+                    border-radius: Tokens.border-radius;
+                    background: Tokens.card-field-background;
 
-                HorizontalLayout {
-                    padding: Tokens.padding-sm;
-                    spacing: Tokens.spacing-sm;
-                    alignment: center;
-
-                    // Japanese word input with overlay label as placeholder
-                    jap-field := Rectangle {
-                        width: 200px;
-                        height: 36px;
-                        border-width: Tokens.border-width;
-                        border-color: Tokens.border-color;
-                        border-radius: Tokens.border-radius;
-                        background: Tokens.card-field-background;
-
-                        jap-input := TextInput {
-                            font-size: Tokens.font-size-body;
-                            color: Tokens.text-primary;
-                            vertical-alignment: center;
-                            width: parent.width - 12px;
-                            x: Tokens.spacing-xs;
-                        }
-
-                        Text {
-                            visible: jap-input.text == "";
-                            text: "Japanese word...";
-                            font-size: Tokens.font-size-body;
-                            color: Tokens.text-placeholder;
-                            vertical-alignment: center;
-                            x: Tokens.spacing-xs;
-                        }
+                    meaning-input := TextInput {
+                        font-size: Tokens.font-size-body;
+                        color: Tokens.text-primary;
+                        vertical-alignment: center;
+                        width: parent.width - 12px;
+                        x: Tokens.spacing-xs;
                     }
 
-                    // Vietnamese meaning input with overlay label as placeholder
-                    meaning-field := Rectangle {
-                        width: 200px;
-                        height: 36px;
-                        border-width: Tokens.border-width;
-                        border-color: Tokens.border-color;
-                        border-radius: Tokens.border-radius;
-                        background: Tokens.card-field-background;
-
-                        meaning-input := TextInput {
-                            font-size: Tokens.font-size-body;
-                            color: Tokens.text-primary;
-                            vertical-alignment: center;
-                            width: parent.width - 12px;
-                            x: Tokens.spacing-xs;
-                        }
-
-                        Text {
-                            visible: meaning-input.text == "";
-                            text: "Vietnamese meaning...";
-                            font-size: Tokens.font-size-body;
-                            color: Tokens.text-placeholder;
-                            vertical-alignment: center;
-                            x: Tokens.spacing-xs;
-                        }
+                    Text {
+                        visible: meaning-input.text == "";
+                        text: "Vietnamese meaning...";
+                        font-size: Tokens.font-size-body;
+                        color: Tokens.text-placeholder;
+                        vertical-alignment: center;
+                        x: Tokens.spacing-xs;
                     }
+                }
 
-                    CommonBtn {
-                        width: Tokens.size-btn-tab;
-                        text: "Confirm";
-                        primary: true;
-                        clicked => {
-                            root.flashcard-add-confirmed(jap-input.text, meaning-input.text);
-                            jap-input.text = "";
-                            meaning-input.text = "";
-                            root.show-add-form = false;
-                        }
+                CommonBtn {
+                    width: Tokens.size-btn-tab;
+                    text: "Confirm";
+                    primary: true;
+                    clicked => {
+                        root.flashcard-add-confirmed(jap-input.text, meaning-input.text);
+                        jap-input.text = "";
+                        meaning-input.text = "";
+                        root.show-add-form = false;
                     }
+                }
 
-                    CommonBtn {
-                        width: Tokens.size-btn-sm;
-                        text: "Cancel";
-                        clicked => {
-                            jap-input.text = "";
-                            meaning-input.text = "";
-                            root.show-add-form = false;
-                        }
+                CommonBtn {
+                    width: Tokens.size-btn-sm;
+                    text: "Cancel";
+                    clicked => {
+                        jap-input.text = "";
+                        meaning-input.text = "";
+                        root.show-add-form = false;
                     }
                 }
             }
+        }
 
-            // "Add Flashcard" button — hidden while the form is open.
-            if !root.show-add-form: CommonBtn {
-                width: Tokens.size-btn-wide;
-                text: "Add Flashcard";
-                primary: true;
-                height: self.visible ? 36px : 0px;
-                clicked => {
-                    root.show-add-form = true;
-                }
+        // "Add Flashcard" button — hidden while the form is open.
+        if !root.show-add-form: CommonBtn {
+            width: Tokens.size-btn-wide;
+            text: "Add Flashcard";
+            primary: true;
+            height: self.visible ? 36px : 0px;
+            clicked => {
+                root.show-add-form = true;
             }
         }
     }
