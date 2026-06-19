@@ -10,7 +10,7 @@ use crate::{LessonData, TenseData, WordData};
 /// kanji: 犬
 /// meaning: dog
 /// type: noun
-/// tense: past|食べました
+/// tense: past : 食べました
 /// example: 犬が走る。
 /// ```
 /// Strip a heading marker (e.g. `"##"` or `"###"`) from the start of a line.
@@ -45,6 +45,25 @@ fn split_field(line: &str) -> Option<(&str, String)> {
     let colon_len = line[idx..].chars().next()?.len_utf8();
     let value = line[idx + colon_len..].trim().to_string();
     Some((key, value))
+}
+
+/// Split a tense field's value (`"<label> : <conjugation>"`) on its own
+/// first colon, tolerating the same conventions as [`split_field`]: a space
+/// before the colon and the full-width colon (`：`).
+///
+/// Returns `None` if there is no second colon, or if the conjugation half
+/// is empty after trimming — matching the documented rule that a `tense`
+/// line without a spelling does not produce a new word.
+fn split_tense_value(value: &str) -> Option<(String, String)> {
+    let idx = value.find([':', '：'])?;
+    let name = value[..idx].trim();
+    let colon_len = value[idx..].chars().next()?.len_utf8();
+    let conjugation = value[idx + colon_len..].trim();
+    if conjugation.is_empty() {
+        None
+    } else {
+        Some((name.to_string(), conjugation.to_string()))
+    }
 }
 
 pub(crate) fn parse_vocabulary(source: &str) -> Vec<LessonData> {
@@ -82,11 +101,8 @@ pub(crate) fn parse_vocabulary(source: &str) -> Vec<LessonData> {
                     "meaning" => word.meaning = value,
                     "type" => word.word_type = value,
                     "tense" => {
-                        if let Some((name, conjugation)) = value.split_once('|') {
-                            word.tenses.push(TenseData {
-                                name: name.trim().to_string(),
-                                conjugation: conjugation.trim().to_string(),
-                            });
+                        if let Some((name, conjugation)) = split_tense_value(&value) {
+                            word.tenses.push(TenseData { name, conjugation });
                         }
                     }
                     "example" if !value.is_empty() => {
@@ -123,7 +139,7 @@ pub(crate) fn serialize_vocabulary(lessons: &[LessonData]) -> String {
                 out.push_str(&format!("type: {}\n", word.word_type));
             }
             for tense in &word.tenses {
-                out.push_str(&format!("tense: {}|{}\n", tense.name, tense.conjugation));
+                out.push_str(&format!("tense: {} : {}\n", tense.name, tense.conjugation));
             }
             for example in &word.examples {
                 out.push_str(&format!("example: {}\n", example));
@@ -165,7 +181,7 @@ mod tests {
 
     #[test]
     fn parse_word_with_tenses_and_examples() {
-        let src = "## Verbs\n\n### たべる\nmeaning: to eat\ntense: past|たべました\ntense: negative|たべません\nexample: 犬が走る。\nexample: その犬は大きい。\n";
+        let src = "## Verbs\n\n### たべる\nmeaning: to eat\ntense: past : たべました\ntense: negative : たべません\nexample: 犬が走る。\nexample: その犬は大きい。\n";
         let lessons = parse_vocabulary(src);
         assert_eq!(lessons.len(), 1);
         let word = &lessons[0].words[0];
@@ -177,6 +193,31 @@ mod tests {
         assert_eq!(word.examples.len(), 2);
         assert_eq!(word.examples[0], "犬が走る。");
         assert_eq!(word.examples[1], "その犬は大きい。");
+    }
+
+    /// Reproduces the literal bundled-data pattern from `extended-vocab.md`,
+    /// which separates the tense label from its conjugation with a second
+    /// colon (e.g. `tense: present-formal : たべます`), not a pipe.
+    #[test]
+    fn parse_tense_with_bundled_data_colon_format() {
+        let src = "## Verbs\n\n### たべる\nmeaning: to eat\ntense: present-formal : たべます\n";
+        let lessons = parse_vocabulary(src);
+        let word = &lessons[0].words[0];
+        assert_eq!(word.tenses.len(), 1);
+        assert_eq!(word.tenses[0].name, "present-formal");
+        assert_eq!(word.tenses[0].conjugation, "たべます");
+    }
+
+    /// Per extended-vocab.md: "any `tense` that doesn't have the spelling
+    /// will not provide a new word." A tense line whose conjugation half is
+    /// empty (e.g. `tense: negative-present-formal:` — no space before the
+    /// trailing colon, nothing after it) must not produce a `TenseData`.
+    #[test]
+    fn parse_tense_with_empty_conjugation_is_skipped() {
+        let src = "## Verbs\n\n### たべる\nmeaning: to eat\ntense: negative-present-formal:\n";
+        let lessons = parse_vocabulary(src);
+        let word = &lessons[0].words[0];
+        assert!(word.tenses.is_empty());
     }
 
     #[test]
