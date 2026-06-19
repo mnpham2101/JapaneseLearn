@@ -2,6 +2,7 @@
 
 use crate::models::{FlashcardCardData, FlashcardStackData, VocabularyLesson, VocabularyWord};
 use crate::transformer::Transformer;
+use crate::TenseType;
 
 /// Concrete transformer: VocabularyLesson → FlashcardStackData.
 /// Kanji duplication rule: if a word has a kanji field, two cards are created —
@@ -31,9 +32,25 @@ fn make_cards(word: &VocabularyWord) -> Vec<FlashcardCardData> {
     if let Some(kanji) = &word.kanji {
         cards.push(FlashcardCardData {
             front: kanji.clone(),
-            back,
+            back: back.clone(),
             known: false,
             is_kanji: true, // kanji front — large brush font
+        });
+    }
+    for tense in &word.tenses {
+        if tense.conjugation.trim().is_empty() {
+            continue;
+        }
+        let tense_label = TenseType::from_label(&tense.name).display_label();
+        let derived_type = match &word.word_type {
+            Some(wt) => format!("{wt} ({tense_label})"),
+            None => format!("({tense_label})"),
+        };
+        cards.push(FlashcardCardData {
+            front: tense.conjugation.clone(),
+            back: format!("{back} — {derived_type}"),
+            known: false,
+            is_kanji: false,
         });
     }
     cards
@@ -61,11 +78,24 @@ mod tests {
         }
     }
 
+    /// Same shape as `word()` but with no tense entries — keeps kanji-duplication
+    /// tests focused on spelling/kanji card behavior, unaffected by tense cards.
+    fn word_no_tenses(spelling: &str, kanji: Option<&str>, meaning: &str) -> VocabularyWord {
+        VocabularyWord {
+            spelling: spelling.into(),
+            kanji: kanji.map(Into::into),
+            meaning: meaning.into(),
+            word_type: Some("noun".into()),
+            tenses: vec![],
+            examples: vec![],
+        }
+    }
+
     #[test]
     fn spelling_only_produces_one_card() {
         let lessons = vec![VocabularyLesson {
             name: "L1".into(),
-            words: vec![word("inu", None, "dog")],
+            words: vec![word_no_tenses("inu", None, "dog")],
         }];
         let stacks = FlashcardExerciseTransformer.transform(&lessons);
         assert_eq!(stacks[0].cards.len(), 1);
@@ -78,7 +108,7 @@ mod tests {
     fn kanji_word_produces_two_cards_sharing_same_back() {
         let lessons = vec![VocabularyLesson {
             name: "L1".into(),
-            words: vec![word("いぬ", Some("犬"), "dog")],
+            words: vec![word_no_tenses("いぬ", Some("犬"), "dog")],
         }];
         let stacks = FlashcardExerciseTransformer.transform(&lessons);
         assert_eq!(stacks[0].cards.len(), 2);
@@ -91,6 +121,71 @@ mod tests {
         assert!(!stacks[0].cards[0].back.contains("e.g."));
         assert!(!stacks[0].cards[0].is_kanji); // spelling card
         assert!(stacks[0].cards[1].is_kanji); // kanji card
+    }
+
+    #[test]
+    fn word_with_no_tenses_produces_no_extra_cards() {
+        let lessons = vec![VocabularyLesson {
+            name: "L1".into(),
+            words: vec![word_no_tenses("いぬ", Some("犬"), "dog")],
+        }];
+        let stacks = FlashcardExerciseTransformer.transform(&lessons);
+        // spelling + kanji only — no tense-derived cards
+        assert_eq!(stacks[0].cards.len(), 2);
+    }
+
+    #[test]
+    fn tense_entry_with_conjugation_produces_additional_card() {
+        let mut w = word("たべる", None, "to eat");
+        w.word_type = Some("verb".into());
+        w.tenses = vec![TenseEntry {
+            name: "past-formal".into(),
+            conjugation: "たべました".into(),
+        }];
+        let lessons = vec![VocabularyLesson {
+            name: "L1".into(),
+            words: vec![w],
+        }];
+        let stacks = FlashcardExerciseTransformer.transform(&lessons);
+        // spelling card + tense card (no kanji field set)
+        assert_eq!(stacks[0].cards.len(), 2);
+        let tense_card = &stacks[0].cards[1];
+        assert_eq!(tense_card.front, "たべました");
+        assert_eq!(tense_card.back, "to eat — verb (past-formal)");
+        assert!(!tense_card.is_kanji);
+    }
+
+    #[test]
+    fn tense_entry_without_word_type_omits_type_prefix() {
+        let mut w = word("たべる", None, "to eat");
+        w.word_type = None;
+        w.tenses = vec![TenseEntry {
+            name: "past-formal".into(),
+            conjugation: "たべました".into(),
+        }];
+        let lessons = vec![VocabularyLesson {
+            name: "L1".into(),
+            words: vec![w],
+        }];
+        let stacks = FlashcardExerciseTransformer.transform(&lessons);
+        let tense_card = &stacks[0].cards[1];
+        assert_eq!(tense_card.back, "to eat — (past-formal)");
+    }
+
+    #[test]
+    fn tense_entry_with_empty_conjugation_produces_no_card() {
+        let mut w = word("たべる", None, "to eat");
+        w.tenses = vec![TenseEntry {
+            name: "past-formal".into(),
+            conjugation: "   ".into(),
+        }];
+        let lessons = vec![VocabularyLesson {
+            name: "L1".into(),
+            words: vec![w],
+        }];
+        let stacks = FlashcardExerciseTransformer.transform(&lessons);
+        // spelling card only — blank conjugation produces no tense card
+        assert_eq!(stacks[0].cards.len(), 1);
     }
 
     #[test]
