@@ -188,20 +188,7 @@ fn generate_exercises_creates_tense_and_sentence_cards() {
         .iter()
         .find(|c| c.jap_obj == "たべました")
         .expect("expected a tense-derived card with jap_obj == 'たべました'");
-    let tense_explanation = tense_card.explanation.to_string();
-    assert!(
-        tense_explanation.contains("to eat"),
-        "tense card explanation should contain 'to eat', got: {tense_explanation}"
-    );
-    assert!(
-        tense_explanation.contains("verb"),
-        "tense card explanation should contain 'verb', got: {tense_explanation}"
-    );
-    assert!(
-        tense_explanation.contains("past-formal")
-            || tense_explanation.to_lowercase().contains("past"),
-        "tense card explanation should reference the 'past-formal' tense, got: {tense_explanation}"
-    );
+    assert_eq!(tense_card.explanation, "to eat");
 
     // --- sentence-stack-list: exactly one sentence card ---
     let sentence_stack_list = flashcard_logic.get_sentence_stack_list();

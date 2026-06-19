@@ -2,7 +2,6 @@
 
 use crate::models::{FlashcardCardData, FlashcardStackData, VocabularyLesson, VocabularyWord};
 use crate::transformer::Transformer;
-use crate::TenseType;
 
 /// Concrete transformer: VocabularyLesson → FlashcardStackData.
 /// Kanji duplication rule: if a word has a kanji field, two cards are created —
@@ -41,14 +40,9 @@ fn make_cards(word: &VocabularyWord) -> Vec<FlashcardCardData> {
         if tense.conjugation.trim().is_empty() {
             continue;
         }
-        let tense_label = TenseType::from_label(&tense.name).display_label();
-        let derived_type = match &word.word_type {
-            Some(wt) => format!("{wt} ({tense_label})"),
-            None => format!("({tense_label})"),
-        };
         cards.push(FlashcardCardData {
             front: tense.conjugation.clone(),
-            back: format!("{back} — {derived_type}"),
+            back: back.clone(),
             known: false,
             is_kanji: false,
         });
@@ -151,12 +145,12 @@ mod tests {
         assert_eq!(stacks[0].cards.len(), 2);
         let tense_card = &stacks[0].cards[1];
         assert_eq!(tense_card.front, "たべました");
-        assert_eq!(tense_card.back, "to eat — verb (past-formal)");
+        assert_eq!(tense_card.back, "to eat");
         assert!(!tense_card.is_kanji);
     }
 
     #[test]
-    fn tense_entry_without_word_type_omits_type_prefix() {
+    fn tense_entry_back_is_meaning_only_regardless_of_word_type() {
         let mut w = word("たべる", None, "to eat");
         w.word_type = None;
         w.tenses = vec![TenseEntry {
@@ -169,7 +163,7 @@ mod tests {
         }];
         let stacks = FlashcardExerciseTransformer.transform(&lessons);
         let tense_card = &stacks[0].cards[1];
-        assert_eq!(tense_card.back, "to eat — (past-formal)");
+        assert_eq!(tense_card.back, "to eat");
     }
 
     #[test]
