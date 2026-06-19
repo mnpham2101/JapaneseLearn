@@ -10,6 +10,16 @@
 // - Deleting a card removes the FlashcardModel at the given index
 // - Deleting a stack removes it from flashcard-list and resets selected-stack-index to -1
 // - Data survives a simulated restart (load_stacks reads what save_stacks wrote)
+//
+// # [Task 8.1]:
+// - update_progress edge case: no stack ever selected (selected-stack-index stays at its
+//   default -1) leaves known-count/total-count at 0 — on_known_changed early-returns before
+//   reaching update_progress whenever stack_index < 0, so the no-selection path is exercised
+//   by asserting the untouched default state rather than invoking that callback
+// - update_progress edge case: an empty stack (zero cards) is selected, then on_known_changed
+//   is invoked with a card index that does not exist in that stack — the handler's card
+//   mutation is skipped via get_mut returning None, but update_progress still runs and
+//   recomputes known-count/total-count as 0/0 from the empty stack
 
 use std::cell::Cell;
 
@@ -198,4 +208,35 @@ fn study_page_persistence_round_trip() {
 
     // Clean up test artifact
     let _ = std::fs::remove_file("data/stacks.json");
+}
+
+/// Covers: Task 8.1 — update_progress with no stack ever selected leaves counts at 0.
+/// on_known_changed early-returns before reaching update_progress whenever stack_index < 0,
+/// so there is no production call path that reaches update_progress with no selection; the
+/// no-selection invariant is instead verified directly against the untouched default state.
+#[test]
+fn study_page_progress_no_selection() {
+    let window = setup();
+    let logic = window.global::<FlashcardAppLogic>();
+
+    assert_eq!(logic.get_selected_stack_index(), -1);
+    assert_eq!(logic.get_known_count(), 0);
+    assert_eq!(logic.get_total_count(), 0);
+}
+
+/// Covers: Task 8.1 — update_progress with an empty selected stack (zero cards) recomputes
+/// known-count/total-count as 0/0. on_known_changed's card mutation is skipped because
+/// card_index 0 does not exist in the empty stack, but update_progress still runs
+/// unconditionally afterward and reflects the empty stack's real card count.
+#[test]
+fn study_page_progress_empty_stack() {
+    let window = setup();
+    let logic = window.global::<FlashcardAppLogic>();
+    seed_stack(&logic, "Empty Stack");
+    logic.set_selected_stack_index(0);
+
+    logic.invoke_known_changed(0, 0, false);
+
+    assert_eq!(logic.get_known_count(), 0);
+    assert_eq!(logic.get_total_count(), 0);
 }
