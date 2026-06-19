@@ -13,6 +13,10 @@ export component Flashcard inherits Rectangle {
 
     callback flipped;
 
+    changed data => {
+        known = data.known;
+    }
+
     min-width: 380px;
     width: 80%;
     preferred-height: 200px;  // allow calculating from child component
