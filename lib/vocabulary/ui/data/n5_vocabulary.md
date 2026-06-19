@@ -1,4 +1,4 @@
-## N5 Vocabulary — People
+## N5 Noun — People
 ### ひと
 kanji: 人
 meaning: person; people
@@ -149,6 +149,12 @@ meaning: son
 type: noun
 example:
 
+### こども
+kanji:　子ども
+meaning: kid
+type: noun
+example: 子どもは　あまいものが　すきです。
+
 ### むすめ
 kanji: 娘
 meaning: daughter
@@ -179,7 +185,7 @@ meaning: grandmother
 type: noun
 example:
 
-## N5 Vocabulary — Objects
+## N5 Noun — Objects
 ### ほん
 kanji: 本
 meaning: book
@@ -217,13 +223,72 @@ meaning: paper
 type: noun
 example: かみに かきます。(I write on paper.)
 
-## N5 Vocabulary — Places
+### きって
+kanji: 切手
+meaning: stamp
+type: noun
+example:
+
+### しんぶん
+kanji: 新聞
+meaning: newspaper
+type: noun
+example:
+
+### クーポン
+kanji:
+meaning: coupon
+type: noun
+example:
+
+###
+kanji:
+meaning:
+type: noun
+example:
+
+###
+kanji:
+meaning:
+type: noun
+example:
+
+
+## N5 Noun — Places
 ### いえ
 kanji: 家
 meaning: house; home
 type: noun
 example: いえに かえります。(I return home.)
 example: いえが おおきいです。(The house is big.)
+
+###
+kanji:
+meaning: kitchen
+type: noun
+example:
+example:
+
+###
+kanji:
+meaning: toilet, restroom
+type: noun
+example:
+example:
+
+###
+kanji:
+meaning: bedroom
+type: noun
+example:
+example:
+
+###
+kanji:
+meaning: living room
+type: noun
+example:
+example:
 
 ### がっこう
 kanji: 学校
@@ -272,6 +337,12 @@ kanji: 駅
 meaning: train station
 type: noun
 example: えきの まえに あります。(It is in front of the station.)
+
+### くうこう
+kanji: 空港
+meaning: airport
+type: noun
+example:
 
 ### みせ
 kanji: 店
@@ -333,7 +404,7 @@ meaning: office
 type: noun
 example:
 
-## N5 Vocabulary — Food and Drink
+## N5 Noun — Food and Drink
 ### みず
 kanji: 水
 meaning: water
@@ -382,7 +453,7 @@ meaning: juice
 type: noun
 example:
 
-## N5 Vocabulary — Time
+## N5 Noun — Time
 ###　せんしゅう
 kanji:　先週
 meaning: last week
@@ -599,7 +670,7 @@ meaning: Sun
 type: noun
 example:
 
-## N5 Vocabulary — Numbers and Quantities
+## N5 Noun — Numbers and Quantities
 ### いくら
 kanji: 幾ら
 meaning: how much (price)
@@ -612,7 +683,7 @@ meaning: how many people
 type: noun
 example: なんにんですか。(How many people are there?)
 
-## N5 Vocabulary — Nature and Weather
+## N5 Noun — Nature and Weather
 ### てんき
 kanji: 天気
 meaning: weather
@@ -642,3 +713,29 @@ kanji: 海
 meaning: sea; ocean
 type: noun
 example: うみで およぎます。(I swim in the sea.)
+
+## N5 Noun — Abstract
+###　しゅみ
+kanji: 趣味
+meaning: hobby, favorite things
+type: noun
+example:
+
+### ゆめ
+kanji:夢
+meaning: dream, wish
+type: noun
+example: 私のゆめは　じぶんの　かいしゃを　つくること　です。: Tôi mơ ước tạo nên một cty của bản thân. 
+example: ゆめは　エベレストに　おぼることです。 : Ườc mơ của tôi là leo đến đỉnh everest.
+
+### にっか
+kanji: 日課
+meaning: habit
+type: noun
+example:
+
+### じぶん
+kanji:自分
+meaning:　
+type: noun
+example:

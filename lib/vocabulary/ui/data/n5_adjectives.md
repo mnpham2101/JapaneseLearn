@@ -1,4 +1,4 @@
-## N5 Adjectives — い-adjectives (Size and Age)
+## N5 Adjectives — Size, Age, Quality of things, place
 
 ### おおきい
 kanji: 大きい
@@ -41,8 +41,6 @@ tense: negative = ふるくない
 tense: negative past = ふるくなかった
 example: この ほんは ふるいです。(This book is old.)
 
-## N5 Adjectives — い-adjectives (Price and Quality)
-
 ### たかい
 kanji: 高い
 meaning: expensive; tall; high
@@ -63,6 +61,32 @@ tense: past = やすかった
 tense: negative = やすくない
 tense: negative past = やすくなかった
 example: このみせは やすいです。(This shop is cheap.)
+
+###
+kanji:
+meaning: long
+type: adjective
+tense: present :
+tense: present-formal :
+tense: past-informal :
+tense: negative-present-formal :
+tense: negative-present-informal :
+tense: negative-past-formal :
+tense: negative-past-informal :
+example:
+
+###
+kanji:
+meaning: short
+type: adjective
+tense: present :
+tense: present-formal :
+tense: past-informal :
+tense: negative-present-formal :
+tense: negative-present-informal :
+tense: negative-past-formal :
+tense: negative-past-informal :
+example:
 
 ### いい
 kanji: 良い
@@ -85,49 +109,18 @@ tense: negative = わるくない
 tense: negative past = わるくなかった
 example: きょうは てんきが わるいです。(The weather is bad today.)
 
-## N5 Adjectives — い-adjectives (Temperature and Sensation)
-
-### あつい
-kanji: 暑い
-meaning: hot (weather or temperature)
-type: adjective (i-adj)
-tense: present = あつい
-tense: past = あつかった
-tense: negative = あつくない
-tense: negative past = あつくなかった
-example: きょうは あついです。(It is hot today.)
-
-### さむい
-kanji: 寒い
-meaning: cold (weather)
-type: adjective (i-adj)
-tense: present = さむい
-tense: past = さむかった
-tense: negative = さむくない
-tense: negative past = さむくなかった
-example: ふゆは さむいです。(Winter is cold.)
-
-### つめたい
-kanji: 冷たい
-meaning: cold (to the touch)
-type: adjective (i-adj)
-tense: present = つめたい
-tense: past = つめたかった
-tense: negative = つめたくない
-tense: negative past = つめたくなかった
-example: みずが つめたいです。(The water is cold.)
-
-### からい
-kanji: 辛い
-meaning: spicy; hot (taste)
-type: adjective (i-adj)
-tense: present = からい
-tense: past = からかった
-tense: negative = からくない
-tense: negative past = からくなかった
-example: このりょうりは からいです。(This dish is spicy.)
-
-## N5 Adjectives — な-adjectives
+### おもい
+kanji: おもい
+meaning: heavy
+type: adjective
+tense: present :
+tense: present-formal :
+tense: past-informal :
+tense: negative-present-formal :
+tense: negative-present-informal :
+tense: negative-past-formal :
+tense: negative-past-informal :
+example:
 
 ### きれい
 kanji: 綺麗
@@ -170,6 +163,284 @@ tense: negative = べんりじゃありません
 tense: negative past = べんりじゃありませんでした
 example: このちかてつは べんりです。(This subway is convenient.)
 
+###
+kanji:
+meaning: complex
+type: adjective
+tense: present :
+tense: present-formal :
+tense: past-informal :
+tense: negative-present-formal :
+tense: negative-present-informal :
+tense: negative-past-formal :
+tense: negative-past-informal :
+example:
+
+###
+kanji:
+meaning: spacious
+type: adjective
+tense: present :
+tense: present-formal :
+tense: past-informal :
+tense: negative-present-formal :
+tense: negative-present-informal :
+tense: negative-past-formal :
+tense: negative-past-informal :
+example:
+
+###
+kanji:
+meaning: small
+type: adjective
+tense: present :
+tense: present-formal :
+tense: past-informal :
+tense: negative-present-formal :
+tense: negative-present-informal :
+tense: negative-past-formal :
+tense: negative-past-informal :
+example:
+
+###
+kanji:
+meaning: dirty
+type: adjective
+tense: present :
+tense: present-formal :
+tense: past-informal :
+tense: negative-present-formal :
+tense: negative-present-informal :
+tense: negative-past-formal :
+tense: negative-past-informal :
+example:
+
+### むりょう
+kanji:無料
+meaning: free, doesn't cost
+type: adjective
+tense: present :
+tense: present-formal :
+tense: past-informal :
+tense: negative-present-formal :
+tense: negative-present-informal :
+tense: negative-past-formal :
+tense: negative-past-informal :
+example:
+
+## N5 Adjective - Characters
+###
+kanji:
+meaning: friendly
+type: adjective
+tense: present :
+tense: present-formal :
+tense: past-informal :
+tense: negative-present-formal :
+tense: negative-present-informal :
+tense: negative-past-formal :
+tense: negative-past-informal :
+example:
+
+###
+kanji:
+meaning: rude
+type: adjective
+tense: present :
+tense: present-formal :
+tense: past-informal :
+tense: negative-present-formal :
+tense: negative-present-informal :
+tense: negative-past-formal :
+tense: negative-past-informal :
+example:
+
+###
+kanji:
+meaning: helpful
+type: adjective
+tense: present :
+tense: present-formal :
+tense: past-informal :
+tense: negative-present-formal :
+tense: negative-present-informal :
+tense: negative-past-formal :
+tense: negative-past-informal :
+example:
+
+###
+kanji:
+meaning: busy
+type: adjective
+tense: present :
+tense: present-formal :
+tense: past-informal :
+tense: negative-present-formal :
+tense: negative-present-informal :
+tense: negative-past-formal :
+tense: negative-past-informal :
+example:
+
+###
+kanji:
+meaning: free
+type: adjective
+tense: present :
+tense: present-formal :
+tense: past-informal :
+tense: negative-present-formal :
+tense: negative-present-informal :
+tense: negative-past-formal :
+tense: negative-past-informal :
+example:
+
+###
+kanji:
+meaning: hardwork
+type: adjective
+tense: present :
+tense: present-formal :
+tense: past-informal :
+tense: negative-present-formal :
+tense: negative-present-informal :
+tense: negative-past-formal :
+tense: negative-past-informal :
+example:
+
+###
+kanji:
+meaning: lazy
+type: adjective
+tense: present :
+tense: present-formal :
+tense: past-informal :
+tense: negative-present-formal :
+tense: negative-present-informal :
+tense: negative-past-formal :
+tense: negative-past-informal :
+example:
+
+###
+kanji:
+meaning: cute
+type: adjective
+tense: present :
+tense: present-formal :
+tense: past-informal :
+tense: negative-present-formal :
+tense: negative-present-informal :
+tense: negative-past-formal :
+tense: negative-past-informal :
+example:
+
+###
+kanji:
+meaning: beautiful
+type: adjective
+tense: present :
+tense: present-formal :
+tense: past-informal :
+tense: negative-present-formal :
+tense: negative-present-informal :
+tense: negative-past-formal :
+tense: negative-past-informal :
+example:
+
+###
+kanji:
+meaning: handsome
+type: adjective
+tense: present :
+tense: present-formal :
+tense: past-informal :
+tense: negative-present-formal :
+tense: negative-present-informal :
+tense: negative-past-formal :
+tense: negative-past-informal :
+example:
+
+###
+kanji:
+meaning: skinny
+type: adjective
+tense: present :
+tense: present-formal :
+tense: past-informal :
+tense: negative-present-formal :
+tense: negative-present-informal :
+tense: negative-past-formal :
+tense: negative-past-informal :
+example:
+
+###
+kanji:
+meaning: fat
+type: adjective
+tense: present :
+tense: present-formal :
+tense: past-informal :
+tense: negative-present-formal :
+tense: negative-present-informal :
+tense: negative-past-formal :
+tense: negative-past-informal :
+example:
+
+###
+kanji:
+meaning: discipline
+type: adjective
+tense: present :
+tense: present-formal :
+tense: past-informal :
+tense: negative-present-formal :
+tense: negative-present-informal :
+tense: negative-past-formal :
+tense: negative-past-informal :
+example:
+
+## N5 Adjectives — Temperature and Sensation
+
+### あつい
+kanji: 暑い
+meaning: hot (weather or temperature)
+type: adjective (i-adj)
+tense: present = あつい
+tense: past = あつかった
+tense: negative = あつくない
+tense: negative past = あつくなかった
+example: きょうは あついです。(It is hot today.)
+
+### さむい
+kanji: 寒い
+meaning: cold (weather)
+type: adjective (i-adj)
+tense: present = さむい
+tense: past = さむかった
+tense: negative = さむくない
+tense: negative past = さむくなかった
+example: ふゆは さむいです。(Winter is cold.)
+
+### つめたい
+kanji: 冷たい
+meaning: cold (to the touch)
+type: adjective (i-adj)
+tense: present = つめたい
+tense: past = つめたかった
+tense: negative = つめたくない
+tense: negative past = つめたくなかった
+example: みずが つめたいです。(The water is cold.)
+
+### からい
+kanji: 辛い
+meaning: spicy; hot (taste)
+type: adjective (i-adj)
+tense: present = からい
+tense: past = からかった
+tense: negative = からくない
+tense: negative past = からくなかった
+example: このりょうりは からいです。(This dish is spicy.)
+
+## N5 Adjectives — reference/like/dislike/want to have/want to do
 ### すき
 kanji: 好き
 meaning: liked; favorite
@@ -180,6 +451,7 @@ tense: negative = すきじゃありません
 tense: negative past = すきじゃありませんでした
 example: にほんごが すきです。(I like Japanese.)
 example: すしが すきです。(I like sushi.)
+exmaple:　かれは　しつれいだ　から、わたしは　かれが　すきじゃないです。: Since he is rude, I don't like him.
 
 ### きらい
 kanji: 嫌い
@@ -190,6 +462,19 @@ tense: past = きらいでした
 tense: negative = きらいじゃありません
 tense: negative past = きらいじゃありませんでした
 example: からいたべものが きらいです。(I dislike spicy food.)
+
+### とくい
+kanji: 得意
+meaning: good at; skilled (used when talked of ourself)
+type: adjective (na-adj)
+tense: present :
+tense: present-formal :
+tense: past-informal :
+tense: negative-present-formal :
+tense: negative-present-informal :
+tense: negative-past-formal :
+tense: negative-past-informal :
+example: 私は、ギータが　まあまあ　とくいです。
 
 ### じょうず
 kanji: 上手
@@ -210,3 +495,176 @@ tense: past = へたでした
 tense: negative = へたじゃありません
 tense: negative past = へたじゃありませんでした
 example: わたしは りょうりが へたです。(I am bad at cooking.)
+
+###　にがて
+kanji:　苦手
+meaning: bad at, unskilled, don't like
+type: adjective (na-adj)
+tense: present :
+tense: present-formal :
+tense: past-informal :
+tense: negative-present-formal :
+tense: negative-present-informal :
+tense: negative-past-formal :
+tense: negative-past-informal :
+example:
+
+## N5 Adjectives - (positions)
+###
+kanji:
+meaning: left
+type: adjective (na-adj)
+tense: present :
+tense: present-formal :
+tense: past-informal :
+tense: negative-present-formal :
+tense: negative-present-informal :
+tense: negative-past-formal :
+tense: negative-past-informal :
+example:
+
+###
+kanji:
+meaning: right
+type: adjective (na-adj)
+tense: present :
+tense: present-formal :
+tense: past-informal :
+tense: negative-present-formal :
+tense: negative-present-informal :
+tense: negative-past-formal :
+tense: negative-past-informal :
+example:
+
+###
+kanji:
+meaning: in front of
+type: adjective (na-adj)
+tense: present :
+tense: present-formal :
+tense: past-informal :
+tense: negative-present-formal :
+tense: negative-present-informal :
+tense: negative-past-formal :
+tense: negative-past-informal :
+example:
+
+###
+kanji:
+meaning: behind
+type: adjective (na-adj)
+tense: present :
+tense: present-formal :
+tense: past-informal :
+tense: negative-present-formal :
+tense: negative-present-informal :
+tense: negative-past-formal :
+tense: negative-past-informal :
+example:
+
+###
+kanji:
+meaning: above
+type: adjective (na-adj)
+tense: present :い-adjectives
+tense: present-formal :
+tense: past-informal :
+tense: negative-present-formal :
+tense: negative-present-informal :
+tense: negative-past-formal :
+tense: negative-past-informal :
+example:
+
+###
+kanji:
+meaning: below, under
+type: adjective (na-adj)
+tense: present :
+tense: present-formal :
+tense: past-informal :
+tense: negative-present-formal :
+tense: negative-present-informal :
+tense: negative-past-formal :
+tense: negative-past-informal :
+example:
+
+###
+kanji:
+meaning: inside
+type: adjective (na-adj)
+tense: present :
+tense: present-formal :
+tense: past-informal :
+tense: negative-present-formal :
+tense: negative-present-informal :
+tense: negative-past-formal :
+tense: negative-past-informal :
+example:
+
+###
+kanji:
+meaning: outside
+type: adjective (na-adj)
+tense: present :
+tense: present-formal :
+tense: past-informal :
+tense: negative-present-formal :
+tense: negative-present-informal :
+tense: negative-past-formal :
+tense: negative-past-informal :
+example:
+
+###
+kanji:
+meaning: beside, next to
+type: adjective (na-adj)
+tense: present :
+tense: present-formal :
+tense: past-informal :
+tense: negative-present-formal :
+tense: negative-present-informal :
+tense: negative-past-formal :
+tense: negative-past-informal :
+example:
+
+###
+kanji:
+meaning: nearby
+type: adjective (na-adj)
+tense: present :
+tense: present-formal :
+tense: past-informal :
+tense: negative-present-formal :
+tense: negative-present-informal :
+tense: negative-past-formal :
+tense: negative-past-informal :
+example:
+
+###
+kanji:
+meaning: between, right in middle
+type: adjective (na-adj)
+tense: present :
+tense: present-formal :
+tense: past-informal :
+tense: negative-present-formal :
+tense: negative-present-informal :
+tense: negative-past-formal :
+tense: negative-past-informal :
+example:
+
+###
+kanji:
+meaning: betweet, within
+type: adjective (na-adj)
+tense: present :
+tense: present-formal :
+tense: past-informal :
+tense: negative-present-formal :
+tense: negative-present-informal :
+tense: negative-past-formal :
+tense: negative-past-informal :
+example:
+
+## expressions
+ 
