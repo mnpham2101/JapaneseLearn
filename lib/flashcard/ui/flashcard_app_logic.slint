@@ -27,6 +27,12 @@ export global FlashcardAppLogic {
     ];
     in-out property <int> selected-stack-index: -1;
 
+    // Phase 8.V — sentence flashcards (generated from vocabulary example sentences,
+    // persisted separately to sentences.json). Decoupled from flashcard-list/
+    // selected-stack-index above; never written to by the manual CRUD callbacks.
+    in-out property <[FlashcardStackModel]> sentence-stack-list: [];
+    in-out property <int> selected-sentence-stack-index: -1;
+
     // Phase 4 study session state
     in-out property <bool> study-session-active: false;
     in property <int> known-count: 0;
