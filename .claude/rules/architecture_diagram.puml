@@ -35,7 +35,7 @@ package "Feature Libraries  [libA]  Slint + Rust" #eaf7ea {
     component "lib/flashcard\n— FlashcardStack, Flashcard, FlashcardList\n— CRUD handlers, JSON persistence\n— init() wires all callbacks" as Flashcard
     component "lib/vocabulary\n— VocabularyPage, LessonList\n— Word form (spelling, kanji, meaning,\n  type, tense, examples)\n— VocabularyAppLogic global\n— init() wires CRUD + generate callbacks" as Vocabulary
     component "lib/grammar\n— GrammarPage, LessonList\n— MatchingExercise, ReconstructExercise\n  FillBlankExercise\n— exercise_engine, scoring, persistence" as Grammar
-    component "lib/analytics\n— ProgressBarChart, SessionHistoryChart\n— session_log, stats\n— init() wires session recording" as Analytics
+    component "lib/analytics\n— AnalyticsPage (Slint views only)\n— calendar grid + known-vs-total chart\n  (proportional Rectangles)\n— sessions.json log\n— init() wires session recording,\n  delegates computation to StudyAnalytic" as Analytics
 }
 
 ' ─────────────────────────────────────────
@@ -44,6 +44,7 @@ package "Feature Libraries  [libA]  Slint + Rust" #eaf7ea {
 package "Service Libraries  [libB]  Rust only\n(platform cfg guards allowed)" #fdeaea {
     component "lib/persistent_data\n— markdown_io (pulldown-cmark)\n— file_io (rfd + WASM stubs)\n— Android stub" as PersistData
     component "lib/audio\n— tts_desktop (tts crate / SAPI)\n— tts_wasm (web_sys SpeechSynthesis)\n— pub fn speak(text)" as Audio
+    component "lib/study_analytic\n— VocabularyStudyAnalytic\n  known vs total, study-days,\n  days-until-target-date\n— pure Rust, no Slint, no init()\n— chrono (clock, wasmbind)" as StudyAnalytic
 }
 
 ' ─────────────────────────────────────────
@@ -95,6 +96,7 @@ Analytics  ..> PersistData : sessions.json
 Vocabulary ..> PersistData : vocabulary.json
 Flashcard  ..> Audio       : speak(word)
 Grammar    ..> Audio       : speak(sentence)
+Analytics  ..> StudyAnalytic : VocabularyStudyAnalytic::compute()
 
 ' libA cross-dependency: vocabulary writes generated stacks into flashcard state
 Vocabulary --> Flashcard   : workspace dep\n(update stacks + save)
