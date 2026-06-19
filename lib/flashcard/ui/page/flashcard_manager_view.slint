@@ -14,6 +14,8 @@ export component FlashcardManagerView inherits Rectangle {
 
     property <bool> show-stack: FlashcardAppLogic.selected-stack-index >= 0;
     property <bool> show-create-form: false;
+    // 0 = Flashcards (manually-managed stacks), 1 = Sentences (machine-generated stacks).
+    property <int> active-tab: 0;
 
     // Reset the create form whenever the stack detail opens.
     changed show-stack => {
@@ -47,6 +49,28 @@ export component FlashcardManagerView inherits Rectangle {
                 color: Tokens.text-primary;
                 vertical-alignment: center;
                 horizontal-stretch: 1;
+            }
+
+            CommonBtn {
+                text: "Flashcards";
+                width: 110px;
+                checked: root.active-tab == 0;
+                checked-bg: Tokens.action-tab-btn-active-bg;
+                checked-text: Tokens.text-primary;
+                clicked => {
+                    root.active-tab = 0;
+                }
+            }
+
+            CommonBtn {
+                text: "Sentences";
+                width: 110px;
+                checked: root.active-tab == 1;
+                checked-bg: Tokens.action-tab-btn-active-bg;
+                checked-text: Tokens.text-primary;
+                clicked => {
+                    root.active-tab = 1;
+                }
             }
 
             CommonBtn {
@@ -123,7 +147,7 @@ export component FlashcardManagerView inherits Rectangle {
                 }
             }
 
-            if !FlashcardAppLogic.study-session-active && root.show-stack: FlashcardStack {
+            if !FlashcardAppLogic.study-session-active && root.active-tab == 0 && root.show-stack: FlashcardStack {
                 stack: FlashcardAppLogic.flashcard-list[FlashcardAppLogic.selected-stack-index];
                 study-clicked => {
                     debug("study-clicked");
@@ -149,7 +173,7 @@ export component FlashcardManagerView inherits Rectangle {
                 }
             }
 
-            if !FlashcardAppLogic.study-session-active && FlashcardAppLogic.selected-stack-index == -1: HorizontalLayout {
+            if !FlashcardAppLogic.study-session-active && root.active-tab == 0 && FlashcardAppLogic.selected-stack-index == -1: HorizontalLayout {
                 alignment: center;
                 // Rectangle {              // very important to remove this wrapper, effect flickable in CommonList - confirmed root causu
                 //     max-width: 330px;    // this width somehow causes incorrect -vertical display, static not scrollable flickable
@@ -166,6 +190,33 @@ export component FlashcardManagerView inherits Rectangle {
                     }
 
                     addButtonText: "Add Stack";
+                }
+            }
+
+            // Sentences tab — read-only view of machine-generated sentence stacks.
+            // Fully regenerated on every "Generate Exercises" run, so no create/edit/delete
+            // callbacks are forwarded to FlashcardAppLogic here (intentional, not an oversight).
+            if !FlashcardAppLogic.study-session-active && root.active-tab == 1 && FlashcardAppLogic.selected-sentence-stack-index >= 0: FlashcardStack {
+                stack: FlashcardAppLogic.sentence-stack-list[FlashcardAppLogic.selected-sentence-stack-index];
+                study-clicked => {
+                    FlashcardAppLogic.study-session-active = true;
+                }
+                close-clicked => {
+                    FlashcardAppLogic.selected-sentence-stack-index = -1;
+                }
+            }
+
+            if !FlashcardAppLogic.study-session-active && root.active-tab == 1 && FlashcardAppLogic.selected-sentence-stack-index == -1: HorizontalLayout {
+                alignment: center;
+                CommonList {
+                    title: "Sentence Stacks";
+                    sentence-flashcard-list := FlashcardList {
+                        stacks: FlashcardAppLogic.sentence-stack-list;
+                        selected-index: FlashcardAppLogic.selected-sentence-stack-index;
+                        label-selected(index) => {
+                            FlashcardAppLogic.selected-sentence-stack-index = index;
+                        }
+                    }
                 }
             }
         }
