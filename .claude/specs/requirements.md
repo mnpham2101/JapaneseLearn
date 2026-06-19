@@ -86,13 +86,13 @@ without changing the active view.
   import it from `@flashcard` without creating a circular dependency.
 
 #### New components
-| Component | File | Library |
-|---|---|---|
-| `StudySessionView` (moved) | `lib/flashcard/ui/components/study_session_view.slint` | flashcard |
-| `LessonStackLabel` | `lib/vocabulary/ui/components/lesson_stack_label.slint` | vocabulary |
-| `LessonStackList` | `lib/vocabulary/ui/components/lesson_stack_list.slint` | vocabulary |
-| `LessonDetailView` | `lib/vocabulary/ui/components/lesson_detail_view.slint` | vocabulary |
-| `FlashcardManagerView` | `lib/vocabulary/ui/components/flashcard_manager_view.slint` | vocabulary |
+| Component                  | File                                                        | Library    |
+| -------------------------- | ----------------------------------------------------------- | ---------- |
+| `StudySessionView` (moved) | `lib/flashcard/ui/components/study_session_view.slint`      | flashcard  |
+| `LessonStackLabel`         | `lib/vocabulary/ui/components/lesson_stack_label.slint`     | vocabulary |
+| `LessonStackList`          | `lib/vocabulary/ui/components/lesson_stack_list.slint`      | vocabulary |
+| `LessonDetailView`         | `lib/vocabulary/ui/components/lesson_detail_view.slint`     | vocabulary |
+| `FlashcardManagerView`     | `lib/vocabulary/ui/components/flashcard_manager_view.slint` | vocabulary |
 
 **User flow**: StudyPage → Vocabulary tab → Import Lesson (action) → imports markdown →
 Lesson tab → view/add/delete lessons via `LessonStackList` → click lesson label →
@@ -146,13 +146,13 @@ detail → view/add/delete/edit flashcards.
   kanji: 食べる
   meaning: to eat
   type: verb
-  tense: positive-polite → 食べます
-  tense: negative-polite → 食べません
-  example: 私は毎日ご飯を食べる。
-  example: 彼は魚を食べません。
+  tense: positive-polite : 食べます
+  tense: negative-polite : 食べません
+  example: 私は毎日ご飯を食べる。 : I eat every day.
+  example: 彼は魚を食べません。 : He doesn't eat fish.
   ```
 
-  The `### <spelling>` subheading starts each word entry. `kanji:`, `type:`, `tense:`, and `example:` are optional. `tense:` and `example:` may repeat for multiple values.
+  The `### <spelling>` subheading starts each word entry. `kanji:`, `type:`, `tense:`, and `example:` are optional. `tense:` and `example:` may repeat for multiple values. Each `tense:` value is `<label> : <conjugation>` (second colon splits label from conjugation); each `example:` value is `<japanese sentence> : <meaning>`. See `@extended-vocab.md` for the full tense-type enum and the rule that each tense entry and each example generates its own flashcard.
 - The application **must** support export of all vocabulary lessons to a markdown file in the same format.
 - File dialogs **must** use `rfd`; all `std::fs` calls **must** be gated `#[cfg(not(target_arch = "wasm32"))]`.
 
@@ -223,11 +223,16 @@ detail → view/add/delete/edit flashcards.
 **Milestone 3 should include the following development**
 - Milestone 3 delivers **Analytics** and **Grammar Study Mode** as defined in the Future Backlog below.
 
+## Extended Vocabulary study
+- Provide more words per `tense` following the specs in `@extended-vocab.md`.
+- For each `example`, following the specs in `@extended-vocab.md`.
+
+## Analytics
+- Follow the specs in `@analytic-v1.md`
+
 # Requirements (Later / Future Backlog)
 
 ## Analytics
-- The application **should** track study sessions: date, stack studied, total cards, known count.
-- The application **should** display progress analytics per stack: known vs unknown bar, cards studied over time.
 - Charts **must** be implemented in pure Slint using proportional `Rectangle` widths/heights — no charting library.
 
 ## Grammar Study Mode
