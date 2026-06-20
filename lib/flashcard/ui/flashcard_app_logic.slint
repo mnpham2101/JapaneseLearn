@@ -35,8 +35,13 @@ export global FlashcardAppLogic {
 
     // Phase 4 study session state
     in-out property <bool> study-session-active: false;
-    in property <int> known-count: 0;
-    in property <int> total-count: 0;
+    // in-out (not in) — the Slint compiler constant-folds a global "in" property
+    // that no .slint binding ever writes to (only Rust does, via the generated
+    // setter, which the compiler's binding-constancy analysis can't see),
+    // baking its literal default into every dependent expression instead of a
+    // live reactive binding. in-out properties are never folded this way.
+    in-out property <int> known-count: 0;
+    in-out property <int> total-count: 0;
     callback known-changed(stack-index: int, card-index: int, known: bool);
 
     // Phase 2 callbacks — wired from UI to Rust handlers in lib/flashcard/src/lib.rs::init()

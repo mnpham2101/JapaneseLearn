@@ -576,6 +576,19 @@ where
                 })
                 .collect();
 
+            let total_words: usize = lessons.iter().map(|l| l.words.len()).sum();
+            let total_examples: usize = lessons
+                .iter()
+                .flat_map(|l| &l.words)
+                .map(|w| w.examples.len())
+                .sum();
+            println!(
+                "[debug] generate-exercises-clicked: lessons={}, total_words={}, total_examples={}",
+                lessons.len(),
+                total_words,
+                total_examples
+            );
+
             // Dispatch through the libD service — pure computation.
             let service = ExerciseGeneratorService;
             let output = ExerciseGeneratorFor::<VocabularyLesson>::generate(

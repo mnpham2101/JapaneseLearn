@@ -10,6 +10,8 @@ export component StudySessionView inherits Rectangle {
     // because the `if FlashcardAppLogic.study-session-active` in StudyPage destroys
     // and recreates this component on every new session.
     property <int> current-card-index: 0;
+    property <int> known-count-mirror <=> FlashcardAppLogic.known-count;
+    property <int> total-count-mirror <=> FlashcardAppLogic.total-count;
     HorizontalLayout {
         alignment: LayoutAlignment.center;
         Rectangle {
@@ -21,7 +23,7 @@ export component StudySessionView inherits Rectangle {
 
                 // Progress counter
                 Text {
-                    text: "Known: " + FlashcardAppLogic.known-count + " / " + "Total: " + FlashcardAppLogic.total-count;
+                    text: "Known: " + root.known-count-mirror + " / " + "Total: " + root.total-count-mirror;
                     font-size: Tokens.font-size-body;
                     color: Tokens.text-secondary;
                     horizontal-alignment: center;

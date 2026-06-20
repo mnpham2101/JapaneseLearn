@@ -158,8 +158,14 @@ where
     let stacks: Vec<flashcard::FlashcardStackModel> = logic.get_flashcard_list().iter().collect();
     if let Some(stack) = stacks.get(stack_idx as usize) {
         let cards: Vec<flashcard::FlashcardModel> = stack.flashcards.iter().collect();
-        logic.set_total_count(cards.len() as i32);
-        logic.set_known_count(cards.iter().filter(|c| c.known).count() as i32);
+        let total = cards.len();
+        let known = cards.iter().filter(|c| c.known).count();
+        println!(
+            "[debug] update_progress: stack='{}', known={}, total={}",
+            stack.stackname, known, total
+        );
+        logic.set_total_count(total as i32);
+        logic.set_known_count(known as i32);
     } else {
         logic.set_known_count(0);
         logic.set_total_count(0);
