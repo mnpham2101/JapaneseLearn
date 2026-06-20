@@ -152,6 +152,7 @@ export component FlashcardManagerView inherits Rectangle {
                 study-clicked => {
                     debug("study-clicked");
                     FlashcardAppLogic.study-session-active = true;
+                    FlashcardAppLogic.study-session-opened();
                 }
                 close-clicked => {
                     FlashcardAppLogic.selected-stack-index = -1;

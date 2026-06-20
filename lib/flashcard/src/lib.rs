@@ -333,6 +333,14 @@ where
 
     {
         let ui_weak = ui.as_weak();
+        logic.on_study_session_opened(move || {
+            let ui = ui_weak.unwrap();
+            update_progress(&ui);
+        });
+    }
+
+    {
+        let ui_weak = ui.as_weak();
         logic.on_known_changed(move |stack_index, card_index, known| {
             let ui = ui_weak.unwrap();
             let logic = ui.global::<FlashcardAppLogic>();
