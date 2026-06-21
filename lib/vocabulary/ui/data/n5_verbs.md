@@ -46,9 +46,11 @@ example: このくすりが のみたくないです　: (I) don't want to drink
 example: けさ たくさん コーヒーを のんだ  : This morning I drank a lot of coffee.
 example: ビールはどのぐらい飲めますか : How much beer can you drink?
 example: ごばい のめます : I can drink 5 glasses.
+example:　毎日は　飲まない。ときどき　飲む。: Tôi không uống mỗi ngày, thình thoảng mới uống.
+example: かいしゃの　まえで　コーヒーを　のまたい？ : Uống cafe trước cty không? 
+example: コーヒーのみにいかない？ : Đi uống cafe không?
 
 ## N5 Verbs — Movement
-
 ### いく
 kanji: 行く
 meaning: to go
@@ -67,9 +69,10 @@ tense: potential-negative-form : いけません
 tense: potential-negative-form-informal (nai-form):　いけない
 example: まいにち　バスで　しごとに　いきます。 : Tôi đi làm bằng xe bus mỗi ngày.
 example: きのう、どこに いきましたか。 ：　　Where did you go yesterday?
+example: あさ、あめだった、かいしゃに　いかなかった。: Vì trời đã mưa sáng nay, nên tôi không đến cty.
 example: ほんやへ　ノートを　二さつ　かいに　いきました。 : tôi đã đến nhà sách để mua 2 quyển vở.
 example: わたしは　ラーメンを　たべるために　にほんへ　いきたいです。：　tôi muốn đến Nhật để ăn Ramen
-example: せんしゅう　のみかいに　いきませんでしたが、こんしゅう　いきます。 : Tuần trước tôi đã không đi tiệc rượu, nhưng tuần này tôi sẽ đi. (lịch sự)
+example: 先週　のみかいに　いきませんでしたが、今週　いきます。 : Tuần trước（せんしゅう）tôi đã không đi tiệc rượu, nhưng tuần này tôi sẽ đi　（こんしゅう）. (lịch sự)
 example:　せんしゅう　のみかいに　いかなかったけど、こんしゅう　いく。: Tuần trước tôi đã không đi tiệc rượu, nhưng tuần này tôi sẽ đi. (suồng sã)
 example: ときょうから、ハノイまで　ごじんで　ひこうきで　いけます。　:　Có thể đi từ Tokyo đến Hà Nội bằng máy bay trong 5 tiếng.
 example: ハノイから　とうきょうまで　いくのに　いくら　かかりますか。: Tốn bao nhiêu tiền để đi từ Hà Nội đến Tokyo?
@@ -94,6 +97,7 @@ example: 去年の秋　　にほんに きました。: Tôi đã đến Nhật
 example: ゆうべ　ここへ　こなかった。　: Tôi đã không đến đây tối qua.
 example: あしたの　ごぜん９じに　でんしゃで　ここへ　こられます。:  Tôi có thể đến đây bằng tàu điện sáng mai, lúc 9h.
 example: けさ、あめが　ふったから、ここへ　こられない。　:  Sáng nay, vì trời mưa, tôi đã không thể đến đây. (informal)
+example: きのうは　のめがに　こられなかった : Tôi đã không thể đến buổi nhậu tối qua. 
 
 ### かえる
 kanji: 帰る
@@ -135,23 +139,24 @@ tense: potential-negative-form-informal (nai-form) :
 tense: te-form : でて
 example: うちを でます。 : I leave the house.
 
-### でる
-kanji: 出る
+### でかける
+kanji: 出かける
 meaning: to leave; to exit; to go out、to start
 type: verb (dictionary)
-tense: present : でます
-tense: past-formal :
-tense: past-informal (ta-form):
-tense: negative-present-formal:
-tense: negative-present-informal (nai-form):
-tense: negative-past-formal  :
-tense: negative-past-informal (nai-form) :
+tense: present : でかけます
+tense: past-formal :　でかけました
+tense: past-informal (ta-form):　でかけた
+tense: negative-present-formal:　　でかけません
+tense: negative-present-informal (nai-form):　でかけない
+tense: negative-past-formal  :　でかけました
+tense: negative-past-informal (nai-form) :　でかけました
 tense: potential-form-formal :
 tense:  potential-form-informal :s
 tense: potential-negative-form :
 tense: potential-negative-form-informal (nai-form) :
 tense: te-form : でて
-example: うちを でます。 : I leave the house.
+example: 明日、どこに　でかける？　いいえ、どこにも　でかけない。: Ngày mai bạn đi đâu? Không tôi không đi đâu cả.　
+
 
 ### はいる
 kanji: 入る
@@ -288,23 +293,22 @@ kanji: 登る
 meaning: to climb
 type: verb (dictionary)
 tense: present : のぼります
-tense: past-formal :
-tense: past-informal (ta-form):
-tense: negative-present-formal:
-tense: negative-present-informal (nai-form):
-tense: negative-past-formal  :
-tense: negative-past-informal (nai-form) :
-tense: potential-form-formal :
-tense:  potential-form-informal :
-tense: potential-negative-form :
-tense: potential-negative-form-informal (nai-form) :
+tense: past-formal :　のぼりません
+tense: past-informal (ta-form):　のぼった
+tense: negative-present-formal:　のぼりません
+tense: negative-present-informal (nai-form):　のぼらない
+tense: negative-past-formal  :　のぼりまでした
+tense: negative-past-informal (nai-form) :　のぼらなかった
+tense: potential-form-formal : のぼれます
+tense: potential-form-informal :　のぼれる
+tense: potential-negative-form :　のぼれません
+tense: potential-negative-form-informal (nai-form) :　のぼれない
 tense: te-form : 
 example: こんども、いっしょに　山に　(やまに) のぼりましょうね　: Lần sau đi leo núi chung nữa nhé.
-example: 
+example: げんきじゃない　から、やまのぼんれない。: Tôi không có khỏe, tôi không leo núi được. 
 
 
 ## N5 Verbs — Daily Actions
-
 ### する
 kanji:
 meaning: to do
@@ -339,25 +343,49 @@ example:  :  Bạn có đề nghị gì không?
 example:  :  Bạn có muốn đề nghị gì không?
 example:  :  Tôi đề nghị đi coi film chung cuối tuần này.
 
+### かいものする
+kanji: 買い物する
+meaning: to shop
+type: verb (dictionary)
+tense: present : 買い物します
+tense: past-formal : かいものしました
+tense: past-informal (ta-form):　かいものした
+tense: negative-present-formal:　かいものません
+tense: negative-present-informal (nai-form):　かいものしない
+tense: negative-past-formal  :　かいものませんでした
+tense: negative-past-informal (nai-form) :　かいものなかった
+tense: potential-form-formal :　かいものできます
+tense: potential-form-informal :　かいものできる
+tense: potential-negative-form :　かいものできません
+tense: potential-negative-form-informal (nai-form) :　かいものできなかった
+tense: te-form :
+example: 私の趣味は　えいがを　みることが　です。: Sở thích của tôi là đi xem phim.
+example: テレビを みます。: I watch TV.
+example: えいがを みました。: I watched a movie.
+example: テレビが　ないから、　みない。: Vì không có TV nên tui ko xem.
+example: とても　かいものたいけど、かいものできない
+
 ### みる
 kanji: 見る
 meaning: to see; to watch
 type: verb (dictionary)
 tense: present : みます
-tense: past-formal :
-tense: past-informal (ta-form):
-tense: negative-present-formal:
-tense: negative-present-informal (nai-form):
-tense: negative-past-formal  :
-tense: negative-past-informal (nai-form) :
-tense: potential-form-formal :
-tense:  potential-form-informal :
-tense: potential-negative-form :
-tense: potential-negative-form-informal (nai-form) :
+tense: past-formal : みました
+tense: past-informal (ta-form):　みまた
+tense: negative-present-formal:　みません
+tense: negative-present-informal (nai-form):　みない
+tense: negative-past-formal  :　みませんでした
+tense: negative-past-informal (nai-form) :　みなかった
+tense: potential-form-formal :　みられます
+tense: potential-form-informal :　みられる
+tense: potential-negative-form :　みられません
+tense: potential-negative-form-informal (nai-form) :　みられない
 tense: te-form :
 example: 私の趣味は　えいがを　みることが　です。: Sở thích của tôi là đi xem phim.
 example: テレビを みます。: I watch TV.
 example: えいがを みました。: I watched a movie.
+example: テレビが　ないから、　みない。: Vì không có TV nên tui ko xem.
+
 
 ### きく
 kanji: 聞く
@@ -376,8 +404,10 @@ tense: potential-negative-form :
 tense: potential-negative-form-informal (nai-form) :
 tense: te-form :
 example: おんがくを ききます。: I listen to music.
-example: せんせいに ききました :: I asked the teacher.
-exmaple: ここで　むりょうで　おんがくを　きくことが　できます。: ở đây có thể nghe nhạc miễn phí.
+example: せんせいに ききました : I asked the teacher.
+example: ここで　むりょうで　おんがくを　きくことが　できます。: ở đây có thể nghe nhạc miễn phí.
+example: 会社で　おんしゃでを　きくことが　しない。: Ở cty không được nghe nhạc.
+
 
 ### かく
 kanji: 書く
@@ -437,25 +467,27 @@ tense: potential-negative-form-informal (nai-form) :　よめない
 tense: te-form :
 example: ほんを よみます。:  I read a book.
 example: しんぶんを よみました。: I read the newspaper.
+example: 今日のひる、　マンガを　よんだ。今は、マンガを　よまたい　: Con đã đọc truyển trưa nay rồi. Con không đọc truyện bây giờ nữa. 
 
 ### はなす
 kanji: 話す
 meaning: to speak; to talk
 type: verb (dictionary)
 tense: present : はなします
-tense: past-formal :
-tense: past-informal (ta-form):
-tense: negative-present-formal:
-tense: negative-present-informal (nai-form):
-tense: negative-past-formal  :
-tense: negative-past-informal (nai-form) :
-tense: potential-form-formal :
-tense:  potential-form-informal :
-tense: potential-negative-form :
-tense: potential-negative-form-informal (nai-form) :
+tense: past-formal : はなしました
+tense: past-informal (ta-form):　はなした
+tense: negative-present-formal:　はなしません
+tense: negative-present-informal (nai-form):　はなさない
+tense: negative-past-formal  :　はなしませんでした
+tense: negative-past-informal (nai-form) :　はなさなかった
+tense: potential-form-formal :　はなせます
+tense: potential-form-informal :　はなせる
+tense: potential-negative-form :　はなせません
+tense: potential-negative-form-informal (nai-form) :　はなせない
 tense: te-form :
 example: にほんごで はなします。: I speak in Japanese.
 example: つまに　仕事を　やめることを　はなさない。: Tôi đã ko nói vợ về việc nghỉ làm.
+example: 日本語を　あまり　はなさない。: tôi không nói tiếng nhật nhiều. 
 
 ### つたえる
 kanji: 伝える
@@ -498,19 +530,19 @@ example: このうた、うたえる。: can you sing this song?
 kanji:　
 meaning: to bath
 type: verb (dictionary)
-tense: present : はなします
-tense: past-formal :
-tense: past-informal (ta-form):
-tense: negative-present-formal:
-tense: negative-present-informal (nai-form):
-tense: negative-past-formal  :
-tense: negative-past-informal (nai-form) :
-tense: potential-form-formal :
-tense:  potential-form-informal :
-tense: potential-negative-form :
-tense: potential-negative-form-informal (nai-form) :
+tense: present :　あびます
+tense: past-formal :　あびました
+tense: past-informal (ta-form):　あびた
+tense: negative-present-formal:　あびません
+tense: negative-present-informal (nai-form):　あびない
+tense: negative-past-formal  :　あびませでした
+tense: negative-past-informal (nai-form) :　あびなかった
+tense: potential-form-formal :　あびられます
+tense: potential-form-informal :　あびられる
+tense: potential-negative-form :　あびられません
+tense: potential-negative-form-informal (nai-form) :　あびられない
 tense: te-form :
-example: 
+example: 毎日　シャワーを　あびる。:  tôi tắm vòi hoa sen mỗi ngày.
 
 ### おきる
 kanji: 起きる
@@ -536,19 +568,20 @@ kanji: 寝る
 meaning: to sleep; to go to bed
 type: verb (dictionary)
 tense: present : ねます
-tense: past-formal :
-tense: past-informal (ta-form):
-tense: negative-present-formal:
-tense: negative-present-informal (nai-form):
-tense: negative-past-formal  :
-tense: negative-past-informal (nai-form) :
-tense: potential-form-formal :
-tense:  potential-form-informal :
-tense: potential-negative-form :
-tense: potential-negative-form-informal (nai-form) :
+tense: past-formal :　ねました
+tense: past-informal (ta-form):　ねた
+tense: negative-present-formal:　ねません
+tense: negative-present-informal (nai-form):　ねない
+tense: negative-past-formal  :　ねませんでした
+tense: negative-past-informal (nai-form) :　ねなかった
+tense: potential-form-formal : ねられます
+tense: potential-form-informal :　ねられる
+tense: potential-negative-form :　ねられません
+tense: potential-negative-form-informal (nai-form) :　ねられない
 tense: te-form :
 example: じゅういちじに ねます。 : I go to sleep at 11 o'clock.
 example: よるくじから　朝日　ごじまで　ねかれます。
+example: 今日は　あすいでした、られ　ねられましんでした。: Hôm qua nóng quá, tôi không thể ngủ. 
 
 ### かう
 kanji:
@@ -950,15 +983,14 @@ type: verb (dictionary)
 tense: present : あります
 tense: past-formal :　ありました
 tense: past-informal (ta-form):　あった
-tense: negative-present-formal:
+tense: negative-present-formal:　ありませんでした
 tense: negative-present-informal (nai-form):　ない
 tense: negative-past-formal  :　ありませんでした
 tense: negative-past-informal (nai-form) :　なかった
 tense: te-form : あって
 example: つくえの うえに ほんが あります。: There is a book on the desk.
-example: じかんが あらない。: I don't have time.
+example: じかんが ない。とても いそがしい: I don't have time.　I am very busy.
 example: かのじょは　うたが　とても　じょうずです。にんきが　ある。 : She sings very well. She is well-liked.
-
 
 
 ### いる
@@ -1042,7 +1074,7 @@ tense: te-form : つかって
 example: パソコンを つかいます。: I use a computer.
 
 ### つくる
-kanji: 
+kanji: つくる
 meaning: to make
 type: verb (dictionary)
 tense: present : つくります
@@ -1050,14 +1082,15 @@ tense: past-formal :　つくりました
 tense: past-informal (ta-form):　つくった
 tense: negative-present-formal:　つくりましん
 tense: negative-present-informal (nai-form):　つくらない
-tense: negative-past-formal  :
-tense: negative-past-informal (nai-form) :
-tense: potential-form-formal :
-tense:  potential-form-informal :
-tense: potential-negative-form :
-tense: potential-negative-form-informal (nai-form) :
+tense: negative-past-formal  : つくりませんでした
+tense: negative-past-informal (nai-form) :　つくらなかった
+tense: potential-form-formal :　つくれます
+tense: potential-form-informal :　つくれる
+tense: potential-negative-form :　つくれません
+tense: potential-negative-form-informal (nai-form) :　つくれない
 tense: te-form :
 example:　ばんごはんを　つくった。　: tôi đã làm đồ ăn tối.
+example: いつも自で　ごはんを　作る？じかんが　ないから、あまり　つくらない　: Bạn thường tự nấu ăn? Không tôi ko có thời gian, không thường nấu ăn lắm.  
 
 ### あう
 kanji: 会う

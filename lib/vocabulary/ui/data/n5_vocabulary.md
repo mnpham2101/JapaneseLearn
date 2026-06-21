@@ -435,6 +435,12 @@ meaning: fish
 type: noun
 example: さかなを たべます。 : I eat fish.
 
+### おかし
+kanji: お菓子
+meaning: bánh kẹo, snack
+type: noun
+example: 
+
 ###　ワイン
 kanji:
 meaning: wine
@@ -682,6 +688,12 @@ kanji: 何人
 meaning: how many people
 type: noun
 example: なんにんですか。 : How many people are there?
+
+### さいご
+kanji: 最後
+meaning:　last one, cuối cùng, 
+type: noun
+example: 最後の　いっこだったじょ　: Cái cuối cùng đấy
 
 ## N5 Noun — Nature and Weather
 ### てんき

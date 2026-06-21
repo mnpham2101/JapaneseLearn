@@ -228,7 +228,7 @@ tense: negative-past-formal :
 tense: negative-past-informal :
 example:
 
-## N5 Adjective - Characters
+## N5 Adjective - Characters, Feeling
 ###
 kanji:
 meaning: friendly
@@ -261,6 +261,7 @@ meaning: helpful
 type: adjective
 tense: present :
 tense: present-formal :
+tense: past-formal :　
 tense: past-informal :
 tense: negative-present-formal :
 tense: negative-present-informal :
@@ -268,18 +269,19 @@ tense: negative-past-formal :
 tense: negative-past-informal :
 example:
 
-###
-kanji:
+### いそがしい
+kanji:　忙しい
 meaning: busy
 type: adjective
-tense: present :
-tense: present-formal :
-tense: past-informal :
-tense: negative-present-formal :
-tense: negative-present-informal :
-tense: negative-past-formal :
-tense: negative-past-informal :
-example:
+tense: present :　いそがしい
+tense: present-formal :　いそがしいです
+tense: past-formal :　いそがしいかったです
+tense: past-informal :　いそがしいかった
+tense: negative-present-formal :　いそがしくないです
+tense: negative-present-informal :　いそがしくない
+tense: negative-past-formal :　いそがしくなかったです
+tense: negative-past-informal :　いそがしくななかった
+example: きのうは　いそがしくなかったから、かぞくと　いっしょに　えいがを　みた。: Hôm qua tôi không bận nên không film cùng gia đình. 
 
 ###
 kanji:
@@ -287,6 +289,7 @@ meaning: free
 type: adjective
 tense: present :
 tense: present-formal :
+tense: past-formal :　
 tense: past-informal :
 tense: negative-present-formal :
 tense: negative-present-informal :
@@ -300,6 +303,7 @@ meaning: hardwork
 type: adjective
 tense: present :
 tense: present-formal :
+tense: past-formal :　
 tense: past-informal :
 tense: negative-present-formal :
 tense: negative-present-informal :
@@ -313,6 +317,7 @@ meaning: lazy
 type: adjective
 tense: present :
 tense: present-formal :
+tense: past-formal :　
 tense: past-informal :
 tense: negative-present-formal :
 tense: negative-present-informal :
@@ -326,6 +331,7 @@ meaning: cute
 type: adjective
 tense: present :
 tense: present-formal :
+tense: past-formal :　
 tense: past-informal :
 tense: negative-present-formal :
 tense: negative-present-informal :
@@ -339,6 +345,7 @@ meaning: beautiful
 type: adjective
 tense: present :
 tense: present-formal :
+tense: past-formal :　
 tense: past-informal :
 tense: negative-present-formal :
 tense: negative-present-informal :
@@ -352,6 +359,7 @@ meaning: handsome
 type: adjective
 tense: present :
 tense: present-formal :
+tense: past-formal :　
 tense: past-informal :
 tense: negative-present-formal :
 tense: negative-present-informal :
@@ -365,6 +373,7 @@ meaning: skinny
 type: adjective
 tense: present :
 tense: present-formal :
+tense: past-formal :　
 tense: past-informal :
 tense: negative-present-formal :
 tense: negative-present-informal :
@@ -378,6 +387,7 @@ meaning: fat
 type: adjective
 tense: present :
 tense: present-formal :
+tense: past-formal :　
 tense: past-informal :
 tense: negative-present-formal :
 tense: negative-present-informal :
@@ -391,6 +401,49 @@ meaning: discipline
 type: adjective
 tense: present :
 tense: present-formal :
+tense: past-formal :　
+tense: past-informal :
+tense: negative-present-formal :
+tense: negative-present-informal :
+tense: negative-past-formal :
+tense: negative-past-informal :
+example:
+
+### たのし
+kanji:　楽しい
+meaning: fun, happy
+type: adjective
+tense: present : たのし
+tense: present-formal :　たのしです
+tense: past-formal: たのしかったです
+tense: past-informal :　たのしかった
+tense: negative-present-formal :　たのしくないです
+tense: negative-present-informal :　たのしくない
+tense: negative-past-formal :　　たのしくなかったです
+tense: negative-past-informal :　たのしくなかった
+example:
+
+### 
+kanji:
+meaning: strong, well 
+type: adjective
+tense: present : 
+tense: present-formal :
+tense: past-formal: 
+tense: past-informal :
+tense: negative-present-formal :
+tense: negative-present-informal :
+tense: negative-past-formal :
+tense: negative-past-informal :
+example:
+
+### 
+kanji:
+meaning: weak
+type: adjective
+tense: present : 
+tense: present-formal :
+tense: past-formal: 
 tense: past-informal :
 tense: negative-present-formal :
 tense: negative-present-informal :
