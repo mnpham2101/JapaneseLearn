@@ -563,8 +563,8 @@ tense: negative-past-informal :
 example:
 
 ## N5 Adjectives - (positions)
-###
-kanji:
+###　ひだり
+kanji:　左
 meaning: left
 type: adjective (na-adj)
 tense: present :
@@ -576,8 +576,8 @@ tense: negative-past-formal :
 tense: negative-past-informal :
 example:
 
-###
-kanji:
+###　みぎ
+kanji:　右
 meaning: right
 type: adjective (na-adj)
 tense: present :
@@ -589,8 +589,8 @@ tense: negative-past-formal :
 tense: negative-past-informal :
 example:
 
-###
-kanji:
+###　まえ
+kanji:　前
 meaning: in front of
 type: adjective (na-adj)
 tense: present :
@@ -600,10 +600,10 @@ tense: negative-present-formal :
 tense: negative-present-informal :
 tense: negative-past-formal :
 tense: negative-past-informal :
-example:
+example:　たべるまえに　: trước khi ăn
 
-###
-kanji:
+### うしる
+kanji:後ろ
 meaning: behind
 type: adjective (na-adj)
 tense: present :
@@ -615,8 +615,8 @@ tense: negative-past-formal :
 tense: negative-past-informal :
 example:
 
-###
-kanji:
+###　うえ
+kanji:　上
 meaning: above
 type: adjective (na-adj)
 tense: present :い-adjectives
@@ -628,21 +628,21 @@ tense: negative-past-formal :
 tense: negative-past-informal :
 example:
 
-###
-kanji:
+###　した
+kanji:　下
 meaning: below, under
 type: adjective (na-adj)
-tense: present :
-tense: present-formal :
-tense: past-informal :
+tense: present :　したです
+tense: present-informal :　
+tense: past-formal :
 tense: negative-present-formal :
 tense: negative-present-informal :
 tense: negative-past-formal :
 tense: negative-past-informal :
-example:
+example:　あのきのしたで　やすみましょう
 
-###
-kanji:
+###　なか
+kanji:中
 meaning: inside
 type: adjective (na-adj)
 tense: present :
@@ -654,8 +654,8 @@ tense: negative-past-formal :
 tense: negative-past-informal :
 example:
 
-###
-kanji:
+###　そと
+kanji:　外
 meaning: outside
 type: adjective (na-adj)
 tense: present :
@@ -667,8 +667,8 @@ tense: negative-past-formal :
 tense: negative-past-informal :
 example:
 
-###
-kanji:
+###　よこ
+kanji:　横
 meaning: beside, next to
 type: adjective (na-adj)
 tense: present :
@@ -680,8 +680,8 @@ tense: negative-past-formal :
 tense: negative-past-informal :
 example:
 
-###
-kanji:
+###　となり
+kanji:　隣
 meaning: nearby
 type: adjective (na-adj)
 tense: present :
@@ -693,8 +693,8 @@ tense: negative-past-formal :
 tense: negative-past-informal :
 example:
 
-###
-kanji:
+###　あいだ
+kanji:　間
 meaning: between, right in middle
 type: adjective (na-adj)
 tense: present :
@@ -706,8 +706,8 @@ tense: negative-past-formal :
 tense: negative-past-informal :
 example:
 
-###
-kanji:
+### まんなか
+kanji:　真ん中
 meaning: betweet, within
 type: adjective (na-adj)
 tense: present :
@@ -721,3 +721,7 @@ example:
 
 ## expressions
  
+##
+kanji:
+meaning:
+example:
